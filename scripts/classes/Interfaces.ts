@@ -19,8 +19,15 @@ export interface IRenderableText extends IRenderableObject {
 	text: string;
 }
 
+export interface ISize {
+	width: number;
+	height: number;
+}
+
 export interface IAppConfig {
 	appTitle: string;
 	fieldWidth: number;
 	fieldHeight: number;
+	rowCount: number;
+	columnCount: number;
 }

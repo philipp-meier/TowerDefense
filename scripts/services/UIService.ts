@@ -1,4 +1,5 @@
-import { IRenderableObject, IRenderableText, IStylableObject, IUIService } from "../classes/Interfaces"
+import { Field } from "../classes/Field.js";
+import { IRenderableObject, IRenderableText, IStylableObject, IUIService } from "../classes/Interfaces.js"
 
 export class UIService implements IUIService {
 
@@ -34,6 +35,20 @@ export class UIService implements IUIService {
 		span.textContent = textObj.text;
 		container.append(span);
 		return container;
+	}
+
+	renderField(field: Field): void {
+		const singleFields = field.SingleFields;
+		const fieldContainer = this.createObject(field);
+		for (let i = 0; i < singleFields.length; i++) {
+			for (let j = 0; j < singleFields[i].length; j++) {
+				const singleField = this.createObject(singleFields[i][j])
+				singleField.style.left = this.getUnitString(singleFields[i][j].x);
+				singleField.style.top = this.getUnitString(singleFields[i][j].y);
+				fieldContainer.append(singleField);
+			}
+		}
+		this.parentContainer.append(fieldContainer);
 	}
 
 	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {
