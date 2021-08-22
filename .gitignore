@@ -1,5 +1,4 @@
 docs
-img
 
 # Files will be compiled on build (tsc, lessc)
 www/js/
