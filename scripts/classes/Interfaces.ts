@@ -30,4 +30,5 @@ export interface IAppConfig {
 	fieldHeight: number;
 	rowCount: number;
 	columnCount: number;
+	svgPath: string;
 }

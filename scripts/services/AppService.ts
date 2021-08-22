@@ -5,7 +5,8 @@ export const AppConfig: IAppConfig = {
 	fieldWidth: 1200,
 	fieldHeight: 600,
 	rowCount: 6,
-	columnCount: 12
+	columnCount: 12,
+	svgPath: "img/"
 };
 
 export class AppService {

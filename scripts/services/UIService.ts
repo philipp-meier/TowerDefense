@@ -1,4 +1,5 @@
 import { Field } from "../classes/Field.js";
+import { AppConfig } from "./AppService.js";
 import { IRenderableObject, IRenderableText, IStylableObject, IUIService } from "../classes/Interfaces.js"
 
 export class UIService implements IUIService {
@@ -8,10 +9,22 @@ export class UIService implements IUIService {
 
 	constructor(container: HTMLDivElement) {
 		this.parentContainer = container;
+		this.registerHandlers();
 	}
 
 	showMessage(message: string): void {
 		alert(message);
+	}
+
+	private registerHandlers(): void {
+		document.addEventListener('click', (e) => {
+			e = e || window.event;
+			const target = e.target;
+
+			// Just for tests.
+			if (target && target instanceof HTMLDivElement)
+				this.renderFieldSvg("tower_1", target);
+		});
 	}
 
 	renderObject(obj: IRenderableObject): void {
@@ -49,6 +62,16 @@ export class UIService implements IUIService {
 			}
 		}
 		this.parentContainer.append(fieldContainer);
+	}
+
+	renderFieldSvg(svgName: string, parentField: HTMLDivElement): void {
+		const objContainer = <HTMLObjectElement>document.createElement('object');
+		objContainer.data = `${AppConfig.svgPath}${svgName}.svg`;
+		objContainer.type = "image/svg+xml";
+		objContainer.width = this.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
+		objContainer.height = this.getUnitString(AppConfig.fieldHeight / AppConfig.rowCount);
+		objContainer.className = "fieldSvg";
+		parentField.append(objContainer);
 	}
 
 	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {
