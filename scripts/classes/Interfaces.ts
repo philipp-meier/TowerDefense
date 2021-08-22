@@ -1,6 +1,7 @@
 export interface IUIService {
 	showMessage(message: string): void;
 	renderObject(obj: IRenderableObject): void;
+	renderText(textObj: IRenderableText): void;
 }
 
 export interface IStylableObject {
@@ -12,4 +13,8 @@ export interface IRenderableObject extends IStylableObject {
 	y: number;
 	height: number;
 	width: number;
+}
+
+export interface IRenderableText extends IRenderableObject {
+	text: string;
 }

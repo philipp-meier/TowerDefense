@@ -1,4 +1,4 @@
-import { IRenderableObject, IUIService } from "./Interfaces.js"
+import { IRenderableObject, IRenderableText, IStylableObject, IUIService } from "./Interfaces.js"
 
 export class UIService implements IUIService {
 
@@ -14,15 +14,35 @@ export class UIService implements IUIService {
 	}
 
 	renderObject(obj: IRenderableObject): void {
+		this.parentContainer.append(this.createObject(obj));
+	}
+	private createObject(obj: IRenderableObject): HTMLElement {
 		const container = <HTMLDivElement>document.createElement('div');
 
-		if (obj.cssClass)
-			container.className = obj.cssClass;
+		this.AppendCssClass(container, obj);
+		this.SetPosition(container, obj);
 
-		container.style.width = this.getUnitString(obj.width);
-		container.style.height = this.getUnitString(obj.height);
+		return container;
+	}
 
-		this.parentContainer.append(container);
+	renderText(textObj: IRenderableText): void {
+		this.parentContainer.append(this.createText(textObj));
+	}
+	private createText(textObj: IRenderableText): HTMLElement {
+		const container = this.createObject(textObj);
+		const span = <HTMLSpanElement>document.createElement('span');
+		span.textContent = textObj.text;
+		container.append(span);
+		return container;
+	}
+
+	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {
+		element.style.width = this.getUnitString(ro.width);
+		element.style.height = this.getUnitString(ro.height);
+	}
+	private AppendCssClass(element: HTMLElement, so: IStylableObject): void {
+		if (so.cssClass)
+			element.className = so.cssClass;
 	}
 	private getUnitString(n: number): string {
 		return `${n}${this.cssUnit}`;
