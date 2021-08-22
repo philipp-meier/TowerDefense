@@ -32,3 +32,21 @@ export interface IAppConfig {
 	columnCount: number;
 	svgPath: string;
 }
+
+export interface IGameObject {
+	svgName: string;
+	health: number;
+	armor: number;
+	damage: number;
+	attackSpeed: number;
+}
+export interface IMovingGameObject extends IGameObject {
+	movementSpeed: number;
+	animationSvgNames: string[];
+}
+export interface IUpgradableGameObject extends IGameObject {
+	upgrades: IGameObject[];
+}
+export interface IShootingGameObject extends IGameObject {
+	bulletSvgName: string[];
+}

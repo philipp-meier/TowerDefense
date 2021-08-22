@@ -1,6 +1,7 @@
 import { Field } from "../classes/Field.js";
 import { AppConfig } from "./AppService.js";
-import { IRenderableObject, IRenderableText, IStylableObject, IUIService } from "../classes/Interfaces.js"
+import { IGameObject, IRenderableObject, IRenderableText, IStylableObject, IUIService } from "../classes/Interfaces.js"
+import { Tower } from "../classes/Tower.js";
 
 export class UIService implements IUIService {
 
@@ -23,7 +24,7 @@ export class UIService implements IUIService {
 
 			// Just for tests.
 			if (target && target instanceof HTMLDivElement)
-				this.renderFieldSvg("tower_1", target);
+				this.renderGameObject(new Tower(), target);
 		});
 	}
 
@@ -64,9 +65,9 @@ export class UIService implements IUIService {
 		this.parentContainer.append(fieldContainer);
 	}
 
-	renderFieldSvg(svgName: string, parentField: HTMLDivElement): void {
+	renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {
 		const objContainer = <HTMLObjectElement>document.createElement('object');
-		objContainer.data = `${AppConfig.svgPath}${svgName}.svg`;
+		objContainer.data = `${AppConfig.svgPath}${gameObject.svgName}.svg`;
 		objContainer.type = "image/svg+xml";
 		objContainer.width = this.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
 		objContainer.height = this.getUnitString(AppConfig.fieldHeight / AppConfig.rowCount);
