@@ -1,10 +1,10 @@
 import { IUIService } from "./Interfaces.js"
 
 export class UIService implements IUIService {
-    constructor() {
-    }
+	constructor() {
+	}
 
-    showMessage(message: string): void {
-        alert(message);
-    }
+	showMessage(message: string): void {
+		alert(message);
+	}
 }

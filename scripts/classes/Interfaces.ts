@@ -1,3 +1,3 @@
 export interface IUIService {
-    showMessage(message: string): void;
+	showMessage(message: string): void;
 }
