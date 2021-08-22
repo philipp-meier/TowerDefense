@@ -1,9 +1,11 @@
 {
   "scripts": {
     "build": "tsc && lessc styles/main.less www/css/main.css",
-    "run": "python3 -m http.server 8080 --directory www"
+    "run": "npm run build && http-server www"
   },
   "devDependencies": {
+    "@types/node": "^16.7.1",
+    "http-server": "^13.0.1",
     "less": "^4.1.1",
     "typescript": "^4.3.5"
   }
