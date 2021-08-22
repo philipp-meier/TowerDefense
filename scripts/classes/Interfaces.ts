@@ -18,3 +18,9 @@ export interface IRenderableObject extends IStylableObject {
 export interface IRenderableText extends IRenderableObject {
 	text: string;
 }
+
+export interface IAppConfig {
+	appTitle: string;
+	fieldWidth: number;
+	fieldHeight: number;
+}

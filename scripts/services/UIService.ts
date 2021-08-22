@@ -1,4 +1,4 @@
-import { IRenderableObject, IRenderableText, IStylableObject, IUIService } from "./Interfaces.js"
+import { IRenderableObject, IRenderableText, IStylableObject, IUIService } from "../classes/Interfaces"
 
 export class UIService implements IUIService {
 
