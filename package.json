@@ -1,12 +1,18 @@
 {
   "scripts": {
     "build": "tsc && lessc styles/main.less www/css/main.css",
+    "test": "env TS_NODE_PROJECT=\"test/tsconfig.testing.json\" mocha --require ts-node/register 'test/**/*.ts'",
     "run": "npm run build && http-server www"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.21",
+    "@types/mocha": "^9.0.0",
     "@types/node": "^16.7.1",
+    "chai": "^4.3.4",
     "http-server": "^13.0.1",
     "less": "^4.1.1",
+    "mocha": "^9.1.0",
+    "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
   }
 }

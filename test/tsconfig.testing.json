@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"target": "ES2015",
+		"module": "commonjs",
+		"strict": true,
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"moduleResolution": "Node",
+		"esModuleInterop": true,
+		"rootDir": "scripts",
+		"outDir": "js"
+	},
+}
