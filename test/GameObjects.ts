@@ -1,4 +1,4 @@
-import { Tower } from "../scripts/classes/Tower";
+import { Tower } from "../src/classes/Tower";
 import { expect } from "chai";
 
 describe('Tower', () => {

@@ -8,7 +8,7 @@
 		"preserveConstEnums": true,
 		"moduleResolution": "Node",
 		"esModuleInterop": true,
-		"rootDir": "scripts",
+		"rootDir": "test",
 		"outDir": "js"
 	},
 }
