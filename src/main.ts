@@ -1,4 +1,4 @@
-import { Field } from './classes/Field.js';
+import { GameBoard } from './classes/GameBoard.js';
 import { UIService } from './services/UIService.js';
 import { AppConfig, AppService } from './services/AppService.js';
 
@@ -13,6 +13,6 @@ import { AppConfig, AppService } from './services/AppService.js';
 
 	uiService.renderText({ cssClass: "appTitle", x: 0, y: 0, width: AppConfig.fieldWidth, height: 25, text: AppConfig.appTitle });
 
-	const field = new Field(0, 0, AppConfig.fieldWidth, AppConfig.fieldHeight);
+	const field = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
 	uiService.renderField(field);
 })();

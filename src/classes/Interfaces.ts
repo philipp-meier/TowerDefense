@@ -1,29 +1,3 @@
-export interface IUIService {
-	showMessage(message: string): void;
-	renderObject(obj: IRenderableObject): void;
-	renderText(textObj: IRenderableText): void;
-}
-
-export interface IStylableObject {
-	cssClass: string;
-}
-
-export interface IRenderableObject extends IStylableObject {
-	x: number;
-	y: number;
-	height: number;
-	width: number;
-}
-
-export interface IRenderableText extends IRenderableObject {
-	text: string;
-}
-
-export interface ISize {
-	width: number;
-	height: number;
-}
-
 export interface IAppConfig {
 	appTitle: string;
 	fieldWidth: number;
@@ -33,12 +7,42 @@ export interface IAppConfig {
 	svgPath: string;
 }
 
+export interface IUIService {
+	showMessage(message: string): void;
+	renderObject(obj: IRenderableObject): void;
+	renderText(textObj: IRenderableText): void;
+}
+
+export interface IGameField {
+	id: number;
+	gameObject: IGameObject | null;
+}
+
+export interface IRenderableObject {
+	cssClass: string;
+	x: number;
+	y: number;
+	height: number;
+	width: number;
+}
+export interface IRenderableText extends IRenderableObject {
+	text: string;
+}
+
+
+export interface IGameObjectOption {
+	title: string;
+	execute(): void;
+}
 export interface IGameObject {
-	svgName: string;
+	id: number;
 	health: number;
 	armor: number;
 	damage: number;
 	attackSpeed: number;
+	field: IGameField | null;
+	getOptions(): IGameObjectOption[]
+	placeObject(field: IGameField): void;
 }
 export interface IMovingGameObject extends IGameObject {
 	movementSpeed: number;

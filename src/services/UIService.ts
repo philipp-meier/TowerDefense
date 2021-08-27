@@ -1,6 +1,6 @@
-import { Field } from "../classes/Field.js";
+import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
-import { IGameObject, IRenderableObject, IRenderableText, IStylableObject, IUIService } from "../classes/Interfaces.js"
+import { IGameObject, IRenderableObject, IRenderableText, IUIService } from "../classes/Interfaces.js"
 import { Tower } from "../classes/Tower.js";
 
 export class UIService implements IUIService {
@@ -34,7 +34,7 @@ export class UIService implements IUIService {
 	private createObject(obj: IRenderableObject): HTMLElement {
 		const container = <HTMLDivElement>document.createElement('div');
 
-		this.AppendCssClass(container, obj);
+		this.AppendCssClass(container, obj.cssClass);
 		this.SetPosition(container, obj);
 
 		return container;
@@ -51,15 +51,20 @@ export class UIService implements IUIService {
 		return container;
 	}
 
-	renderField(field: Field): void {
-		const singleFields = field.SingleFields;
-		const fieldContainer = this.createObject(field);
+	renderField(field: GameBoard): void {
+		const singleFields = field.GameFields;
+		const fieldContainer = this.createObject({ cssClass: "game-field", x: 0, y: 0, height: AppConfig.fieldHeight, width: AppConfig.fieldWidth });
+		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
+		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
+
 		for (let i = 0; i < singleFields.length; i++) {
 			for (let j = 0; j < singleFields[i].length; j++) {
-				const singleField = this.createObject(singleFields[i][j])
-				singleField.style.left = this.getUnitString(singleFields[i][j].x);
-				singleField.style.top = this.getUnitString(singleFields[i][j].y);
-				fieldContainer.append(singleField);
+				const singleField = singleFields[i][j];
+				const singleFieldObject = this.createObject({ cssClass: "singleField", x: 0, y: 0, width: fieldWidth, height: fieldHeight });
+				singleFieldObject.style.left = this.getUnitString(j * fieldWidth);
+				singleFieldObject.style.top = this.getUnitString(i * fieldHeight);
+				singleFieldObject.dataset.fieldId = singleField.id.toString();
+				fieldContainer.append(singleFieldObject);
 			}
 		}
 		this.parentContainer.append(fieldContainer);
@@ -67,11 +72,12 @@ export class UIService implements IUIService {
 
 	renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {
 		const objContainer = <HTMLObjectElement>document.createElement('object');
-		objContainer.data = `${AppConfig.svgPath}${gameObject.svgName}.svg`;
+		objContainer.data = `${AppConfig.svgPath}tower_base.svg`;
 		objContainer.type = "image/svg+xml";
 		objContainer.width = this.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
 		objContainer.height = this.getUnitString(AppConfig.fieldHeight / AppConfig.rowCount);
 		objContainer.className = "fieldSvg";
+		objContainer.dataset.gameObjectId = `${gameObject.id}`;
 		parentField.append(objContainer);
 	}
 
@@ -79,9 +85,9 @@ export class UIService implements IUIService {
 		element.style.width = this.getUnitString(ro.width);
 		element.style.height = this.getUnitString(ro.height);
 	}
-	private AppendCssClass(element: HTMLElement, so: IStylableObject): void {
-		if (so.cssClass)
-			element.className = so.cssClass;
+	private AppendCssClass(element: HTMLElement, className: string): void {
+		if (className)
+			element.className = className;
 	}
 	private getUnitString(n: number): string {
 		return `${n}${this.cssUnit}`;
