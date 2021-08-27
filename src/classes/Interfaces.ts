@@ -41,6 +41,7 @@ export interface IGameObject {
 	getAttackSpeed(): number;
 	getAssignedGameField(): IGameField | null;
 	getOptions(): IGameObjectOption[]
+	getSvg(): string;
 	placeObject(field: IGameField): void;
 }
 export interface IMovingGameObject extends IGameObject {

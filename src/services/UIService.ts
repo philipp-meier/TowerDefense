@@ -38,7 +38,7 @@ export class UIService implements IUIService {
 				const gameObject = this.m_renderedGameObjects.find(go => go.getID().toString() == target.dataset.gameObjectId);
 
 				if (gameObject)
-					this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY);
+					this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, this.updateGameObject);
 			}
 		}, false);
 
@@ -48,6 +48,13 @@ export class UIService implements IUIService {
 			if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
 				this.m_htmlContextMenu.hide();
 		})
+	}
+
+	private updateGameObject(gameObject: IGameObject) {
+		// Redraw
+		const container = document.querySelector(`div.singleField[data-game-object-id="${gameObject.getID()}"]`);
+		if (container && container instanceof HTMLDivElement)
+			container.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 	}
 
 	public showMessage(message: string): void {
@@ -96,8 +103,10 @@ export class UIService implements IUIService {
 	}
 
 	public renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {
-		parentField.style.backgroundImage = `url('${AppConfig.svgPath}tower_base.svg')`;
-		parentField.dataset.gameObjectId = `${gameObject.getID()}`;
+		parentField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+
+		if (!parentField.dataset.gameObjectId)
+			parentField.dataset.gameObjectId = `${gameObject.getID()}`;
 	}
 
 	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {

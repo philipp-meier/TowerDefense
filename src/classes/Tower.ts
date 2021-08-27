@@ -9,6 +9,7 @@ export class Tower implements IUpgradableGameObject {
 	private m_attackSpeed: number = 1;
 	private m_upgrades: IGameObject[] = [];
 	private m_assignedGameField: IGameField | null = null;
+	private m_svg = 'tower_base.svg';
 
 	constructor() {
 		this.m_id = Tower.currentId++;
@@ -21,11 +22,12 @@ export class Tower implements IUpgradableGameObject {
 	public getAttackSpeed(): number { return this.m_attackSpeed; }
 	public getAssignedGameField(): IGameField | null { return this.m_assignedGameField; }
 	public getUpgrades(): IGameObject[] { return this.m_upgrades; }
+	public getSvg(): string { return this.m_svg; }
 
 	public getOptions(): IGameObjectOption[] {
 		return [{
-			title: "Test Option",
-			execute: () => { alert('test'); }
+			title: "Upgrade",
+			execute: () => { this.m_svg = 'tower_upgrade_1.svg'; }
 		}]
 	}
 	public placeObject(field: IGameField): void {

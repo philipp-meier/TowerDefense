@@ -1,5 +1,7 @@
 import { IGameObject, IGameObjectOption } from "../classes/Interfaces";
 
+type ContextMenuCallback = (gameObject: IGameObject) => void;
+
 export class HtmlContextMenu {
 	private m_htmlElement: HTMLUListElement;
 
@@ -13,7 +15,7 @@ export class HtmlContextMenu {
 		menu.className = "menu";
 		return menu;
 	}
-	private buildMenuItem(option: IGameObjectOption): HTMLLIElement {
+	private buildMenuItem(gameObject: IGameObject, option: IGameObjectOption, fnCallback: ContextMenuCallback): HTMLLIElement {
 		const menuItem = <HTMLLIElement>document.createElement('li');
 		menuItem.className = "menu-item";
 
@@ -21,6 +23,7 @@ export class HtmlContextMenu {
 		btn.className = "menu-btn";
 		btn.onclick = () => {
 			option.execute();
+			fnCallback(gameObject);
 			this.hide();
 		};
 
@@ -33,14 +36,14 @@ export class HtmlContextMenu {
 		return menuItem;
 	}
 
-	private prepareContextMenu(gameObject: IGameObject) {
+	private prepareContextMenu(gameObject: IGameObject, fnCallback: ContextMenuCallback) {
 		this.m_htmlElement.innerText = '';
 		gameObject.getOptions().forEach((option) => {
-			this.m_htmlElement.append(this.buildMenuItem(option));
+			this.m_htmlElement.append(this.buildMenuItem(gameObject, option, fnCallback));
 		});
 	}
-	public show(gameObject: IGameObject, x: number, y: number) {
-		this.prepareContextMenu(gameObject);
+	public show(gameObject: IGameObject, x: number, y: number, fnCallback: ContextMenuCallback) {
+		this.prepareContextMenu(gameObject, fnCallback);
 		this.m_htmlElement.style.left = x + "px";
 		this.m_htmlElement.style.top = y + "px";
 		this.m_htmlElement.classList.add('menu-show');
