@@ -48,9 +48,6 @@ export interface IMovingGameObject extends IGameObject {
 	getMovementSpeed(): number;
 	getAnimationSvgNames(): string[];
 }
-export interface IUpgradableGameObject extends IGameObject {
-	getUpgrades(): IGameObject[];
-}
 export interface IShootingGameObject extends IGameObject {
 	getBulletSvgName(): string[];
 }
