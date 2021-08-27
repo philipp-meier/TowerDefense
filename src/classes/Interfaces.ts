@@ -29,7 +29,6 @@ export interface IRenderableText extends IRenderableObject {
 	text: string;
 }
 
-
 export interface IGameObjectOption {
 	title: string;
 	execute(): void;

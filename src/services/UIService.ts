@@ -2,14 +2,18 @@ import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
 import { IGameObject, IRenderableObject, IRenderableText, IUIService } from "../classes/Interfaces.js"
 import { Tower } from "../classes/Tower.js";
+import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 
 export class UIService implements IUIService {
 
 	readonly parentContainer: HTMLDivElement;
 	private readonly cssUnit: string = 'px';
+	private renderedGameObjects: IGameObject[] = [];
+	private htmlContextMenu: HtmlContextMenu;
 
 	constructor(container: HTMLDivElement) {
 		this.parentContainer = container;
+		this.htmlContextMenu = new HtmlContextMenu(container);
 		this.registerHandlers();
 	}
 
@@ -23,9 +27,34 @@ export class UIService implements IUIService {
 			const target = e.target;
 
 			// Just for tests.
-			if (target && target instanceof HTMLDivElement)
-				this.renderGameObject(new Tower(), target);
+			if (target && target instanceof HTMLDivElement && target.classList.contains('singleField')) {
+				const tower = new Tower();
+				this.renderGameObject(tower, target);
+				this.renderedGameObjects.push(tower);
+			}
+
 		});
+
+		document.addEventListener('contextmenu', (e) => {
+			e = e || window.event;
+			e.preventDefault();
+
+			const target = e.target;
+			if (target && target instanceof HTMLDivElement && target.dataset.gameObjectId) {
+				const gameObject = this.renderedGameObjects.find(go => go.id.toString() == target.dataset.gameObjectId);
+
+				if (gameObject)
+					this.htmlContextMenu.show(gameObject, e.pageX, e.pageY);
+			}
+
+		}, false);
+
+		document.addEventListener('mousedown', (e) => {
+			e = e || window.event;
+			const target = e.target;
+			if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
+				this.htmlContextMenu.hide();
+		})
 	}
 
 	renderObject(obj: IRenderableObject): void {
@@ -71,14 +100,8 @@ export class UIService implements IUIService {
 	}
 
 	renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {
-		const objContainer = <HTMLObjectElement>document.createElement('object');
-		objContainer.data = `${AppConfig.svgPath}tower_base.svg`;
-		objContainer.type = "image/svg+xml";
-		objContainer.width = this.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
-		objContainer.height = this.getUnitString(AppConfig.fieldHeight / AppConfig.rowCount);
-		objContainer.className = "fieldSvg";
-		objContainer.dataset.gameObjectId = `${gameObject.id}`;
-		parentField.append(objContainer);
+		parentField.style.backgroundImage = `url('${AppConfig.svgPath}tower_base.svg')`;
+		parentField.dataset.gameObjectId = `${gameObject.id}`;
 	}
 
 	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {

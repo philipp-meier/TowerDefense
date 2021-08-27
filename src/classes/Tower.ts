@@ -16,7 +16,10 @@ export class Tower implements IUpgradableGameObject {
 	}
 
 	getOptions(): IGameObjectOption[] {
-		throw new Error("Method not implemented.");
+		return [{
+			title: "Test Option",
+			execute: () => { alert('test'); }
+		}]
 	}
 	placeObject(field: IGameField): void {
 		this.field = field;
