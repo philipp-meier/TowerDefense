@@ -6,19 +6,15 @@ import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 
 export class UIService implements IUIService {
 
-	readonly parentContainer: HTMLDivElement;
-	private readonly cssUnit: string = 'px';
-	private renderedGameObjects: IGameObject[] = [];
-	private htmlContextMenu: HtmlContextMenu;
+	private readonly m_parentContainer: HTMLDivElement;
+	private readonly m_cssUnit: string = 'px';
+	private m_renderedGameObjects: IGameObject[] = [];
+	private m_htmlContextMenu: HtmlContextMenu;
 
 	constructor(container: HTMLDivElement) {
-		this.parentContainer = container;
-		this.htmlContextMenu = new HtmlContextMenu(container);
+		this.m_parentContainer = container;
+		this.m_htmlContextMenu = new HtmlContextMenu(container);
 		this.registerHandlers();
-	}
-
-	showMessage(message: string): void {
-		alert(message);
 	}
 
 	private registerHandlers(): void {
@@ -26,13 +22,11 @@ export class UIService implements IUIService {
 			e = e || window.event;
 			const target = e.target;
 
-			// Just for tests.
 			if (target && target instanceof HTMLDivElement && target.classList.contains('singleField')) {
 				const tower = new Tower();
 				this.renderGameObject(tower, target);
-				this.renderedGameObjects.push(tower);
+				this.m_renderedGameObjects.push(tower);
 			}
-
 		});
 
 		document.addEventListener('contextmenu', (e) => {
@@ -41,24 +35,26 @@ export class UIService implements IUIService {
 
 			const target = e.target;
 			if (target && target instanceof HTMLDivElement && target.dataset.gameObjectId) {
-				const gameObject = this.renderedGameObjects.find(go => go.id.toString() == target.dataset.gameObjectId);
+				const gameObject = this.m_renderedGameObjects.find(go => go.getID().toString() == target.dataset.gameObjectId);
 
 				if (gameObject)
-					this.htmlContextMenu.show(gameObject, e.pageX, e.pageY);
+					this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY);
 			}
-
 		}, false);
 
 		document.addEventListener('mousedown', (e) => {
 			e = e || window.event;
 			const target = e.target;
 			if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
-				this.htmlContextMenu.hide();
+				this.m_htmlContextMenu.hide();
 		})
 	}
 
-	renderObject(obj: IRenderableObject): void {
-		this.parentContainer.append(this.createObject(obj));
+	public showMessage(message: string): void {
+		alert(message);
+	}
+	public renderObject(obj: IRenderableObject): void {
+		this.m_parentContainer.append(this.createObject(obj));
 	}
 	private createObject(obj: IRenderableObject): HTMLElement {
 		const container = <HTMLDivElement>document.createElement('div');
@@ -69,8 +65,8 @@ export class UIService implements IUIService {
 		return container;
 	}
 
-	renderText(textObj: IRenderableText): void {
-		this.parentContainer.append(this.createText(textObj));
+	public renderText(textObj: IRenderableText): void {
+		this.m_parentContainer.append(this.createText(textObj));
 	}
 	private createText(textObj: IRenderableText): HTMLElement {
 		const container = this.createObject(textObj);
@@ -80,8 +76,8 @@ export class UIService implements IUIService {
 		return container;
 	}
 
-	renderField(field: GameBoard): void {
-		const singleFields = field.GameFields;
+	public renderGameBoard(field: GameBoard): void {
+		const singleFields = field.GameFields();
 		const fieldContainer = this.createObject({ cssClass: "game-field", x: 0, y: 0, height: AppConfig.fieldHeight, width: AppConfig.fieldWidth });
 		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
 		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
@@ -96,12 +92,12 @@ export class UIService implements IUIService {
 				fieldContainer.append(singleFieldObject);
 			}
 		}
-		this.parentContainer.append(fieldContainer);
+		this.m_parentContainer.append(fieldContainer);
 	}
 
-	renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {
+	public renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {
 		parentField.style.backgroundImage = `url('${AppConfig.svgPath}tower_base.svg')`;
-		parentField.dataset.gameObjectId = `${gameObject.id}`;
+		parentField.dataset.gameObjectId = `${gameObject.getID()}`;
 	}
 
 	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {
@@ -113,6 +109,6 @@ export class UIService implements IUIService {
 			element.className = className;
 	}
 	private getUnitString(n: number): string {
-		return `${n}${this.cssUnit}`;
+		return `${n}${this.m_cssUnit}`;
 	}
 }

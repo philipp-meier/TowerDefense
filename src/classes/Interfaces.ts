@@ -8,9 +8,9 @@ export interface IAppConfig {
 }
 
 export interface IUIService {
-	showMessage(message: string): void;
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
+	showMessage(message: string): void;
 }
 
 export interface IGameField {
@@ -34,22 +34,22 @@ export interface IGameObjectOption {
 	execute(): void;
 }
 export interface IGameObject {
-	id: number;
-	health: number;
-	armor: number;
-	damage: number;
-	attackSpeed: number;
-	field: IGameField | null;
+	getID(): number;
+	getHealth(): number;
+	getArmor(): number;
+	getDamage(): number;
+	getAttackSpeed(): number;
+	getAssignedGameField(): IGameField | null;
 	getOptions(): IGameObjectOption[]
 	placeObject(field: IGameField): void;
 }
 export interface IMovingGameObject extends IGameObject {
-	movementSpeed: number;
-	animationSvgNames: string[];
+	getMovementSpeed(): number;
+	getAnimationSvgNames(): string[];
 }
 export interface IUpgradableGameObject extends IGameObject {
-	upgrades: IGameObject[];
+	getUpgrades(): IGameObject[];
 }
 export interface IShootingGameObject extends IGameObject {
-	bulletSvgName: string[];
+	getBulletSvgName(): string[];
 }

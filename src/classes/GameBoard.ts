@@ -1,10 +1,10 @@
 import { IGameField } from "./Interfaces.js";
 
 export class GameBoard {
-	public GameFields: IGameField[][];
+	private m_GameFields: IGameField[][];
 
 	constructor(rowCount: number, columnCount: number) {
-		this.GameFields = this.createGameFieldArray(rowCount, columnCount);
+		this.m_GameFields = this.createGameFieldArray(rowCount, columnCount);
 	}
 
 	private createGameFieldArray(rowCount: number, columnCount: number): IGameField[][] {
@@ -18,5 +18,9 @@ export class GameBoard {
 			}
 		}
 		return singleFields;
+	}
+
+	public GameFields(): IGameField[][] {
+		return this.m_GameFields;
 	}
 }

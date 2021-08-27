@@ -14,5 +14,5 @@ import { AppConfig, AppService } from './services/AppService.js';
 	uiService.renderText({ cssClass: "appTitle", x: 0, y: 0, width: AppConfig.fieldWidth, height: 25, text: AppConfig.appTitle });
 
 	const field = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
-	uiService.renderField(field);
+	uiService.renderGameBoard(field);
 })();

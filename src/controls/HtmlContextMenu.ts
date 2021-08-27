@@ -1,11 +1,11 @@
 import { IGameObject, IGameObjectOption } from "../classes/Interfaces";
 
 export class HtmlContextMenu {
-	private htmlElement: HTMLUListElement;
+	private m_htmlElement: HTMLUListElement;
 
 	constructor(p: HTMLDivElement) {
-		this.htmlElement = this.buildMenu();
-		p.append(this.htmlElement);
+		this.m_htmlElement = this.buildMenu();
+		p.append(this.m_htmlElement);
 	}
 
 	private buildMenu(): HTMLUListElement {
@@ -34,18 +34,18 @@ export class HtmlContextMenu {
 	}
 
 	private prepareContextMenu(gameObject: IGameObject) {
-		this.htmlElement.innerText = '';
+		this.m_htmlElement.innerText = '';
 		gameObject.getOptions().forEach((option) => {
-			this.htmlElement.append(this.buildMenuItem(option));
+			this.m_htmlElement.append(this.buildMenuItem(option));
 		});
 	}
 	public show(gameObject: IGameObject, x: number, y: number) {
 		this.prepareContextMenu(gameObject);
-		this.htmlElement.style.left = x + "px";
-		this.htmlElement.style.top = y + "px";
-		this.htmlElement.classList.add('menu-show');
+		this.m_htmlElement.style.left = x + "px";
+		this.m_htmlElement.style.top = y + "px";
+		this.m_htmlElement.classList.add('menu-show');
 	}
 	public hide() {
-		this.htmlElement.classList.remove('menu-show');
+		this.m_htmlElement.classList.remove('menu-show');
 	}
 }
