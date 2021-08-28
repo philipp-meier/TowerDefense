@@ -44,10 +44,15 @@ export interface IGameObject {
 	getSvg(): string;
 	placeObject(field: IGameField): void;
 }
+export interface IBuyableGameObject extends IGameObject, IPriced { }
 export interface IMovingGameObject extends IGameObject {
 	getMovementSpeed(): number;
 	getAnimationSvgNames(): string[];
 }
 export interface IShootingGameObject extends IGameObject {
 	getBulletSvgName(): string[];
+}
+
+export interface IPriced {
+	getPrice(): number;
 }

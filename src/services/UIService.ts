@@ -3,17 +3,19 @@ import { AppConfig } from "./AppService.js";
 import { IGameObject, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
 import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
+import { Game } from "../classes/Game.js";
 
 export class UIService implements IUIService {
 
 	private readonly m_parentContainer: HTMLDivElement;
 	private readonly m_cssUnit: string = 'px';
-	private m_renderedGameObjects: IGameObject[] = [];
+	private readonly m_game: Game;
 	private m_htmlContextMenu: HtmlContextMenu;
 
-	constructor(container: HTMLDivElement) {
+	constructor(container: HTMLDivElement, game: Game) {
 		this.m_parentContainer = container;
 		this.m_htmlContextMenu = new HtmlContextMenu(container);
+		this.m_game = game;
 		this.registerHandlers();
 	}
 
@@ -24,8 +26,8 @@ export class UIService implements IUIService {
 
 			if (target && target instanceof HTMLDivElement && target.classList.contains('singleField')) {
 				const tower = new Tower();
+				this.m_game.addBuyableGameObject(tower);
 				this.renderGameObject(tower, target);
-				this.m_renderedGameObjects.push(tower);
 			}
 		});
 
@@ -35,7 +37,7 @@ export class UIService implements IUIService {
 
 			const target = e.target;
 			if (target && target instanceof HTMLDivElement && target.dataset.gameObjectId) {
-				const gameObject = this.m_renderedGameObjects.find(go => go.getID().toString() == target.dataset.gameObjectId);
+				const gameObject = this.m_game.getBuyableGameObjects().find(go => go.getID().toString() == target.dataset.gameObjectId);
 
 				if (gameObject)
 					this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, this.updateGameObject);

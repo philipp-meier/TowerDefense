@@ -1,6 +1,6 @@
-import { IGameObject, IGameObjectOption, IGameField } from "../Interfaces.js";
+import { IGameObjectOption, IGameField, IBuyableGameObject } from "../Interfaces.js";
 
-export class Tower implements IGameObject {
+export class Tower implements IBuyableGameObject {
 	private static currentId: number = 1;
 	private m_id: number;
 	private m_health: number = 100;
@@ -22,6 +22,7 @@ export class Tower implements IGameObject {
 	public getAttackSpeed(): number { return this.m_attackSpeed; }
 	public getAssignedGameField(): IGameField | null { return this.m_assignedGameField; }
 	public getSvg(): string { return this.m_svg; }
+	public getPrice(): number { return 50; }
 
 	public getOptions(): IGameObjectOption[] {
 		return [{
