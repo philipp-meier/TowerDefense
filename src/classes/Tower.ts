@@ -8,7 +8,7 @@ export class Tower implements IGameObject {
 	private m_damage: number = 15;
 	private m_attackSpeed: number = 1;
 	private m_assignedGameField: IGameField | null = null;
-	private m_svg = 'tower_base.svg';
+	private m_svg = 'Tower/level1.svg';
 	private m_upgrades: number = 0;
 
 	constructor() {
@@ -28,10 +28,10 @@ export class Tower implements IGameObject {
 			title: "Upgrade",
 			execute: () => {
 				if (this.m_upgrades == 0) {
-					this.m_svg = 'tower_upgrade_1.svg';
 					this.m_upgrades++;
+					this.m_svg = 'Tower/level2.svg';
 				} else {
-					this.m_svg = 'tower_upgrade_2.svg';
+					this.m_svg = 'Tower/level3.svg';
 				}
 			}
 		}]

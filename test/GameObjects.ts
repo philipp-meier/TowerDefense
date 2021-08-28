@@ -2,28 +2,23 @@ import { Tower } from "../src/classes/Tower";
 import { expect } from "chai";
 
 describe('Tower', () => {
-	it('should be initialised with tower_base.svg', () => {
+	it('should be initialised with Tower/level1.svg', () => {
 		let tower = new Tower();
-		expect(tower.svgName).to.equal('tower_base');
+		expect(tower.getSvg()).to.equal('Tower/level1.svg');
 	});
 
 	it('should be initialised with 100 health', () => {
 		let tower = new Tower();
-		expect(tower.health).to.equal(100);
+		expect(tower.getHealth()).to.equal(100);
 	});
 
 	it('should be initialised with 15 damage', () => {
 		let tower = new Tower();
-		expect(tower.damage).to.equal(15);
+		expect(tower.getDamage()).to.equal(15);
 	});
 
 	it('should be initialised with attack speed "1"', () => {
 		let tower = new Tower();
-		expect(tower.attackSpeed).to.equal(1);
-	});
-
-	it('should be initialised without upgrades', () => {
-		let tower = new Tower();
-		expect(tower.upgrades.length).to.equal(0);
+		expect(tower.getAttackSpeed()).to.equal(1);
 	});
 })
