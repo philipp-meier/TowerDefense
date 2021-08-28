@@ -37,7 +37,7 @@ export class UIService implements IUIService {
 
 			const target = e.target;
 			if (target && target instanceof HTMLDivElement && target.dataset.gameObjectId) {
-				const gameObject = this.m_game.getBuyableGameObjects().find(go => go.getID().toString() == target.dataset.gameObjectId);
+				const gameObject = this.m_game.getBuyableGameObjectById(parseInt(target.dataset.gameObjectId));
 
 				if (gameObject)
 					this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, this.updateGameObject);

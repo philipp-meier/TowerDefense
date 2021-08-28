@@ -14,7 +14,7 @@ export class Game {
 		this.m_player.buy(gameObject);
 		this.m_buyableGameObjects.push(gameObject);
 	}
-	public getBuyableGameObjects(): IBuyableGameObject[] {
-		return this.m_buyableGameObjects;
+	public getBuyableGameObjectById(id: number): IBuyableGameObject | undefined {
+		return this.m_buyableGameObjects.find(x => x.getID() == id);
 	}
 }
