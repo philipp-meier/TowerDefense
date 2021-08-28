@@ -1,6 +1,6 @@
 import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
-import { IGameObject, IRenderableObject, IRenderableText, IUIService } from "../classes/Interfaces.js"
+import { IGameObject, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
 import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 

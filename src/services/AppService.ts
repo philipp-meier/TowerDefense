@@ -1,4 +1,4 @@
-import { IAppConfig as IAppConfig } from "../classes/Interfaces.js";
+import { IAppConfig as IAppConfig } from "../Interfaces.js";
 
 export const AppConfig: IAppConfig = {
 	appTitle: "Tower Defense",

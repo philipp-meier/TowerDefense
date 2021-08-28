@@ -1,4 +1,4 @@
-import { IGameObject, IGameObjectOption, IGameField } from "./Interfaces.js";
+import { IGameObject, IGameObjectOption, IGameField } from "../Interfaces.js";
 
 export class Tower implements IGameObject {
 	private static currentId: number = 1;

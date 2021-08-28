@@ -1,4 +1,4 @@
-import { IGameObject, IGameObjectOption } from "../classes/Interfaces";
+import { IGameObject, IGameObjectOption } from "../Interfaces";
 
 type ContextMenuCallback = (gameObject: IGameObject) => void;
 
