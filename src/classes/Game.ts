@@ -1,4 +1,4 @@
-import { IBuyableGameObject } from "../Interfaces.js";
+import { IBuyableGameObject, IGameObjectOption } from "../Interfaces.js";
 import { Player } from "./Player.js";
 import { PlayerStatusBar } from "./PlayerStatusBar.js";
 
@@ -19,6 +19,10 @@ export class Game {
 	}
 	public getBuyableGameObjectById(id: number): IBuyableGameObject | undefined {
 		return this.m_buyableGameObjects.find(x => x.getID() == id);
+	}
+
+	public buyGameObjectOption(option: IGameObjectOption) {
+		this.m_player.buy(option);
 	}
 
 	public getPlayerStatusBar(): PlayerStatusBar {

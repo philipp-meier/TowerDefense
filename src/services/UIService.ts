@@ -1,6 +1,6 @@
 import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
-import { IGameObject, IPlayerStatusBar, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
+import { IGameObject, IGameObjectOption, IPlayerStatusBar, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
 import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 import { Game } from "../classes/Game.js";
@@ -59,8 +59,19 @@ export class UIService implements IUIService {
 				return;
 
 			const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
-			if (gameObject)
-				this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, this.updateGameObject);
+			if (gameObject) {
+				const execGameObjectOption = (gameObject: IGameObject, option: IGameObjectOption) => {
+					this.m_game.buyGameObjectOption(option);
+					option.execute();
+
+					// Redraw
+					const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
+					if (gameObjectField)
+						gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+				};
+
+				this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, execGameObjectOption);
+			}
 		}, false);
 
 		document.addEventListener('mousedown', (e) => {
@@ -69,13 +80,6 @@ export class UIService implements IUIService {
 			if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
 				this.m_htmlContextMenu.hide();
 		})
-	}
-
-	private updateGameObject(gameObject: IGameObject) {
-		// Redraw
-		const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
-		if (gameObjectField)
-			gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 	}
 
 	public showMessage(message: string): void {

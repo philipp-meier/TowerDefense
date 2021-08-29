@@ -1,6 +1,6 @@
 import { IGameObject, IGameObjectOption } from "../Interfaces";
 
-type ContextMenuCallback = (gameObject: IGameObject) => void;
+type ContextMenuExecOptionCallback = (gameObject: IGameObject, option: IGameObjectOption) => void;
 
 export class HtmlContextMenu {
 	private m_htmlElement: HTMLUListElement;
@@ -15,15 +15,14 @@ export class HtmlContextMenu {
 		menu.className = "menu";
 		return menu;
 	}
-	private buildMenuItem(gameObject: IGameObject, option: IGameObjectOption, fnCallback: ContextMenuCallback): HTMLLIElement {
+	private buildMenuItem(gameObject: IGameObject, option: IGameObjectOption, fnExecOptionCallback: ContextMenuExecOptionCallback): HTMLLIElement {
 		const menuItem = <HTMLLIElement>document.createElement('li');
 		menuItem.className = "menu-item";
 
 		const btn = document.createElement('a');
 		btn.className = "menu-btn";
 		btn.onclick = () => {
-			option.execute();
-			fnCallback(gameObject);
+			fnExecOptionCallback(gameObject, option);
 			this.hide();
 		};
 
@@ -36,18 +35,18 @@ export class HtmlContextMenu {
 		return menuItem;
 	}
 
-	private prepareContextMenu(gameObject: IGameObject, fnCallback: ContextMenuCallback): boolean {
+	private prepareContextMenu(gameObject: IGameObject, fnExecOptionCallback: ContextMenuExecOptionCallback): boolean {
 		const options = gameObject.getOptions();
 
 		this.m_htmlElement.innerText = '';
 		options.forEach((option) => {
-			this.m_htmlElement.append(this.buildMenuItem(gameObject, option, fnCallback));
+			this.m_htmlElement.append(this.buildMenuItem(gameObject, option, fnExecOptionCallback));
 		});
 
 		return options.length > 0;
 	}
-	public show(gameObject: IGameObject, x: number, y: number, fnCallback: ContextMenuCallback) {
-		if (this.prepareContextMenu(gameObject, fnCallback)) {
+	public show(gameObject: IGameObject, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback) {
+		if (this.prepareContextMenu(gameObject, fnExecOptionCallback)) {
 			this.m_htmlElement.style.left = x + "px";
 			this.m_htmlElement.style.top = y + "px";
 			this.m_htmlElement.classList.add('menu-show');
