@@ -25,17 +25,22 @@ export class Tower implements IBuyableGameObject {
 	public getPrice(): number { return 50; }
 
 	public getOptions(): IGameObjectOption[] {
-		return [{
-			title: "Upgrade",
+		if (this.m_upgrades == 0)
+			return [this.createGameObjectOption("Upgrade 1", "Tower/level2.svg", 50)];
+		else if (this.m_upgrades == 1)
+			return [this.createGameObjectOption("Upgrade 2", "Tower/level3.svg", 100)];
+		else
+			return [];
+	}
+	private createGameObjectOption(title: string, svgName: string, price: number): IGameObjectOption {
+		return {
+			title: title,
 			execute: () => {
-				if (this.m_upgrades == 0) {
-					this.m_upgrades++;
-					this.m_svg = 'Tower/level2.svg';
-				} else {
-					this.m_svg = 'Tower/level3.svg';
-				}
-			}
-		}]
+				this.m_upgrades++;
+				this.m_svg = svgName
+			},
+			getPrice: () => { return price; }
+		};
 	}
 	public placeObject(field: IGameField): void {
 		this.m_assignedGameField = field;

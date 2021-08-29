@@ -4,6 +4,7 @@ import { IGameObject, IRenderableObject, IRenderableText, IUIService } from "../
 import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 import { Game } from "../classes/Game.js";
+import { GameFieldService } from "./GameFieldService.js";
 
 export class UIService implements IUIService {
 
@@ -24,10 +25,14 @@ export class UIService implements IUIService {
 			e = e || window.event;
 			const target = e.target;
 
-			if (target && target instanceof HTMLDivElement && target.classList.contains('singleField')) {
+			if (!target || !GameFieldService.isEventTargetGameField(target))
+				return;
+
+			const gameObjectID = GameFieldService.getGameObjectIdFromEventTarget(target);
+			if (!gameObjectID) {
 				const tower = new Tower();
 				this.m_game.addBuyableGameObject(tower);
-				this.renderGameObject(tower, target);
+				this.renderGameObject(tower, <HTMLDivElement>target);
 			}
 		});
 
@@ -36,12 +41,13 @@ export class UIService implements IUIService {
 			e.preventDefault();
 
 			const target = e.target;
-			if (target && target instanceof HTMLDivElement && target.dataset.gameObjectId) {
-				const gameObject = this.m_game.getBuyableGameObjectById(parseInt(target.dataset.gameObjectId));
+			const gameObjectID = target && GameFieldService.getGameObjectIdFromEventTarget(target);
+			if (!gameObjectID)
+				return;
 
-				if (gameObject)
-					this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, this.updateGameObject);
-			}
+			const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
+			if (gameObject)
+				this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, this.updateGameObject);
 		}, false);
 
 		document.addEventListener('mousedown', (e) => {
@@ -54,9 +60,9 @@ export class UIService implements IUIService {
 
 	private updateGameObject(gameObject: IGameObject) {
 		// Redraw
-		const container = document.querySelector(`div.singleField[data-game-object-id="${gameObject.getID()}"]`);
-		if (container && container instanceof HTMLDivElement)
-			container.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+		const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
+		if (gameObjectField)
+			gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 	}
 
 	public showMessage(message: string): void {
@@ -86,19 +92,19 @@ export class UIService implements IUIService {
 	}
 
 	public renderGameBoard(field: GameBoard): void {
-		const singleFields = field.GameFields();
-		const fieldContainer = this.createObject({ cssClass: "game-field", x: 0, y: 0, height: AppConfig.fieldHeight, width: AppConfig.fieldWidth });
+		const gameFields = field.GameFields();
+		const fieldContainer = this.createObject({ cssClass: "game-board", x: 0, y: 0, height: AppConfig.fieldHeight, width: AppConfig.fieldWidth });
 		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
 		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
 
-		for (let i = 0; i < singleFields.length; i++) {
-			for (let j = 0; j < singleFields[i].length; j++) {
-				const singleField = singleFields[i][j];
-				const singleFieldObject = this.createObject({ cssClass: "singleField", x: 0, y: 0, width: fieldWidth, height: fieldHeight });
-				singleFieldObject.style.left = this.getUnitString(j * fieldWidth);
-				singleFieldObject.style.top = this.getUnitString(i * fieldHeight);
-				singleFieldObject.dataset.fieldId = singleField.id.toString();
-				fieldContainer.append(singleFieldObject);
+		for (let i = 0; i < gameFields.length; i++) {
+			for (let j = 0; j < gameFields[i].length; j++) {
+				const gameField = gameFields[i][j];
+				const gameFieldObject = this.createObject({ cssClass: "game-field", x: 0, y: 0, width: fieldWidth, height: fieldHeight });
+				gameFieldObject.style.left = this.getUnitString(j * fieldWidth);
+				gameFieldObject.style.top = this.getUnitString(i * fieldHeight);
+				gameFieldObject.dataset.fieldId = gameField.id.toString();
+				fieldContainer.append(gameFieldObject);
 			}
 		}
 		this.m_parentContainer.append(fieldContainer);

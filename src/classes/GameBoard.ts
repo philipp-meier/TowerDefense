@@ -8,16 +8,16 @@ export class GameBoard {
 	}
 
 	private createGameFieldArray(rowCount: number, columnCount: number): IGameField[][] {
-		let singleFields: IGameField[][] = [];
+		let gameFields: IGameField[][] = [];
 
 		let fieldID = 1;
 		for (let i = 0; i < rowCount; i++) {
-			singleFields[i] = [];
+			gameFields[i] = [];
 			for (let j = 0; j < columnCount; j++) {
-				singleFields[i][j] = { id: fieldID++, gameObject: null };
+				gameFields[i][j] = { id: fieldID++, gameObject: null };
 			}
 		}
-		return singleFields;
+		return gameFields;
 	}
 
 	public GameFields(): IGameField[][] {

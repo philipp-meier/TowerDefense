@@ -29,7 +29,7 @@ export interface IRenderableText extends IRenderableObject {
 	text: string;
 }
 
-export interface IGameObjectOption {
+export interface IGameObjectOption extends IPriced {
 	title: string;
 	execute(): void;
 }
