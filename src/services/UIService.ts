@@ -34,7 +34,7 @@ export class UIService implements IUIService {
 	}
 
 	private registerHandlers(): void {
-		document.addEventListener('click', (e) => {
+		this.m_parentContainer.addEventListener('click', (e) => {
 			e = e || window.event;
 			const target = e.target;
 
@@ -49,7 +49,7 @@ export class UIService implements IUIService {
 			}
 		});
 
-		document.addEventListener('contextmenu', (e) => {
+		this.m_parentContainer.addEventListener('contextmenu', (e) => {
 			e = e || window.event;
 			e.preventDefault();
 
@@ -74,7 +74,7 @@ export class UIService implements IUIService {
 			}
 		}, false);
 
-		document.addEventListener('mousedown', (e) => {
+		this.m_parentContainer.addEventListener('mousedown', (e) => {
 			e = e || window.event;
 			const target = e.target;
 			if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))

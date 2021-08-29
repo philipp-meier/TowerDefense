@@ -2,16 +2,16 @@
     <g id="Tower_Level3">
         <title>Layer 1</title>
         <g stroke="null" id="svg_5">
-            <rect stroke="#000" id="svg_3" height="5.59783" width="45.37691" y="4.40614" x="48.67366" fill="#7f7f7f" />
+            <rect stroke="#000" id="svg_3" height="5.59783" width="45.37691" y="4.40614" x="48.67366" fill="#999999" />
             <rect stroke="#000" id="svg_4" height="5.59783" width="45.37691" y="13.44879" x="48.67366" fill="#999999" />
             <ellipse stroke="#000" ry="23.25255" rx="31.04735" id="svg_2" cy="24.21387" cx="39.46181" fill="#191919" />
-            <rect stroke="#000" id="svg_1" height="77.93908" width="70.96538" y="22.06085" x="3.97912" fill="#262222" />
+            <rect stroke="#000" id="svg_1" height="77.93908" width="70.96538" y="22.06085" x="3.97912" fill="#565656" />
         </g>
-        <rect stroke="#000" fill="#666666" x="28.34526" y="26.66667" width="64.83581" height="4.81013" id="svg_6" />
-        <rect stroke="#000" fill="#666666" x="28.63511" y="34.49275" width="64.83581" height="4.81013" id="svg_7" />
-        <rect stroke="#000" fill="#666666" x="28.63511" y="42.31884" width="64.83581" height="4.81013" id="svg_8" />
-        <rect stroke="#000" fill="#666666" x="28.63511" y="49.85507" width="64.83581" height="4.81013" id="svg_9" />
-        <rect stroke="#000" fill="#666666" x="28.63511" y="58.26087" width="64.83581" height="4.81013" id="svg_10" />
+        <rect stroke="#000" fill="#999999" x="28.34526" y="26.66667" width="64.83581" height="4.81013" id="svg_6" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="34.49275" width="64.83581" height="4.81013" id="svg_7" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="42.31884" width="64.83581" height="4.81013" id="svg_8" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="49.85507" width="64.83581" height="4.81013" id="svg_9" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="58.26087" width="64.83581" height="4.81013" id="svg_10" />
     </g>
 
 </svg>
