@@ -36,7 +36,6 @@ export class Tower implements IBuyableGameObject {
 		return {
 			title: title,
 			execute: () => {
-				// TODO: Check price
 				this.m_upgrades++;
 				this.m_svg = svgName
 			},

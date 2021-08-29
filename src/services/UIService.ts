@@ -5,6 +5,7 @@ import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 import { Game } from "../classes/Game.js";
 import { GameFieldService } from "./GameFieldService.js";
+import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
 
 export class UIService implements IUIService {
 
@@ -12,10 +13,13 @@ export class UIService implements IUIService {
 	private readonly m_cssUnit: string = 'px';
 	private readonly m_game: Game;
 	private m_htmlContextMenu: HtmlContextMenu;
+	private m_htmlMessageBox: HtmlMessageBox;
 
 	constructor(container: HTMLDivElement, game: Game) {
 		this.m_parentContainer = container;
 		this.m_htmlContextMenu = new HtmlContextMenu(container);
+		this.m_htmlMessageBox = new HtmlMessageBox(container);
+
 		this.m_game = game;
 		this.registerHandlers();
 
@@ -43,9 +47,13 @@ export class UIService implements IUIService {
 
 			const gameObjectID = GameFieldService.getGameObjectIdFromEventTarget(target);
 			if (!gameObjectID) {
-				const tower = new Tower();
-				this.m_game.addBuyableGameObject(tower);
-				this.renderGameObject(tower, <HTMLDivElement>target);
+				try {
+					const tower = new Tower();
+					this.m_game.addBuyableGameObject(tower);
+					this.renderGameObject(tower, <HTMLDivElement>target);
+				} catch (ex) {
+					this.showMessage(ex.message);
+				}
 			}
 		});
 
@@ -61,13 +69,17 @@ export class UIService implements IUIService {
 			const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
 			if (gameObject) {
 				const execGameObjectOption = (gameObject: IGameObject, option: IGameObjectOption) => {
-					this.m_game.buyGameObjectOption(option);
-					option.execute();
+					try {
+						this.m_game.buyGameObjectOption(option);
+						option.execute();
 
-					// Redraw
-					const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
-					if (gameObjectField)
-						gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+						// Redraw
+						const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
+						if (gameObjectField)
+							gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+					} catch (ex) {
+						this.showMessage(ex.message);
+					}
 				};
 
 				this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, execGameObjectOption);
@@ -83,7 +95,7 @@ export class UIService implements IUIService {
 	}
 
 	public showMessage(message: string): void {
-		alert(message);
+		this.m_htmlMessageBox.show('Message', message);
 	}
 	public renderObject(obj: IRenderableObject): void {
 		this.m_parentContainer.append(this.createObject(obj));
