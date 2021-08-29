@@ -10,6 +10,7 @@ export interface IAppConfig {
 export interface IUIService {
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
+	renderPlayerStatusBar(statusBar: IPlayerStatusBar): void;
 	showMessage(message: string): void;
 }
 
@@ -20,13 +21,16 @@ export interface IGameField {
 
 export interface IRenderableObject {
 	cssClass: string;
-	x: number;
-	y: number;
 	height: number;
 	width: number;
 }
 export interface IRenderableText extends IRenderableObject {
 	text: string;
+}
+
+export interface IPlayerStatusBar extends IRenderableObject {
+	health: number;
+	coins: number;
 }
 
 export interface IGameObjectOption extends IPriced {

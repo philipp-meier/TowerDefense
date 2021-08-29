@@ -1,6 +1,6 @@
 import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
-import { IGameObject, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
+import { IGameObject, IPlayerStatusBar, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
 import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 import { Game } from "../classes/Game.js";
@@ -93,14 +93,14 @@ export class UIService implements IUIService {
 
 	public renderGameBoard(field: GameBoard): void {
 		const gameFields = field.GameFields();
-		const fieldContainer = this.createObject({ cssClass: "game-board", x: 0, y: 0, height: AppConfig.fieldHeight, width: AppConfig.fieldWidth });
+		const fieldContainer = this.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
 		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
 		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
 
 		for (let i = 0; i < gameFields.length; i++) {
 			for (let j = 0; j < gameFields[i].length; j++) {
 				const gameField = gameFields[i][j];
-				const gameFieldObject = this.createObject({ cssClass: "game-field", x: 0, y: 0, width: fieldWidth, height: fieldHeight });
+				const gameFieldObject = this.createObject({ cssClass: "game-field", width: fieldWidth, height: fieldHeight });
 				gameFieldObject.style.left = this.getUnitString(j * fieldWidth);
 				gameFieldObject.style.top = this.getUnitString(i * fieldHeight);
 				gameFieldObject.dataset.fieldId = gameField.id.toString();
@@ -115,6 +115,32 @@ export class UIService implements IUIService {
 
 		if (!parentField.dataset.gameObjectId)
 			parentField.dataset.gameObjectId = `${gameObject.getID()}`;
+	}
+
+	public renderPlayerStatusBar(statusBar: IPlayerStatusBar): void {
+		const container = document.createElement('div');
+		this.AppendCssClass(container, statusBar.cssClass);
+		this.SetPosition(container, statusBar);
+
+		const healthContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/health.svg`, statusBar.health);
+		const coinContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/coin.svg`, statusBar.coins);
+
+		container.append(healthContainer);
+		container.append(coinContainer);
+		this.m_parentContainer.append(container);
+	}
+	private renderPlayerStatusBarItem(svgPath: string, value: number): HTMLDivElement {
+		const container = document.createElement('div');
+		const imgDiv = document.createElement('div');
+		imgDiv.style.backgroundImage = `url('${svgPath}')`;
+		imgDiv.className = "icon";
+
+		const spanDiv = document.createElement('span');
+		spanDiv.textContent = value.toString();
+
+		container.append(imgDiv);
+		container.append(spanDiv);
+		return container;
 	}
 
 	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {
