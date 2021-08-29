@@ -1,3 +1,5 @@
+import { HtmlControlBuilder } from "../services/HtmlControlBuilder.js";
+
 export class HtmlMessageBox {
 	private m_htmlElement: HTMLDivElement;
 
@@ -7,29 +9,12 @@ export class HtmlMessageBox {
 	}
 
 	private buildMessageBox(): HTMLDivElement {
-		const menu = <HTMLDivElement>document.createElement('div');
-		menu.className = "message-box hidden";
+		const menu = HtmlControlBuilder.createDiv(null, "message-box hidden");
+		HtmlControlBuilder.createDiv(menu, "title");
+		HtmlControlBuilder.createDiv(menu, "text");
 
-		const titleDiv = document.createElement('div');
-		titleDiv.className = "title";
-		menu.append(titleDiv);
-
-		const textDiv = document.createElement('div');
-		textDiv.className = "text";
-		menu.append(textDiv);
-
-		const commandDiv = document.createElement('div');
-		commandDiv.className = "commands";
-
-		const okButton = <HTMLButtonElement>document.createElement('button');
-		okButton.type = "button";
-		okButton.textContent = "OK";
-		okButton.onclick = () => {
-			this.hide();
-		}
-
-		commandDiv.append(okButton);
-		menu.append(commandDiv);
+		const commandDiv = HtmlControlBuilder.createDiv(menu, "commands");
+		HtmlControlBuilder.createButton(commandDiv, "OK", () => { this.hide(); });
 
 		return menu;
 	}

@@ -1,4 +1,5 @@
-import { IGameObject, IGameObjectOption } from "../Interfaces";
+import { IGameObject, IGameObjectOption } from "../Interfaces.js";
+import { HtmlControlBuilder } from "../services/HtmlControlBuilder.js";
 
 type ContextMenuExecOptionCallback = (gameObject: IGameObject, option: IGameObjectOption) => void;
 
@@ -11,27 +12,17 @@ export class HtmlContextMenu {
 	}
 
 	private buildMenu(): HTMLUListElement {
-		const menu = <HTMLUListElement>document.createElement('ul');
-		menu.className = "menu";
-		return menu;
+		return HtmlControlBuilder.createUListElement(null, "menu");
 	}
 	private buildMenuItem(gameObject: IGameObject, option: IGameObjectOption, fnExecOptionCallback: ContextMenuExecOptionCallback): HTMLLIElement {
-		const menuItem = <HTMLLIElement>document.createElement('li');
-		menuItem.className = "menu-item";
+		const menuItem = HtmlControlBuilder.createListElement(null, "menu-item");
 
-		const btn = document.createElement('a');
-		btn.className = "menu-btn";
-		btn.onclick = () => {
+		const btn = HtmlControlBuilder.createLinkButton(menuItem, "menu-btn", () => {
 			fnExecOptionCallback(gameObject, option);
 			this.hide();
-		};
+		});
 
-		const span = document.createElement('span');
-		span.className = "menu-text";
-		span.textContent = option.title;
-
-		btn.append(span);
-		menuItem.append(btn);
+		HtmlControlBuilder.createSpan(btn, option.title, "menu-text");
 		return menuItem;
 	}
 

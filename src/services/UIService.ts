@@ -6,11 +6,11 @@ import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 import { Game } from "../classes/Game.js";
 import { GameFieldService } from "./GameFieldService.js";
 import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
+import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
 
 export class UIService implements IUIService {
 
 	private readonly m_parentContainer: HTMLDivElement;
-	private readonly m_cssUnit: string = 'px';
 	private readonly m_game: Game;
 	private m_htmlContextMenu: HtmlContextMenu;
 	private m_htmlMessageBox: HtmlMessageBox;
@@ -98,40 +98,30 @@ export class UIService implements IUIService {
 		this.m_htmlMessageBox.show('Message', message);
 	}
 	public renderObject(obj: IRenderableObject): void {
-		this.m_parentContainer.append(this.createObject(obj));
-	}
-	private createObject(obj: IRenderableObject): HTMLElement {
-		const container = <HTMLDivElement>document.createElement('div');
-
-		this.AppendCssClass(container, obj.cssClass);
-		this.SetPosition(container, obj);
-
-		return container;
+		this.m_parentContainer.append(HtmlControlBuilder.createObject(obj));
 	}
 
 	public renderText(textObj: IRenderableText): void {
 		this.m_parentContainer.append(this.createText(textObj));
 	}
 	private createText(textObj: IRenderableText): HTMLElement {
-		const container = this.createObject(textObj);
-		const span = <HTMLSpanElement>document.createElement('span');
-		span.textContent = textObj.text;
-		container.append(span);
+		const container = HtmlControlBuilder.createObject(textObj);
+		HtmlControlBuilder.createSpan(container, textObj.text, null);
 		return container;
 	}
 
 	public renderGameBoard(field: GameBoard): void {
 		const gameFields = field.GameFields();
-		const fieldContainer = this.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
+		const fieldContainer = HtmlControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
 		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
 		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
 
 		for (let i = 0; i < gameFields.length; i++) {
 			for (let j = 0; j < gameFields[i].length; j++) {
 				const gameField = gameFields[i][j];
-				const gameFieldObject = this.createObject({ cssClass: "game-field", width: fieldWidth, height: fieldHeight });
-				gameFieldObject.style.left = this.getUnitString(j * fieldWidth);
-				gameFieldObject.style.top = this.getUnitString(i * fieldHeight);
+				const gameFieldObject = HtmlControlBuilder.createObject({ cssClass: "game-field", width: fieldWidth, height: fieldHeight });
+				gameFieldObject.style.left = HtmlControlBuilder.getUnitString(j * fieldWidth);
+				gameFieldObject.style.top = HtmlControlBuilder.getUnitString(i * fieldHeight);
 				gameFieldObject.dataset.fieldId = gameField.id.toString();
 				fieldContainer.append(gameFieldObject);
 			}
@@ -147,32 +137,22 @@ export class UIService implements IUIService {
 	}
 
 	public renderPlayerStatusBar(statusBar: IPlayerStatusBar): void {
-		const container = document.createElement('div');
-		this.AppendCssClass(container, statusBar.cssClass);
-		this.SetPosition(container, statusBar);
+		const container = HtmlControlBuilder.createDiv(this.m_parentContainer, statusBar.cssClass);
+		HtmlControlBuilder.SetPosition(container, statusBar);
 
 		const healthContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/health.svg`, statusBar.getHealth(), "health");
 		const coinContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/coin.svg`, statusBar.getCoins(), "coins");
 
 		container.append(healthContainer);
 		container.append(coinContainer);
-		this.m_parentContainer.append(container);
 	}
 	private renderPlayerStatusBarItem(svgPath: string, value: number, className: string): HTMLDivElement {
-		const container = document.createElement('div');
+		const container = HtmlControlBuilder.createDiv(null, className);
 
-		if (className)
-			container.className = className;
-
-		const imgDiv = document.createElement('div');
+		const imgDiv = HtmlControlBuilder.createDiv(container, "icon");
 		imgDiv.style.backgroundImage = `url('${svgPath}')`;
-		imgDiv.className = "icon";
 
-		const spanDiv = document.createElement('span');
-		spanDiv.textContent = value.toString();
-
-		container.append(imgDiv);
-		container.append(spanDiv);
+		HtmlControlBuilder.createSpan(container, value.toString(), null);
 		return container;
 	}
 	private refreshPlayerStatusBar(): void {
@@ -184,17 +164,5 @@ export class UIService implements IUIService {
 		const coinSpan = document.querySelector(`div.${playerStatusBar.cssClass} div.coins span`);
 		if (coinSpan && coinSpan instanceof HTMLSpanElement)
 			coinSpan.textContent = playerStatusBar.getCoins().toString();
-	}
-
-	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {
-		element.style.width = this.getUnitString(ro.width);
-		element.style.height = this.getUnitString(ro.height);
-	}
-	private AppendCssClass(element: HTMLElement, className: string): void {
-		if (className)
-			element.className = className;
-	}
-	private getUnitString(n: number): string {
-		return `${n}${this.m_cssUnit}`;
 	}
 }
