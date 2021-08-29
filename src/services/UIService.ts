@@ -18,6 +18,19 @@ export class UIService implements IUIService {
 		this.m_htmlContextMenu = new HtmlContextMenu(container);
 		this.m_game = game;
 		this.registerHandlers();
+
+		// Start update loop
+		let prevTime = 0.0;
+		const updateLoop = (time: number) => {
+			const dt = time - prevTime;
+			prevTime = time;
+
+			// Updates
+			this.refreshPlayerStatusBar();
+
+			window.requestAnimationFrame(updateLoop);
+		}
+		updateLoop(prevTime);
 	}
 
 	private registerHandlers(): void {
@@ -122,15 +135,19 @@ export class UIService implements IUIService {
 		this.AppendCssClass(container, statusBar.cssClass);
 		this.SetPosition(container, statusBar);
 
-		const healthContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/health.svg`, statusBar.health);
-		const coinContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/coin.svg`, statusBar.coins);
+		const healthContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/health.svg`, statusBar.getHealth(), "health");
+		const coinContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/coin.svg`, statusBar.getCoins(), "coins");
 
 		container.append(healthContainer);
 		container.append(coinContainer);
 		this.m_parentContainer.append(container);
 	}
-	private renderPlayerStatusBarItem(svgPath: string, value: number): HTMLDivElement {
+	private renderPlayerStatusBarItem(svgPath: string, value: number, className: string): HTMLDivElement {
 		const container = document.createElement('div');
+
+		if (className)
+			container.className = className;
+
 		const imgDiv = document.createElement('div');
 		imgDiv.style.backgroundImage = `url('${svgPath}')`;
 		imgDiv.className = "icon";
@@ -141,6 +158,16 @@ export class UIService implements IUIService {
 		container.append(imgDiv);
 		container.append(spanDiv);
 		return container;
+	}
+	private refreshPlayerStatusBar(): void {
+		const playerStatusBar = this.m_game.getPlayerStatusBar();
+		const healthSpan = document.querySelector(`div.${playerStatusBar.cssClass} div.health span`);
+		if (healthSpan && healthSpan instanceof HTMLSpanElement)
+			healthSpan.textContent = playerStatusBar.getHealth().toString();
+
+		const coinSpan = document.querySelector(`div.${playerStatusBar.cssClass} div.coins span`);
+		if (coinSpan && coinSpan instanceof HTMLSpanElement)
+			coinSpan.textContent = playerStatusBar.getCoins().toString();
 	}
 
 	private SetPosition(element: HTMLElement, ro: IRenderableObject): void {

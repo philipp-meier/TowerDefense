@@ -3,6 +3,7 @@ import { UIService } from './services/UIService.js';
 import { AppConfig, AppService } from './services/AppService.js';
 import { Player } from './classes/Player.js';
 import { Game } from './classes/Game.js';
+import { PlayerStatusBar } from './classes/PlayerStatusBar.js';
 
 (() => {
 	const main = document.getElementById("main");
@@ -16,7 +17,7 @@ import { Game } from './classes/Game.js';
 	}
 
 	uiService.renderText({ cssClass: "app-title", width: AppConfig.fieldWidth, height: 25, text: AppConfig.appTitle });
-	uiService.renderPlayerStatusBar({ cssClass: "player-status-bar", health: 85, coins: 2000, width: AppConfig.fieldWidth, height: 25 });
+	uiService.renderPlayerStatusBar(game.getPlayerStatusBar());
 
 	const field = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
 	uiService.renderGameBoard(field);

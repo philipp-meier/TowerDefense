@@ -29,8 +29,8 @@ export interface IRenderableText extends IRenderableObject {
 }
 
 export interface IPlayerStatusBar extends IRenderableObject {
-	health: number;
-	coins: number;
+	getHealth(): number;
+	getCoins(): number;
 }
 
 export interface IGameObjectOption extends IPriced {
