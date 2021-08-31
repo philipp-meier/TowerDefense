@@ -8,7 +8,7 @@ export class GameBoard {
 	}
 
 	private createGameFieldArray(rowCount: number, columnCount: number): IGameField[][] {
-		let gameFields: IGameField[][] = [];
+		const gameFields: IGameField[][] = [];
 
 		let fieldID = 1;
 		for (let i = 0; i < rowCount; i++) {

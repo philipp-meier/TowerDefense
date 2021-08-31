@@ -26,7 +26,6 @@ export class UIService implements IUIService {
 		// Start update loop
 		let prevTime = 0.0;
 		const updateLoop = (time: number) => {
-			const dt = time - prevTime;
 			prevTime = time;
 
 			// Updates

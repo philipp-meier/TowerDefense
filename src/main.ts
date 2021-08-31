@@ -3,7 +3,6 @@ import { UIService } from './services/UIService.js';
 import { AppConfig, AppService } from './services/AppService.js';
 import { Player } from './classes/Player.js';
 import { Game } from './classes/Game.js';
-import { PlayerStatusBar } from './classes/PlayerStatusBar.js';
 
 (() => {
 	const main = document.getElementById("main");

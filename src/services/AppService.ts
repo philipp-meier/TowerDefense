@@ -10,8 +10,6 @@ export const AppConfig: IAppConfig = {
 };
 
 export class AppService {
-	constructor() { }
-
 	public static isSupportedScreenSize(): boolean {
 		return window.innerHeight > AppConfig.fieldHeight && window.innerWidth > AppConfig.fieldWidth;
 	}

@@ -3,9 +3,9 @@ import { AppConfig } from "../services/AppService.js";
 import { Player } from "./Player.js";
 
 export class PlayerStatusBar implements IPlayerStatusBar {
-	cssClass: string = "player-status-bar";
-	height: number = 25;
-	width: number = AppConfig.fieldWidth;
+	cssClass = "player-status-bar";
+	height = 25;
+	width = AppConfig.fieldWidth;
 
 	private m_Player: Player;
 

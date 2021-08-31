@@ -19,7 +19,7 @@ export class HtmlMessageBox {
 		return menu;
 	}
 
-	public show(title: string, message: string) {
+	public show(title: string, message: string): void {
 		const titleDiv = this.m_htmlElement.querySelector('div.title');
 		if (titleDiv && titleDiv instanceof HTMLDivElement)
 			titleDiv.textContent = title;
@@ -30,7 +30,7 @@ export class HtmlMessageBox {
 
 		this.m_htmlElement.classList.remove('hidden');
 	}
-	public hide() {
+	public hide(): void {
 		this.m_htmlElement.classList.add('hidden');
 	}
 }

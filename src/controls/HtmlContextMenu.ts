@@ -36,14 +36,14 @@ export class HtmlContextMenu {
 
 		return options.length > 0;
 	}
-	public show(gameObject: IGameObject, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback) {
+	public show(gameObject: IGameObject, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback): void {
 		if (this.prepareContextMenu(gameObject, fnExecOptionCallback)) {
 			this.m_htmlElement.style.left = x + "px";
 			this.m_htmlElement.style.top = y + "px";
 			this.m_htmlElement.classList.add('menu-show');
 		}
 	}
-	public hide() {
+	public hide(): void {
 		this.m_htmlElement.classList.remove('menu-show');
 	}
 }

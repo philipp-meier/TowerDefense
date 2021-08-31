@@ -1,15 +1,15 @@
 import { IGameObjectOption, IGameField, IBuyableGameObject } from "../Interfaces.js";
 
 export class Tower implements IBuyableGameObject {
-	private static currentId: number = 1;
+	private static currentId = 1;
 	private m_id: number;
-	private m_health: number = 100;
-	private m_armor: number = 0;
-	private m_damage: number = 15;
-	private m_attackSpeed: number = 1;
+	private m_health = 100;
+	private m_armor = 0;
+	private m_damage = 15;
+	private m_attackSpeed = 1;
 	private m_assignedGameField: IGameField | null = null;
 	private m_svg = 'Tower/level1.svg';
-	private m_upgrades: number = 0;
+	private m_upgrades = 0;
 
 	constructor() {
 		this.m_id = Tower.currentId++;

@@ -1,8 +1,8 @@
 export class GameFieldService {
-	public static isEventTargetGameField(target: EventTarget) {
+	public static isEventTargetGameField(target: EventTarget): boolean {
 		return target && target instanceof HTMLDivElement && this.isGameField(target);
 	}
-	private static isGameField(container: HTMLDivElement) {
+	private static isGameField(container: HTMLDivElement): boolean {
 		return container && container.classList.contains('game-field');
 	}
 

@@ -1,7 +1,7 @@
 import { IRenderableObject } from "../Interfaces.js";
 
 export class HtmlControlBuilder {
-	private static m_cssUnit: string = 'px';
+	private static m_cssUnit = 'px';
 
 	private static createHtmlElement(tagName: string, parent: HTMLElement | null = null, cssClass: string | null = null) {
 		const htmlElement = document.createElement(tagName);

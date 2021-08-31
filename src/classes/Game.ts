@@ -21,7 +21,7 @@ export class Game {
 		return this.m_buyableGameObjects.find(x => x.getID() == id);
 	}
 
-	public buyGameObjectOption(option: IGameObjectOption) {
+	public buyGameObjectOption(option: IGameObjectOption): void {
 		this.m_player.buy(option);
 	}
 
