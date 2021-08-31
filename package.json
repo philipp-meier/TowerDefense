@@ -2,8 +2,8 @@
   "scripts": {
     "build": "tsc && lessc styles/main.less www/css/main.css",
     "test": "env TS_NODE_PROJECT=\"test/tsconfig.testing.json\" mocha --require ts-node/register 'test/**/*.ts'",
-    "run": "npm run build && http-server www",
-    "lint": "eslint . --ext .ts"
+    "lint": "eslint . --ext .ts",
+    "run": "npm run lint && npm run build && http-server www"
   },
   "devDependencies": {
     "@types/chai": "^4.2.21",
