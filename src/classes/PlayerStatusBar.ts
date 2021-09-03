@@ -3,9 +3,9 @@ import { AppConfig } from "../services/AppService.js";
 import { Player } from "./Player.js";
 
 export class PlayerStatusBar implements IPlayerStatusBar {
-	cssClass = "player-status-bar";
-	height = 25;
-	width = AppConfig.fieldWidth;
+	public cssClass = "player-status-bar";
+	public height = 25;
+	public width = AppConfig.fieldWidth;
 
 	private m_Player: Player;
 
@@ -13,10 +13,10 @@ export class PlayerStatusBar implements IPlayerStatusBar {
 		this.m_Player = player;
 	}
 
-	getHealth(): number {
+	public getHealth(): number {
 		return this.m_Player.getHealth();
 	}
-	getCoins(): number {
+	public getCoins(): number {
 		return this.m_Player.getCoins();
 	}
 }

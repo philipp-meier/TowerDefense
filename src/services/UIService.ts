@@ -51,7 +51,7 @@ export class UIService implements IUIService {
 					this.m_game.addBuyableGameObject(tower);
 					this.renderGameObject(tower, <HTMLDivElement>target);
 				} catch (ex) {
-					this.showMessage(ex.message);
+					this.showMessage((<Error>ex).message);
 				}
 			}
 		});
@@ -77,7 +77,7 @@ export class UIService implements IUIService {
 						if (gameObjectField)
 							gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 					} catch (ex) {
-						this.showMessage(ex.message);
+						this.showMessage((<Error>ex).message);
 					}
 				};
 
