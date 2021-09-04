@@ -17,6 +17,8 @@ export interface IUIService {
 	renderGameBoard(gameBoard: GameBoard): void;
 	refreshUI(): void;
 	renderMessage(message: string): void;
+
+	addGameObject(target: never): void;
 }
 
 export interface IGameField {

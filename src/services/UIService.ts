@@ -8,6 +8,7 @@ import { GameFieldService } from "./GameFieldService.js";
 import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
 import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
 import { HtmlPlayerStatusBar } from "../controls/HtmlPlayerStatusBar.js";
+import { HtmlInputService } from "./HtmlInputService.js";
 
 export class UIService implements IUIService {
 
@@ -24,68 +25,44 @@ export class UIService implements IUIService {
 		this.m_htmlPlayerStatusBar = new HtmlPlayerStatusBar();
 		this.m_game = game;
 
-		this.registerHandlers();
+		HtmlInputService.registerHandlers(container, this);
 	}
 
 	public refreshUI(): void {
 		this.m_htmlPlayerStatusBar.refreshPlayerStatusBar(this.m_game.getPlayerStatusInfo());
 	}
 
-	private registerHandlers(): void {
-		this.m_parentContainer.addEventListener('click', (e) => {
-			e = e || window.event;
-			const target = e.target;
-
-			if (!target || !GameFieldService.isEventTargetGameField(target))
-				return;
-
-			const gameObjectID = GameFieldService.getGameObjectIdFromEventTarget(target);
-			if (!gameObjectID) {
+	public addGameObject(target: never): void {
+		try {
+			const tower = new Tower();
+			this.m_game.buyGameObject(tower);
+			this.renderGameObject(tower, <HTMLDivElement>target);
+		} catch (ex) {
+			this.renderMessage((<Error>ex).message);
+		}
+	}
+	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
+		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
+		if (gameObject) {
+			const execGameObjectOption = (gameObject: IGameObject, option: IGameObjectOption) => {
 				try {
-					const tower = new Tower();
-					this.m_game.buyGameObject(tower);
-					this.renderGameObject(tower, <HTMLDivElement>target);
+					this.m_game.buyGameObjectOption(option);
+					option.execute();
+
+					// Redraw
+					const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
+					if (gameObjectField)
+						gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 				} catch (ex) {
 					this.renderMessage((<Error>ex).message);
 				}
-			}
-		});
+			};
 
-		this.m_parentContainer.addEventListener('contextmenu', (e) => {
-			e = e || window.event;
-			e.preventDefault();
-
-			const target = e.target;
-			const gameObjectID = target && GameFieldService.getGameObjectIdFromEventTarget(target);
-			if (!gameObjectID)
-				return;
-
-			const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
-			if (gameObject) {
-				const execGameObjectOption = (gameObject: IGameObject, option: IGameObjectOption) => {
-					try {
-						this.m_game.buyGameObjectOption(option);
-						option.execute();
-
-						// Redraw
-						const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
-						if (gameObjectField)
-							gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
-					} catch (ex) {
-						this.renderMessage((<Error>ex).message);
-					}
-				};
-
-				this.m_htmlContextMenu.show(gameObject, e.pageX, e.pageY, execGameObjectOption);
-			}
-		}, false);
-
-		this.m_parentContainer.addEventListener('mousedown', (e) => {
-			e = e || window.event;
-			const target = e.target;
-			if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
-				this.m_htmlContextMenu.hide();
-		})
+			this.m_htmlContextMenu.show(gameObject, posX, posY, execGameObjectOption);
+		}
+	}
+	public hideContextMenu(): void {
+		this.m_htmlContextMenu.hide();
 	}
 
 	public renderMessage(message: string): void {
