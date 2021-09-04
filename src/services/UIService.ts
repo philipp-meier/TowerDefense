@@ -7,6 +7,7 @@ import { Game } from "../classes/Game.js";
 import { GameFieldService } from "./GameFieldService.js";
 import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
 import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
+import { HtmlPlayerStatusBar } from "../controls/HtmlPlayerStatusBar.js";
 
 export class UIService implements IUIService {
 
@@ -14,18 +15,20 @@ export class UIService implements IUIService {
 	private readonly m_game: Game;
 	private m_htmlContextMenu: HtmlContextMenu;
 	private m_htmlMessageBox: HtmlMessageBox;
+	private m_htmlPlayerStatusBar: HtmlPlayerStatusBar;
 
 	constructor(container: HTMLDivElement, game: Game) {
 		this.m_parentContainer = container;
 		this.m_htmlContextMenu = new HtmlContextMenu(container);
 		this.m_htmlMessageBox = new HtmlMessageBox(container);
+		this.m_htmlPlayerStatusBar = new HtmlPlayerStatusBar();
 		this.m_game = game;
 
 		this.registerHandlers();
 	}
 
 	public refreshUI(): void {
-		this.refreshPlayerStatusBar(this.m_game.getPlayerStatusInfo());
+		this.m_htmlPlayerStatusBar.refreshPlayerStatusBar(this.m_game.getPlayerStatusInfo());
 	}
 
 	private registerHandlers(): void {
@@ -131,33 +134,6 @@ export class UIService implements IUIService {
 	}
 
 	public renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void {
-		const renderInfo = { height: 25, width: AppConfig.fieldWidth, cssClass: "player-status-bar" };
-		const container = HtmlControlBuilder.createDiv(this.m_parentContainer, renderInfo.cssClass);
-		HtmlControlBuilder.SetPosition(container, renderInfo);
-
-		const healthContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/health.svg`, statusInfo.health, "health");
-		const coinContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/coin.svg`, statusInfo.coins, "coins");
-
-		container.append(healthContainer);
-		container.append(coinContainer);
-	}
-	private renderPlayerStatusBarItem(svgPath: string, value: number, className: string): HTMLDivElement {
-		const container = HtmlControlBuilder.createDiv(null, className);
-
-		const imgDiv = HtmlControlBuilder.createDiv(container, "icon");
-		imgDiv.style.backgroundImage = `url('${svgPath}')`;
-
-		HtmlControlBuilder.createSpan(container, value.toString(), null);
-		return container;
-	}
-	private refreshPlayerStatusBar(statusInfo: IPlayerStatusInfo): void {
-		const renderInfo = { height: 25, width: AppConfig.fieldWidth, cssClass: "player-status-bar" };
-		const healthSpan = document.querySelector(`div.${renderInfo.cssClass} div.health span`);
-		if (healthSpan && healthSpan instanceof HTMLSpanElement)
-			healthSpan.textContent = statusInfo.health.toString();
-
-		const coinSpan = document.querySelector(`div.${renderInfo.cssClass} div.coins span`);
-		if (coinSpan && coinSpan instanceof HTMLSpanElement)
-			coinSpan.textContent = statusInfo.coins.toString();
+		this.m_htmlPlayerStatusBar.createPlayerStatusBar(this.m_parentContainer, statusInfo);
 	}
 }
