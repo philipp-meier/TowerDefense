@@ -23,18 +23,11 @@ export class UIService implements IUIService {
 
 		this.m_game = game;
 		this.registerHandlers();
+		this.m_game.start(this);
+	}
 
-		// Start update loop
-		let prevTime = 0.0;
-		const updateLoop = (time: number) => {
-			prevTime = time;
-
-			// Updates
-			this.refreshPlayerStatusBar();
-
-			window.requestAnimationFrame(updateLoop);
-		}
-		updateLoop(prevTime);
+	public refreshUI(): void {
+		this.refreshPlayerStatusBar();
 	}
 
 	private registerHandlers(): void {

@@ -13,6 +13,7 @@ export interface IUIService {
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
 	renderPlayerStatusBar(statusBar: PlayerStatusBar): void;
+	refreshUI(): void;
 	showMessage(message: string): void;
 }
 
