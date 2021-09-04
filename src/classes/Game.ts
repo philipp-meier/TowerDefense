@@ -1,8 +1,7 @@
-import { IBuyableGameObject, IGameObjectOption, IUIService } from "../Interfaces.js";
+import { IBuyableGameObject, IGameObjectOption, IPlayerStatusInfo, IUIService } from "../Interfaces.js";
 import { AppConfig } from "../services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
-import { PlayerStatusBar } from "./PlayerStatusBar.js";
 
 export class Game {
 	private m_buyableGameObjects: IBuyableGameObject[] = [];
@@ -15,6 +14,10 @@ export class Game {
 	}
 
 	public start(uiService: IUIService): void {
+		uiService.renderAppTitle(AppConfig.appTitle);
+		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
+		uiService.renderGameBoard(this.m_gameBoard);
+
 		this.updateLoop(uiService);
 	}
 	private updateLoop(uiService: IUIService): void {
@@ -24,20 +27,20 @@ export class Game {
 
 	public buyGameObject(gameObject: IBuyableGameObject): void {
 		// TODO: Object should not be created at all, if it is too expensive.
-		this.m_player.buy(gameObject);
+		this.m_player.buyItem(gameObject);
 		this.m_buyableGameObjects.push(gameObject);
 	}
 	public buyGameObjectOption(option: IGameObjectOption): void {
-		this.m_player.buy(option);
+		this.m_player.buyItem(option);
 	}
 
 	public getBuyableGameObjectById(id: number): IBuyableGameObject | undefined {
 		return this.m_buyableGameObjects.find(x => x.getID() == id);
 	}
-	public getPlayerStatusBar(): PlayerStatusBar {
-		return this.m_player.getStatusBar();
-	}
-	public getGameBoard(): GameBoard {
-		return this.m_gameBoard;
+	public getPlayerStatusInfo(): IPlayerStatusInfo {
+		return {
+			health: this.m_player.getHealth(),
+			coins: this.m_player.getCoins()
+		};
 	}
 }

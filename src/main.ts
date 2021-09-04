@@ -12,7 +12,5 @@ import { Game } from './classes/Game.js';
 		return;
 	}
 
-	uiService.renderText({ cssClass: "app-title", width: AppConfig.fieldWidth, height: 25, text: AppConfig.appTitle });
-	uiService.renderPlayerStatusBar(game.getPlayerStatusBar());
-	uiService.renderGameBoard(game.getGameBoard());
+	game.start(uiService);
 })();

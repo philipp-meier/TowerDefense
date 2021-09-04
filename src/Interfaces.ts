@@ -1,4 +1,4 @@
-import { PlayerStatusBar } from "./classes/PlayerStatusBar";
+import { GameBoard } from "./classes/GameBoard";
 
 export interface IAppConfig {
 	appTitle: string;
@@ -12,7 +12,9 @@ export interface IAppConfig {
 export interface IUIService {
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
-	renderPlayerStatusBar(statusBar: PlayerStatusBar): void;
+	renderAppTitle(title: string): void;
+	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
+	renderGameBoard(gameBoard: GameBoard): void;
 	refreshUI(): void;
 	showMessage(message: string): void;
 }
@@ -46,13 +48,20 @@ export interface IGameObject {
 	getSvg(): string;
 	placeObject(field: IGameField): void;
 }
-export interface IBuyableGameObject extends IGameObject, IPriced { }
+export interface IBuyableGameObject extends IGameObject, IPriced {
+	placeObject(field: IGameField): void;
+}
 export interface IMovingGameObject extends IGameObject {
 	getMovementSpeed(): number;
 	getAnimationSvgNames(): string[];
 }
 export interface IShootingGameObject extends IGameObject {
 	getBulletSvgName(): string[];
+}
+
+export interface IPlayerStatusInfo {
+	health: number;
+	coins: number;
 }
 
 export interface IPriced {
