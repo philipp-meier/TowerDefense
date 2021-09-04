@@ -1,12 +1,13 @@
 import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
-import { IGameObject, IGameObjectOption, IPlayerStatusBar, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
+import { IGameObject, IGameObjectOption, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
 import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 import { Game } from "../classes/Game.js";
 import { GameFieldService } from "./GameFieldService.js";
 import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
 import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
+import { PlayerStatusBar } from "../classes/PlayerStatusBar.js";
 
 export class UIService implements IUIService {
 
@@ -48,7 +49,7 @@ export class UIService implements IUIService {
 			if (!gameObjectID) {
 				try {
 					const tower = new Tower();
-					this.m_game.addBuyableGameObject(tower);
+					this.m_game.buyGameObject(tower);
 					this.renderGameObject(tower, <HTMLDivElement>target);
 				} catch (ex) {
 					this.showMessage((<Error>ex).message);
@@ -135,9 +136,10 @@ export class UIService implements IUIService {
 			parentField.dataset.gameObjectId = `${gameObject.getID()}`;
 	}
 
-	public renderPlayerStatusBar(statusBar: IPlayerStatusBar): void {
-		const container = HtmlControlBuilder.createDiv(this.m_parentContainer, statusBar.cssClass);
-		HtmlControlBuilder.SetPosition(container, statusBar);
+	public renderPlayerStatusBar(statusBar: PlayerStatusBar): void {
+		const renderInfo = { height: 25, width: AppConfig.fieldWidth, cssClass: "player-status-bar" };
+		const container = HtmlControlBuilder.createDiv(this.m_parentContainer, renderInfo.cssClass);
+		HtmlControlBuilder.SetPosition(container, renderInfo);
 
 		const healthContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/health.svg`, statusBar.getHealth(), "health");
 		const coinContainer = this.renderPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/coin.svg`, statusBar.getCoins(), "coins");
@@ -156,11 +158,12 @@ export class UIService implements IUIService {
 	}
 	private refreshPlayerStatusBar(): void {
 		const playerStatusBar = this.m_game.getPlayerStatusBar();
-		const healthSpan = document.querySelector(`div.${playerStatusBar.cssClass} div.health span`);
+		const renderInfo = { height: 25, width: AppConfig.fieldWidth, cssClass: "player-status-bar" };
+		const healthSpan = document.querySelector(`div.${renderInfo.cssClass} div.health span`);
 		if (healthSpan && healthSpan instanceof HTMLSpanElement)
 			healthSpan.textContent = playerStatusBar.getHealth().toString();
 
-		const coinSpan = document.querySelector(`div.${playerStatusBar.cssClass} div.coins span`);
+		const coinSpan = document.querySelector(`div.${renderInfo.cssClass} div.coins span`);
 		if (coinSpan && coinSpan instanceof HTMLSpanElement)
 			coinSpan.textContent = playerStatusBar.getCoins().toString();
 	}

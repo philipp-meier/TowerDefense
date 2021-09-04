@@ -1,3 +1,5 @@
+import { PlayerStatusBar } from "./classes/PlayerStatusBar";
+
 export interface IAppConfig {
 	appTitle: string;
 	fieldWidth: number;
@@ -10,7 +12,7 @@ export interface IAppConfig {
 export interface IUIService {
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
-	renderPlayerStatusBar(statusBar: IPlayerStatusBar): void;
+	renderPlayerStatusBar(statusBar: PlayerStatusBar): void;
 	showMessage(message: string): void;
 }
 
@@ -26,11 +28,6 @@ export interface IRenderableObject {
 }
 export interface IRenderableText extends IRenderableObject {
 	text: string;
-}
-
-export interface IPlayerStatusBar extends IRenderableObject {
-	getHealth(): number;
-	getCoins(): number;
 }
 
 export interface IGameObjectOption extends IPriced {

@@ -1,12 +1,6 @@
-import { IPlayerStatusBar } from "../Interfaces.js";
-import { AppConfig } from "../services/AppService.js";
 import { Player } from "./Player.js";
 
-export class PlayerStatusBar implements IPlayerStatusBar {
-	public cssClass = "player-status-bar";
-	public height = 25;
-	public width = AppConfig.fieldWidth;
-
+export class PlayerStatusBar {
 	private m_Player: Player;
 
 	constructor(player: Player) {

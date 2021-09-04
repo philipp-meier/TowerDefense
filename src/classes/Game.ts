@@ -7,14 +7,14 @@ import { PlayerStatusBar } from "./PlayerStatusBar.js";
 export class Game {
 	private m_buyableGameObjects: IBuyableGameObject[] = [];
 	private m_player: Player;
-	private m_GameBoard: GameBoard;
+	private m_gameBoard: GameBoard;
 
 	constructor() {
 		this.m_player = new Player();
-		this.m_GameBoard = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
+		this.m_gameBoard = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
 	}
 
-	public addBuyableGameObject(gameObject: IBuyableGameObject): void {
+	public buyGameObject(gameObject: IBuyableGameObject): void {
 		// TODO: Object should not be created at all, if it is too expensive.
 		this.m_player.buy(gameObject);
 		this.m_buyableGameObjects.push(gameObject);
@@ -31,6 +31,6 @@ export class Game {
 		return this.m_player.getStatusBar();
 	}
 	public getGameBoard(): GameBoard {
-		return this.m_GameBoard;
+		return this.m_gameBoard;
 	}
 }
