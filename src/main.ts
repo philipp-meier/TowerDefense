@@ -1,13 +1,10 @@
-import { GameBoard } from './classes/GameBoard.js';
 import { UIService } from './services/UIService.js';
 import { AppConfig, AppService } from './services/AppService.js';
-import { Player } from './classes/Player.js';
 import { Game } from './classes/Game.js';
 
 (() => {
 	const main = document.getElementById("main");
-	const player = new Player();
-	const game = new Game(player);
+	const game = new Game();
 	const uiService = new UIService(<HTMLDivElement>main, game);
 
 	if (!AppService.isSupportedScreenSize()) {
@@ -17,7 +14,5 @@ import { Game } from './classes/Game.js';
 
 	uiService.renderText({ cssClass: "app-title", width: AppConfig.fieldWidth, height: 25, text: AppConfig.appTitle });
 	uiService.renderPlayerStatusBar(game.getPlayerStatusBar());
-
-	const field = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
-	uiService.renderGameBoard(field);
+	uiService.renderGameBoard(game.getGameBoard());
 })();

@@ -1,15 +1,17 @@
 import { IBuyableGameObject, IGameObjectOption } from "../Interfaces.js";
+import { AppConfig } from "../services/AppService.js";
+import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
 import { PlayerStatusBar } from "./PlayerStatusBar.js";
 
 export class Game {
 	private m_buyableGameObjects: IBuyableGameObject[] = [];
 	private m_player: Player;
-	private m_playerStatusBar: PlayerStatusBar;
+	private m_GameBoard: GameBoard;
 
-	constructor(player: Player) {
-		this.m_player = player;
-		this.m_playerStatusBar = new PlayerStatusBar(player);
+	constructor() {
+		this.m_player = new Player();
+		this.m_GameBoard = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
 	}
 
 	public addBuyableGameObject(gameObject: IBuyableGameObject): void {
@@ -26,6 +28,9 @@ export class Game {
 	}
 
 	public getPlayerStatusBar(): PlayerStatusBar {
-		return this.m_playerStatusBar;
+		return this.m_player.getStatusBar();
+	}
+	public getGameBoard(): GameBoard {
+		return this.m_GameBoard;
 	}
 }
