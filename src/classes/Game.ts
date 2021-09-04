@@ -15,14 +15,11 @@ export class Game {
 	}
 
 	public start(uiService: IUIService): void {
-		let prevTime = 0.0;
-		const updateLoop = (time: number) => {
-			prevTime = time;
-
-			uiService.refreshUI();
-			window.requestAnimationFrame(updateLoop);
-		}
-		updateLoop(prevTime);
+		this.updateLoop(uiService);
+	}
+	private updateLoop(uiService: IUIService): void {
+		uiService.refreshUI();
+		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
 	}
 
 	public buyGameObject(gameObject: IBuyableGameObject): void {
