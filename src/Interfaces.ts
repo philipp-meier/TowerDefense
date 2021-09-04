@@ -1,4 +1,4 @@
-import { GameBoard } from "./classes/GameBoard";
+import { GameBoard } from "./classes/GameBoard.js";
 
 export interface IAppConfig {
 	appTitle: string;
@@ -16,7 +16,7 @@ export interface IUIService {
 	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
 	renderGameBoard(gameBoard: GameBoard): void;
 	refreshUI(): void;
-	showMessage(message: string): void;
+	renderMessage(message: string): void;
 }
 
 export interface IGameField {

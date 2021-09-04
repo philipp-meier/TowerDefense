@@ -46,7 +46,7 @@ export class UIService implements IUIService {
 					this.m_game.buyGameObject(tower);
 					this.renderGameObject(tower, <HTMLDivElement>target);
 				} catch (ex) {
-					this.showMessage((<Error>ex).message);
+					this.renderMessage((<Error>ex).message);
 				}
 			}
 		});
@@ -72,7 +72,7 @@ export class UIService implements IUIService {
 						if (gameObjectField)
 							gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 					} catch (ex) {
-						this.showMessage((<Error>ex).message);
+						this.renderMessage((<Error>ex).message);
 					}
 				};
 
@@ -88,7 +88,7 @@ export class UIService implements IUIService {
 		})
 	}
 
-	public showMessage(message: string): void {
+	public renderMessage(message: string): void {
 		this.m_htmlMessageBox.show('Message', message);
 	}
 	public renderObject(obj: IRenderableObject): void {
@@ -99,31 +99,11 @@ export class UIService implements IUIService {
 		this.renderText({ cssClass: "app-title", width: AppConfig.fieldWidth, height: 25, text: title });
 	}
 	public renderText(textObj: IRenderableText): void {
-		this.m_parentContainer.append(this.createText(textObj));
-	}
-	private createText(textObj: IRenderableText): HTMLElement {
-		const container = HtmlControlBuilder.createObject(textObj);
-		HtmlControlBuilder.createSpan(container, textObj.text, null);
-		return container;
+		this.m_parentContainer.append(HtmlControlBuilder.createText(textObj));
 	}
 
-	public renderGameBoard(field: GameBoard): void {
-		const gameFields = field.GameFields();
-		const fieldContainer = HtmlControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
-		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
-		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
-
-		for (let i = 0; i < gameFields.length; i++) {
-			for (let j = 0; j < gameFields[i].length; j++) {
-				const gameField = gameFields[i][j];
-				const gameFieldObject = HtmlControlBuilder.createObject({ cssClass: "game-field", width: fieldWidth, height: fieldHeight });
-				gameFieldObject.style.left = HtmlControlBuilder.getUnitString(j * fieldWidth);
-				gameFieldObject.style.top = HtmlControlBuilder.getUnitString(i * fieldHeight);
-				gameFieldObject.dataset.fieldId = gameField.id.toString();
-				fieldContainer.append(gameFieldObject);
-			}
-		}
-		this.m_parentContainer.append(fieldContainer);
+	public renderGameBoard(gameBoard: GameBoard): void {
+		this.m_parentContainer.append(HtmlControlBuilder.createGameBoard(gameBoard));
 	}
 
 	public renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {

@@ -1,4 +1,6 @@
-import { IRenderableObject } from "../Interfaces.js";
+import { GameBoard } from "../classes/GameBoard.js";
+import { IRenderableObject, IRenderableText } from "../Interfaces.js";
+import { AppConfig } from "./AppService.js";
 
 export class HtmlControlBuilder {
 	private static m_cssUnit = 'px';
@@ -42,6 +44,31 @@ export class HtmlControlBuilder {
 		btn.textContent = text;
 		btn.onclick = onClick;
 		return btn;
+	}
+
+	public static createText(textObj: IRenderableText): HTMLElement {
+		const container = HtmlControlBuilder.createObject(textObj);
+		HtmlControlBuilder.createSpan(container, textObj.text, null);
+		return container;
+	}
+
+	public static createGameBoard(field: GameBoard): HTMLElement {
+		const gameFields = field.GameFields();
+		const fieldContainer = HtmlControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
+		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
+		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
+
+		for (let i = 0; i < gameFields.length; i++) {
+			for (let j = 0; j < gameFields[i].length; j++) {
+				const gameField = gameFields[i][j];
+				const gameFieldObject = HtmlControlBuilder.createObject({ cssClass: "game-field", width: fieldWidth, height: fieldHeight });
+				gameFieldObject.style.left = HtmlControlBuilder.getUnitString(j * fieldWidth);
+				gameFieldObject.style.top = HtmlControlBuilder.getUnitString(i * fieldHeight);
+				gameFieldObject.dataset.fieldId = gameField.id.toString();
+				fieldContainer.append(gameFieldObject);
+			}
+		}
+		return fieldContainer;
 	}
 
 	public static createObject(obj: IRenderableObject): HTMLElement {

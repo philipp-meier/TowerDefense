@@ -8,7 +8,7 @@ import { Game } from './classes/Game.js';
 	const uiService = new UIService(<HTMLDivElement>main, game);
 
 	if (!AppService.isSupportedScreenSize()) {
-		uiService.showMessage(`Resolution not supported! (Min.: ${AppConfig.fieldWidth}x${AppConfig.fieldHeight})`);
+		uiService.renderMessage(`Resolution not supported! (Min.: ${AppConfig.fieldWidth}x${AppConfig.fieldHeight})`);
 		return;
 	}
 
