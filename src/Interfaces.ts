@@ -1,4 +1,5 @@
 import { GameBoard } from "./classes/GameBoard.js";
+import { GameObject } from "./classes/GameObjects.js";
 
 export interface IAppConfig {
 	appTitle: string;
@@ -15,15 +16,14 @@ export interface IUIService {
 	renderAppTitle(title: string): void;
 	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
 	renderGameBoard(gameBoard: GameBoard): void;
-	refreshUI(): void;
 	renderMessage(message: string): void;
-
 	addGameObject(target: never): void;
+	refreshUI(): void;
 }
 
 export interface IGameField {
 	id: number;
-	gameObject: IGameObject | null;
+	gameObject: GameObject | null;
 }
 
 export interface IRenderableObject {
@@ -38,27 +38,6 @@ export interface IRenderableText extends IRenderableObject {
 export interface IGameObjectOption extends IPriced {
 	title: string;
 	execute(): void;
-}
-export interface IGameObject {
-	getID(): number;
-	getHealth(): number;
-	getArmor(): number;
-	getDamage(): number;
-	getAttackSpeed(): number;
-	getAssignedGameField(): IGameField | null;
-	getOptions(): IGameObjectOption[]
-	getSvg(): string;
-	placeObject(field: IGameField): void;
-}
-export interface IBuyableGameObject extends IGameObject, IPriced {
-	placeObject(field: IGameField): void;
-}
-export interface IMovingGameObject extends IGameObject {
-	getMovementSpeed(): number;
-	getAnimationSvgNames(): string[];
-}
-export interface IShootingGameObject extends IGameObject {
-	getBulletSvgName(): string[];
 }
 
 export interface IPlayerStatusInfo {

@@ -1,6 +1,6 @@
 import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
-import { IGameObject, IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
+import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
 import { Tower } from "../classes/Tower.js";
 import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
 import { Game } from "../classes/Game.js";
@@ -9,6 +9,7 @@ import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
 import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
 import { HtmlPlayerStatusBar } from "../controls/HtmlPlayerStatusBar.js";
 import { HtmlInputService } from "./HtmlInputService.js";
+import { GameObject } from "../classes/GameObjects.js";
 
 export class UIService implements IUIService {
 
@@ -44,7 +45,7 @@ export class UIService implements IUIService {
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
 		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
 		if (gameObject) {
-			const execGameObjectOption = (gameObject: IGameObject, option: IGameObjectOption) => {
+			const execGameObjectOption = (gameObject: GameObject, option: IGameObjectOption) => {
 				try {
 					this.m_game.buyGameObjectOption(option);
 					option.execute();
@@ -83,7 +84,7 @@ export class UIService implements IUIService {
 		this.m_parentContainer.append(HtmlControlBuilder.createGameBoard(gameBoard));
 	}
 
-	public renderGameObject(gameObject: IGameObject, parentField: HTMLDivElement): void {
+	public renderGameObject(gameObject: GameObject, parentField: HTMLDivElement): void {
 		parentField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 
 		if (!parentField.dataset.gameObjectId)

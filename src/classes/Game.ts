@@ -1,12 +1,13 @@
-import { IBuyableGameObject, IGameObjectOption, IPlayerStatusInfo, IUIService } from "../Interfaces.js";
+import { IGameObjectOption, IPlayerStatusInfo, IUIService } from "../Interfaces.js";
+import { BuyableGameObject, GameObject } from "./GameObjects.js";
 import { AppConfig } from "../services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
 
 export class Game {
-	private m_buyableGameObjects: IBuyableGameObject[] = [];
 	private m_player: Player;
 	private m_gameBoard: GameBoard;
+	private m_gameObjects: GameObject[] = [];
 
 	constructor() {
 		this.m_player = new Player();
@@ -25,17 +26,17 @@ export class Game {
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
 	}
 
-	public buyGameObject(gameObject: IBuyableGameObject): void {
+	public buyGameObject(gameObject: BuyableGameObject): void {
 		// TODO: Object should not be created at all, if it is too expensive.
 		this.m_player.buyItem(gameObject);
-		this.m_buyableGameObjects.push(gameObject);
+		this.m_gameObjects.push(gameObject);
 	}
 	public buyGameObjectOption(option: IGameObjectOption): void {
 		this.m_player.buyItem(option);
 	}
 
-	public getBuyableGameObjectById(id: number): IBuyableGameObject | undefined {
-		return this.m_buyableGameObjects.find(x => x.getID() == id);
+	public getBuyableGameObjectById(id: number): BuyableGameObject | undefined {
+		return <BuyableGameObject | undefined>this.m_gameObjects.find(x => x instanceof BuyableGameObject && x.getID() == id);
 	}
 	public getPlayerStatusInfo(): IPlayerStatusInfo {
 		return {
