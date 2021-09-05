@@ -1,5 +1,5 @@
-import { Bullet } from "../classes/Bullet.js";
 import { GameBoard } from "../classes/GameBoard.js";
+import { GameObjectBase } from "../classes/GameObjects.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "./AppService.js";
 
@@ -66,26 +66,30 @@ export class HtmlControlBuilder {
 				gameFieldObject.style.left = HtmlControlBuilder.getUnitString(j * fieldWidth);
 				gameFieldObject.style.top = HtmlControlBuilder.getUnitString(i * fieldHeight);
 				gameFieldObject.dataset.fieldId = gameField.id.toString();
+				gameFieldObject.dataset.lane = i.toString();
+
+				if (j+1 == gameFields[i].length)
+					gameFieldObject.classList.add('last');
+
 				fieldContainer.append(gameFieldObject);
 			}
 		}
 		return fieldContainer;
 	}
 
-	public static createBullet(fromElement: HTMLDivElement, bullet: Bullet): HTMLDivElement {
-		const bulletDiv = <HTMLDivElement>document.createElement('div');
-		bulletDiv.className = 'bullet';
-		bulletDiv.style.backgroundImage = `url('${AppConfig.svgPath}${bullet.getSvg()}')`;
-		bulletDiv.style.height = AppConfig.fieldHeight / AppConfig.rowCount + 'px';
-		bulletDiv.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
-		bulletDiv.style.top = fromElement.style.top;
-		bulletDiv.style.left = fromElement.style.left;
-		bulletDiv.dataset.gameObjectId = bullet.getID().toString();
-		return bulletDiv;
+	public static createMovingGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string): HTMLDivElement {
+		const gameObjectDiv = HtmlControlBuilder.createDiv(null, className);
+		gameObjectDiv.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+		gameObjectDiv.style.height = AppConfig.fieldHeight / AppConfig.rowCount + 'px';
+		gameObjectDiv.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
+		gameObjectDiv.style.top = fromElement.style.top;
+		gameObjectDiv.style.left = fromElement.style.left;
+		gameObjectDiv.dataset.gameObjectId = gameObject.getID().toString();
+		return gameObjectDiv;
 	}
 
 	public static createObject(obj: IRenderableObject): HTMLElement {
-		const container = <HTMLDivElement>this.createDiv(null, obj.cssClass);
+		const container = HtmlControlBuilder.createDiv(null, obj.cssClass);
 		HtmlControlBuilder.SetPosition(container, obj);
 		return container;
 	}

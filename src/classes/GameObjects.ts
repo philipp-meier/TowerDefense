@@ -20,7 +20,7 @@ export class GameObject extends GameObjectBase {
 	constructor(svg: string) {
 		super(svg);
 	}
-	
+
 	public getHealth(): number { return this.m_health; }
 	public getArmor(): number { return this.m_armor; }
 }

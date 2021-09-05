@@ -5,12 +5,14 @@ import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
 import { Tower } from "./Tower.js";
 import { Bullet } from "./Bullet.js";
+import { Enemy } from "./Enemy.js";
 
 export class Game {
 	private m_player: Player;
 	private m_gameBoard: GameBoard;
 	private m_gameObjects: GameObject[] = [];
 	private m_spawnedBullets: Bullet[] = [];
+	private m_spawnedEnemies: Enemy[] = [];
 
 	constructor() {
 		this.m_player = new Player();
@@ -23,11 +25,21 @@ export class Game {
 		uiService.renderGameBoard(this.m_gameBoard);
 
 		this.bulletLoop(uiService);
+		this.enemyLoop(uiService);
 		this.updateLoop(uiService);
 	}
 	private updateLoop(uiService: IUIService): void {
 		uiService.refreshUI();
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
+	}
+	private enemyLoop(uiService: IUIService): void {
+		const spawnEnemies = () => {
+			const enemy = new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
+			this.m_spawnedEnemies.push(enemy);
+			uiService.renderEnemy(enemy);
+			setTimeout(spawnEnemies, 10000);
+		};
+		setTimeout(spawnEnemies, 10000);
 	}
 	private bulletLoop(uiService: IUIService): void {
 		const spawnBullets = () => {
@@ -40,6 +52,10 @@ export class Game {
 			setTimeout(spawnBullets, 5000);
 		};
 		setTimeout(spawnBullets, 5000);
+	}
+
+	private getRandomNumber(min: number, max:number): number {
+		return Math.floor(Math.random() * (max - min) + min);
 	}
 
 	public buyGameObject(gameObject: BuyableGameObject): void {
@@ -58,6 +74,11 @@ export class Game {
 		if (index > 0)
 			this.m_spawnedBullets.splice(index, 1);
 	}
+	public removeEnemy(enemy: Enemy): void {
+		const index = this.m_spawnedEnemies.indexOf(enemy);
+		if (index > 0)
+			this.m_spawnedEnemies.splice(index, 1);
+	}
 
 	public getBuyableGameObjectById(id: number): BuyableGameObject | undefined {
 		return <BuyableGameObject | undefined>this.m_gameObjects.find(x => x instanceof BuyableGameObject && x.getID() == id);
@@ -70,5 +91,8 @@ export class Game {
 	}
 	public getSpawnedBullets(): Bullet[] {
 		return this.m_spawnedBullets;
+	}
+	public getSpawnedEnemies(): Enemy[] {
+		return this.m_spawnedEnemies;
 	}
 }

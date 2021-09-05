@@ -11,6 +11,7 @@ import { HtmlPlayerStatusBar } from "../controls/HtmlPlayerStatusBar.js";
 import { HtmlInputService } from "./HtmlInputService.js";
 import { GameObject } from "../classes/GameObjects.js";
 import { Bullet } from "../classes/Bullet.js";
+import { Enemy } from "../classes/Enemy.js";
 
 export class UIService implements IUIService {
 
@@ -45,6 +46,21 @@ export class UIService implements IUIService {
 			}
 		});
 
+		this.m_game.getSpawnedEnemies().forEach((enemy) => {
+			const enemyDiv = GameFieldService.getGameObjectDivElement(enemy.getID());
+			if (enemyDiv) {
+				const left = Number(enemyDiv.style.left.replace('px', ''));
+				// TODO: Intersects with game object (= damage)
+				if (left <= 0) {
+					this.m_game.removeEnemy(enemy);
+					document.querySelector('.game-field')?.removeChild(enemyDiv);
+				} else {
+					// TODO: Speed
+					enemyDiv.style.left = (left - 1) + 'px';
+				}
+			}
+		});
+
 		this.m_htmlPlayerStatusBar.refreshPlayerStatusBar(this.m_game.getPlayerStatusInfo());
 	}
 
@@ -57,15 +73,15 @@ export class UIService implements IUIService {
 			this.renderMessage((<Error>ex).message);
 		}
 	}
-	public renderBullet(from: GameObject, bullet: Bullet): void {
-		const gameObjectField = GameFieldService.getGameObjectDivElement(from.getID());
+	public renderEnemy(enemy: Enemy): void {
+		const spawnDiv = <HTMLDivElement>document.querySelector(`div.last[data-lane='${enemy.getLane()}']`);
 		const gameBoard = <HTMLDivElement>document.querySelector('.game-field');
-		if (gameObjectField && gameBoard) {
-			const bulletDiv = HtmlControlBuilder.createBullet(gameObjectField, bullet);
-			gameBoard.append(bulletDiv);
-		}
-		else
-			throw new Error('Game object not found');
+		gameBoard.append(HtmlControlBuilder.createMovingGameObject(spawnDiv, enemy, 'enemy'));
+	}
+	public renderBullet(from: GameObject, bullet: Bullet): void {
+		const gameObjectField = <HTMLDivElement>GameFieldService.getGameObjectDivElement(from.getID());
+		const gameBoard = <HTMLDivElement>document.querySelector('.game-field');
+		gameBoard.append(HtmlControlBuilder.createMovingGameObject(gameObjectField, bullet, 'bullet'));
 	}
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
 		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
