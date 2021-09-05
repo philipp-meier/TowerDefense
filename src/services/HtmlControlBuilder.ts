@@ -1,3 +1,4 @@
+import { Bullet } from "../classes/Bullet.js";
 import { GameBoard } from "../classes/GameBoard.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "./AppService.js";
@@ -69,6 +70,18 @@ export class HtmlControlBuilder {
 			}
 		}
 		return fieldContainer;
+	}
+
+	public static createBullet(fromElement: HTMLDivElement, bullet: Bullet): HTMLDivElement {
+		const bulletDiv = <HTMLDivElement>document.createElement('div');
+		bulletDiv.className = 'bullet';
+		bulletDiv.style.backgroundImage = `url('${AppConfig.svgPath}${bullet.getSvg()}')`;
+		bulletDiv.style.height = AppConfig.fieldHeight / AppConfig.rowCount + 'px';
+		bulletDiv.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
+		bulletDiv.style.top = fromElement.style.top;
+		bulletDiv.style.left = fromElement.style.left;
+		bulletDiv.dataset.gameObjectId = bullet.getID().toString();
+		return bulletDiv;
 	}
 
 	public static createObject(obj: IRenderableObject): HTMLElement {

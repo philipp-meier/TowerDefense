@@ -1,27 +1,39 @@
-import { IGameObjectOption } from "../Interfaces.js";
+import { IGameObjectOption, IShootingGameObject } from "../Interfaces.js";
 import { BuyableGameObject } from "./GameObjects.js";
+import { Bullet } from "./Bullet.js";
 
-export class Tower extends BuyableGameObject {
+export class Tower extends BuyableGameObject implements IShootingGameObject {
 	private m_upgrades = 0;
+	private m_bulletSvg = 'Tower/bullets1.svg';
+	private m_attackSpeed = 1;
+	private m_attackDamage = 10;
 
 	constructor() {
 		super('Tower/level1.svg', 50);
 	}
 
+	public getBulletSvgName(): string { return this.m_bulletSvg; }
+	public getAttackSpeed(): number { return this.m_attackSpeed; }
+	public getAttackDamage(): number { return this.m_attackDamage; }
+
+	public spawnBullet(): Bullet {
+		return new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackDamage);
+	}
 	public getOptions(): IGameObjectOption[] {
 		if (this.m_upgrades == 0)
-			return [this.createGameObjectOption("50$ - Upgrade 1", "Tower/level2.svg", 50)];
+			return [this.createGameObjectOption("Upgrade 1", "Tower/level2.svg", "Tower/bullets2.svg", 50)];
 		else if (this.m_upgrades == 1)
-			return [this.createGameObjectOption("100$ - Upgrade 2", "Tower/level3.svg", 100)];
+			return [this.createGameObjectOption("Upgrade 2", "Tower/level3.svg", "Tower/bullets3.svg", 100)];
 		else
 			return [];
 	}
-	private createGameObjectOption(title: string, svgName: string, price: number): IGameObjectOption {
+	private createGameObjectOption(title: string, svgName: string, bulletSvgName: string, price: number): IGameObjectOption {
 		return {
-			title: title,
+			title: `${price}$ - ${title}`,
 			execute: () => {
 				this.m_upgrades++;
-				this.m_svg = svgName
+				this.m_svg = svgName;
+				this.m_bulletSvg = bulletSvgName;
 			},
 			getPrice: () => { return price; }
 		};

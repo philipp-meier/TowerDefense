@@ -19,8 +19,8 @@ export class GameFieldService {
 		return null;
 	}
 
-	public static getGameObjectGameField(gameObjectID: number): HTMLDivElement | null {
-		const container = document.querySelector(`div.game-field[data-game-object-id="${gameObjectID}"]`);
+	public static getGameObjectDivElement(gameObjectID: number): HTMLDivElement | null {
+		const container = document.querySelector(`div[data-game-object-id="${gameObjectID}"]`);
 		if (container && container instanceof HTMLDivElement)
 			return container;
 

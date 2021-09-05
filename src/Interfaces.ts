@@ -1,3 +1,4 @@
+import { Bullet } from "./classes/Bullet.js";
 import { GameBoard } from "./classes/GameBoard.js";
 import { GameObject } from "./classes/GameObjects.js";
 
@@ -17,6 +18,7 @@ export interface IUIService {
 	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
 	renderGameBoard(gameBoard: GameBoard): void;
 	renderMessage(message: string): void;
+	renderBullet(from: GameObject, bullet: Bullet): void;
 	addGameObject(target: never): void;
 	refreshUI(): void;
 }
@@ -47,4 +49,12 @@ export interface IPlayerStatusInfo {
 
 export interface IPriced {
 	getPrice(): number;
+}
+
+// Modifications
+export interface IShootingGameObject {
+	getBulletSvgName(): string;
+	getAttackSpeed(): number;
+	getAttackDamage(): number;
+	spawnBullet(): Bullet;
 }

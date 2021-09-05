@@ -35,7 +35,5 @@ export class BuyableGameObject extends GameObject implements IPriced {
 		this.m_price = price;
 	}
 
-	getPrice(): number {
-		return this.m_price;
-	}
+	public getPrice(): number { return this.m_price; }
 }

@@ -10,6 +10,7 @@ import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
 import { HtmlPlayerStatusBar } from "../controls/HtmlPlayerStatusBar.js";
 import { HtmlInputService } from "./HtmlInputService.js";
 import { GameObject } from "../classes/GameObjects.js";
+import { Bullet } from "../classes/Bullet.js";
 
 export class UIService implements IUIService {
 
@@ -30,6 +31,20 @@ export class UIService implements IUIService {
 	}
 
 	public refreshUI(): void {
+		this.m_game.getSpawnedBullets().forEach((bullet) => {
+			const bulletDiv = GameFieldService.getGameObjectDivElement(bullet.getID());
+			if (bulletDiv) {
+				const left = Number(bulletDiv.style.left.replace('px', ''));
+				const width = Number(bulletDiv.style.width.replace('px', ''));
+				if ((left + width) >= AppConfig.fieldWidth) {
+					this.m_game.removeBullet(bullet);
+					document.querySelector('.game-field')?.removeChild(bulletDiv);
+				} else {
+					bulletDiv.style.left = (left + bullet.getSpeed()) + 'px';
+				}
+			}
+		});
+
 		this.m_htmlPlayerStatusBar.refreshPlayerStatusBar(this.m_game.getPlayerStatusInfo());
 	}
 
@@ -42,6 +57,16 @@ export class UIService implements IUIService {
 			this.renderMessage((<Error>ex).message);
 		}
 	}
+	public renderBullet(from: GameObject, bullet: Bullet): void {
+		const gameObjectField = GameFieldService.getGameObjectDivElement(from.getID());
+		const gameBoard = <HTMLDivElement>document.querySelector('.game-field');
+		if (gameObjectField && gameBoard) {
+			const bulletDiv = HtmlControlBuilder.createBullet(gameObjectField, bullet);
+			gameBoard.append(bulletDiv);
+		}
+		else
+			throw new Error('Game object not found');
+	}
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
 		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
 		if (gameObject) {
@@ -51,7 +76,7 @@ export class UIService implements IUIService {
 					option.execute();
 
 					// Redraw
-					const gameObjectField = GameFieldService.getGameObjectGameField(gameObject.getID());
+					const gameObjectField = GameFieldService.getGameObjectDivElement(gameObject.getID());
 					if (gameObjectField)
 						gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 				} catch (ex) {

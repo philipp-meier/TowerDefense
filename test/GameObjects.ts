@@ -14,7 +14,7 @@ describe('Tower', () => {
 
 	it('should be initialised with 15 damage', () => {
 		const tower = new Tower();
-		expect(tower.getDamage()).to.equal(15);
+		expect(tower.getAttackDamage()).to.equal(15);
 	});
 
 	it('should be initialised with attack speed "1"', () => {
