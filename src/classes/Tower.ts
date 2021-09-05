@@ -34,6 +34,7 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 				this.m_upgrades++;
 				this.m_svg = svgName;
 				this.m_bulletSvg = bulletSvgName;
+				this.m_attackDamage += 50;
 			},
 			getPrice: () => { return price; }
 		};
