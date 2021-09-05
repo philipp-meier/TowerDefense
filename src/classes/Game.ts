@@ -37,9 +37,9 @@ export class Game {
 				uiService.renderBullet(tower, bullet);
 				this.spawnBullet(bullet);
 			});
-			setTimeout(spawnBullets, 10000);
+			setTimeout(spawnBullets, 5000);
 		};
-		setTimeout(spawnBullets, 10000);
+		setTimeout(spawnBullets, 5000);
 	}
 
 	public buyGameObject(gameObject: BuyableGameObject): void {
