@@ -1,5 +1,5 @@
 import { IGameObjectOption, IPlayerStatusInfo, IUIService } from "../Interfaces.js";
-import { BuyableGameObject, GameObject } from "./GameObjects.js";
+import { BuyableGameObject, GameObjectBase } from "./GameObjects.js";
 import { AppConfig } from "../services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
@@ -10,9 +10,7 @@ import { Enemy } from "./Enemy.js";
 export class Game {
 	private m_player: Player;
 	private m_gameBoard: GameBoard;
-	private m_gameObjects: GameObject[] = [];
-	private m_spawnedBullets: Bullet[] = [];
-	private m_spawnedEnemies: Enemy[] = [];
+	private m_gameObjects: GameObjectBase[] = [];
 
 	constructor() {
 		this.m_player = new Player();
@@ -35,7 +33,7 @@ export class Game {
 	private enemyLoop(uiService: IUIService): void {
 		const spawnEnemies = () => {
 			const enemy = new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
-			this.m_spawnedEnemies.push(enemy);
+			this.spawnGameObject(enemy);
 			uiService.renderEnemy(enemy);
 			setTimeout(spawnEnemies, 10000);
 		};
@@ -46,8 +44,8 @@ export class Game {
 			this.m_gameObjects.filter(x => x instanceof Tower).forEach((x) => {
 				const tower = <Tower>x;
 				const bullet = tower.spawnBullet();
+				this.spawnGameObject(bullet);
 				uiService.renderBullet(tower, bullet);
-				this.spawnBullet(bullet);
 			});
 			setTimeout(spawnBullets, 5000);
 		};
@@ -66,18 +64,27 @@ export class Game {
 	public buyGameObjectOption(option: IGameObjectOption): void {
 		this.m_player.buyItem(option);
 	}
-	public spawnBullet(bullet: Bullet): void {
-		this.m_spawnedBullets.push(bullet);
+	public spawnGameObject(gameObject: GameObjectBase): void {
+		this.m_gameObjects.push(gameObject);
 	}
-	public removeBullet(bullet: Bullet): void {
-		const index = this.m_spawnedBullets.indexOf(bullet);
-		if (index > 0)
-			this.m_spawnedBullets.splice(index, 1);
+	public removeGameObject(gameObject: GameObjectBase): void {
+		const item = this.m_gameObjects.find(x => x.getID() == gameObject.getID());
+		if (item) {
+			const index = this.m_gameObjects.indexOf(item);
+			this.m_gameObjects.splice(index, 1);
+		}
 	}
-	public removeEnemy(enemy: Enemy): void {
-		const index = this.m_spawnedEnemies.indexOf(enemy);
-		if (index > 0)
-			this.m_spawnedEnemies.splice(index, 1);
+
+	public bulletHitsEnemy(bullet: Bullet, enemy: Enemy): void {
+		if (enemy && bullet) {
+			if (enemy.getHealth()-bullet.getDamage() <= 0) {
+				this.m_player.awardCoins(enemy.getCoins());
+				this.removeGameObject(enemy);
+			} else {
+				enemy.takeDamage(bullet.getDamage());
+			}
+			this.removeGameObject(bullet);
+		}
 	}
 
 	public getBuyableGameObjectById(id: number): BuyableGameObject | undefined {
@@ -89,10 +96,13 @@ export class Game {
 			coins: this.m_player.getCoins()
 		};
 	}
+	public getGameObjects(): GameObjectBase[] {
+		return this.m_gameObjects;
+	}
 	public getSpawnedBullets(): Bullet[] {
-		return this.m_spawnedBullets;
+		return <Bullet[]>this.m_gameObjects.filter(x => x instanceof Bullet);
 	}
 	public getSpawnedEnemies(): Enemy[] {
-		return this.m_spawnedEnemies;
+		return <Enemy[]>this.m_gameObjects.filter(x => x instanceof Enemy);
 	}
 }

@@ -23,6 +23,10 @@ export class GameObject extends GameObjectBase {
 
 	public getHealth(): number { return this.m_health; }
 	public getArmor(): number { return this.m_armor; }
+
+	public takeDamage(damage: number): void {
+		this.m_health -= damage;
+	}
 }
 
 export class BuyableGameObject extends GameObject implements IPriced {

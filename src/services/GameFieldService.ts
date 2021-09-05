@@ -12,7 +12,7 @@ export class GameFieldService {
 
 		return null;
 	}
-	private static getGameObjectId(container: HTMLDivElement): number | null {
+	public static getGameObjectId(container: HTMLDivElement): number | null {
 		if (container && container.dataset.gameObjectId)
 			return parseInt(container.dataset.gameObjectId);
 
@@ -25,5 +25,16 @@ export class GameFieldService {
 			return container;
 
 		return null;
+	}
+
+	public static getAllRenderedGameObjects(): HTMLDivElement[] {
+		const list : HTMLDivElement[] = [];
+
+		document.querySelectorAll('div[data-game-object-id]').forEach(x => {
+			if (x instanceof HTMLDivElement)
+				list.push(x);
+		});
+
+		return list;
 	}
 }

@@ -6,7 +6,7 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 	private m_upgrades = 0;
 	private m_bulletSvg = 'Tower/bullets1.svg';
 	private m_attackSpeed = 1;
-	private m_attackDamage = 10;
+	private m_attackDamage = 50;
 
 	constructor() {
 		super('Tower/level1.svg', 50);

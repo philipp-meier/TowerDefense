@@ -11,6 +11,9 @@ export class Player {
 		this.m_Coins -= item.getPrice();
 	}
 
+	public awardCoins(coins: number): void {
+		this.m_Coins += coins;
+	}
 	public getHealth(): number {
 		return this.m_Health;
 	}

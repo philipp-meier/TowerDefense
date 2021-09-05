@@ -32,13 +32,24 @@ export class UIService implements IUIService {
 	}
 
 	public refreshUI(): void {
+
+		this.removeDeletedGameObjects();
+
 		this.m_game.getSpawnedBullets().forEach((bullet) => {
 			const bulletDiv = GameFieldService.getGameObjectDivElement(bullet.getID());
+
+			this.m_game.getSpawnedEnemies().forEach((enemy) => {
+				const enemyDiv = GameFieldService.getGameObjectDivElement(enemy.getID());
+				if (bulletDiv && enemyDiv && this.isColliding(bulletDiv, enemyDiv)) {
+					this.m_game.bulletHitsEnemy(bullet, enemy);
+				}
+			});
+
 			if (bulletDiv) {
 				const left = Number(bulletDiv.style.left.replace('px', ''));
 				const width = Number(bulletDiv.style.width.replace('px', ''));
 				if ((left + width) >= AppConfig.fieldWidth) {
-					this.m_game.removeBullet(bullet);
+					this.m_game.removeGameObject(bullet);
 					document.querySelector('.game-field')?.removeChild(bulletDiv);
 				} else {
 					bulletDiv.style.left = (left + bullet.getSpeed()) + 'px';
@@ -50,9 +61,8 @@ export class UIService implements IUIService {
 			const enemyDiv = GameFieldService.getGameObjectDivElement(enemy.getID());
 			if (enemyDiv) {
 				const left = Number(enemyDiv.style.left.replace('px', ''));
-				// TODO: Intersects with game object (= damage)
 				if (left <= 0) {
-					this.m_game.removeEnemy(enemy);
+					this.m_game.removeGameObject(enemy);
 					document.querySelector('.game-field')?.removeChild(enemyDiv);
 				} else {
 					// TODO: Speed
@@ -72,6 +82,17 @@ export class UIService implements IUIService {
 		} catch (ex) {
 			this.renderMessage((<Error>ex).message);
 		}
+	}
+	private removeDeletedGameObjects(): void {
+		const gameObjectFields = GameFieldService.getAllRenderedGameObjects();
+		const existingGameObjects = this.m_game.getGameObjects();
+		const gameBoard = <HTMLDivElement>document.querySelector('.game-field');
+		gameObjectFields.forEach(gameObjectField => {
+			const gameObjectID = GameFieldService.getGameObjectId(gameObjectField);
+			if (gameObjectID && !existingGameObjects.find(x => x.getID() === gameObjectID)) {
+				gameBoard.removeChild(gameObjectField);
+			}
+		});
 	}
 	public renderEnemy(enemy: Enemy): void {
 		const spawnDiv = <HTMLDivElement>document.querySelector(`div.last[data-lane='${enemy.getLane()}']`);
@@ -134,5 +155,26 @@ export class UIService implements IUIService {
 
 	public renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void {
 		this.m_htmlPlayerStatusBar.createPlayerStatusBar(this.m_parentContainer, statusInfo);
+	}
+
+	private isColliding(a: HTMLDivElement, b: HTMLDivElement): boolean {
+		const width = AppConfig.fieldWidth/AppConfig.columnCount;
+		const height = AppConfig.fieldHeight/AppConfig.rowCount;
+
+		const rect1 = {
+			x: parseInt(a.style.left, 10),
+			y: parseInt(a.style.top, 10),
+			width: width, height: height
+		};
+		const rect2 = {
+			x: parseInt(b.style.left, 10),
+			y: parseInt(b.style.top, 10),
+			width: width, height: height
+		};
+
+		return rect1.x < rect2.x + rect2.width &&
+			rect1.x + rect1.width > rect2.x &&
+			rect1.y < rect2.y + rect2.height &&
+			rect1.y + rect1.height > rect2.y;
 	}
 }
