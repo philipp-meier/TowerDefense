@@ -1,6 +1,6 @@
-import { GameObject } from "./GameObjects.js";
+import { GameObjectBase } from "./GameObjects.js";
 
-export class Bullet extends GameObject {
+export class Bullet extends GameObjectBase {
 	private m_damage: number;
 	private m_speed: number;
 

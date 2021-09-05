@@ -1,4 +1,4 @@
-import { GameObject } from "../classes/GameObjects.js";
+import { BuyableGameObject, GameObject } from "../classes/GameObjects.js";
 import { IGameObjectOption } from "../Interfaces.js";
 import { HtmlControlBuilder } from "../services/HtmlControlBuilder.js";
 
@@ -27,7 +27,7 @@ export class HtmlContextMenu {
 		return menuItem;
 	}
 
-	private prepareContextMenu(gameObject: GameObject, fnExecOptionCallback: ContextMenuExecOptionCallback): boolean {
+	private prepareContextMenu(gameObject: BuyableGameObject, fnExecOptionCallback: ContextMenuExecOptionCallback): boolean {
 		const options = gameObject.getOptions();
 
 		this.m_htmlElement.innerText = '';
@@ -37,7 +37,7 @@ export class HtmlContextMenu {
 
 		return options.length > 0;
 	}
-	public show(gameObject: GameObject, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback): void {
+	public show(gameObject: BuyableGameObject, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback): void {
 		if (this.prepareContextMenu(gameObject, fnExecOptionCallback)) {
 			this.m_htmlElement.style.left = x + "px";
 			this.m_htmlElement.style.top = y + "px";
