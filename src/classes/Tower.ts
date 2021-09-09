@@ -5,7 +5,7 @@ import { Bullet } from "./Bullet.js";
 export class Tower extends BuyableGameObject implements IShootingGameObject {
 	private m_upgrades = 0;
 	private m_bulletSvg = 'Tower/bullets1.svg';
-	private m_attackSpeed = 1;
+	private m_attackSpeed = 5;
 	private m_attackDamage = 50;
 
 	constructor() {
@@ -17,7 +17,7 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 	public getAttackDamage(): number { return this.m_attackDamage; }
 
 	public spawnBullet(): Bullet {
-		return new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackDamage);
+		return new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
 	}
 	public getOptions(): IGameObjectOption[] {
 		if (this.m_upgrades == 0)
@@ -34,6 +34,7 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 				this.m_upgrades++;
 				this.m_svg = svgName;
 				this.m_bulletSvg = bulletSvgName;
+				this.m_attackSpeed += 5;
 				this.m_attackDamage += 50;
 			},
 			getPrice: () => { return price; }
