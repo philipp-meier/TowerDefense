@@ -77,10 +77,26 @@ export class UIService implements IUIService {
 					enemyDiv.style.left = (left - 1) + 'px';
 				}
 
-				// Health bar
-				const healthBarValueDiv = enemyDiv.querySelector('.health-bar > .value');
+				// Collides with tower
+				this.m_game.getSpawnedTowers().forEach((tower) => {
+					const towerDiv = GameFieldService.getGameObjectDivElement(tower.getID());
+					if (towerDiv && enemyDiv && this.isColliding(enemyDiv, towerDiv)) {
+						this.m_game.enemyHitsTower(enemy, tower);
+					}
+				});
+			}
+		});
+
+		this.m_game.getGameObjects().forEach((gameObject) => {
+			if (!(gameObject instanceof GameObject))
+				return;
+
+			const gameObjectDiv = GameFieldService.getGameObjectDivElement(gameObject.getID());
+			if (gameObjectDiv) {
+				// Refresh health bar
+				const healthBarValueDiv = gameObjectDiv.querySelector('.health-bar > .value');
 				if (healthBarValueDiv && healthBarValueDiv instanceof HTMLDivElement) {
-					healthBarValueDiv.style.width = enemy.getHealth() + '%';
+					healthBarValueDiv.style.width = gameObject.getHealth() + '%';
 				}
 			}
 		});
@@ -104,7 +120,11 @@ export class UIService implements IUIService {
 		gameObjectFields.forEach(gameObjectField => {
 			const gameObjectID = GameFieldService.getGameObjectId(gameObjectField);
 			if (gameObjectID && !existingGameObjects.find(x => x.getID() === gameObjectID)) {
-				gameBoard.removeChild(gameObjectField);
+				// TODO: Render towers in div elements.
+				if (gameObjectField.classList.contains('game-field'))
+					this.removeGameObject(gameObjectField);
+				else
+					gameBoard.removeChild(gameObjectField);
 			}
 		});
 	}
@@ -165,6 +185,17 @@ export class UIService implements IUIService {
 
 		if (!parentField.dataset.gameObjectId)
 			parentField.dataset.gameObjectId = `${gameObject.getID()}`;
+
+		if (!parentField.querySelector('.health-bar'))
+			HtmlControlBuilder.createHealthBar(parentField);
+	}
+	public removeGameObject(gameFieldDiv: HTMLDivElement): void {
+		gameFieldDiv.style.backgroundImage = '';
+		const healthBar = gameFieldDiv.querySelector('.health-bar');
+		if (healthBar)
+			gameFieldDiv.removeChild(healthBar);
+
+		delete gameFieldDiv.dataset.gameObjectId;
 	}
 
 	public renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void {

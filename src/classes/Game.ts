@@ -95,6 +95,15 @@ export class Game {
 			this.removeGameObject(bullet);
 		}
 	}
+	public enemyHitsTower(enemy: Enemy, tower: Tower): void {
+		if (enemy && tower) {
+			tower.takeDamage(enemy.getDamage());
+			this.removeGameObject(enemy);
+
+			if (tower.getHealth() <= 0)
+				this.removeGameObject(tower);
+		}
+	}
 
 	public enemyHitsPlayer(enemy: Enemy): void {
 		this.m_player.takeDamage(enemy.getDamage());
@@ -121,5 +130,8 @@ export class Game {
 	}
 	public getSpawnedEnemies(): Enemy[] {
 		return <Enemy[]>this.m_gameObjects.filter(x => x instanceof Enemy);
+	}
+	public getSpawnedTowers(): Tower[] {
+		return <Tower[]>this.m_gameObjects.filter(x => x instanceof Tower);
 	}
 }
