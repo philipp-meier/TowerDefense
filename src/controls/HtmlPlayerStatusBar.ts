@@ -9,8 +9,8 @@ export class HtmlPlayerStatusBar {
 		const container = HtmlControlBuilder.createDiv(parent, renderInfo.cssClass);
 		HtmlControlBuilder.SetPosition(container, renderInfo);
 
-		const healthContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/health.svg`, statusInfo.health, "health");
-		const coinContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}/StatusBar/coin.svg`, statusInfo.coins, "coins");
+		const healthContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/health.svg`, statusInfo.health, "health");
+		const coinContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/coin.svg`, statusInfo.coins, "coins");
 
 		container.append(healthContainer);
 		container.append(coinContainer);

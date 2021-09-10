@@ -68,6 +68,12 @@ export class UIService implements IUIService {
 					// TODO: Speed
 					enemyDiv.style.left = (left - 1) + 'px';
 				}
+
+				// Health bar
+				const healthBarValueDiv = enemyDiv.querySelector('.health-bar > .value');
+				if (healthBarValueDiv && healthBarValueDiv instanceof HTMLDivElement) {
+					healthBarValueDiv.style.width = enemy.getHealth() + '%';
+				}
 			}
 		});
 
@@ -158,8 +164,8 @@ export class UIService implements IUIService {
 	}
 
 	private isColliding(a: HTMLDivElement, b: HTMLDivElement): boolean {
-		const width = AppConfig.fieldWidth/AppConfig.columnCount;
-		const height = AppConfig.fieldHeight/AppConfig.rowCount;
+		const width = AppConfig.fieldWidth / AppConfig.columnCount;
+		const height = AppConfig.fieldHeight / AppConfig.rowCount;
 
 		const rect1 = {
 			x: parseInt(a.style.left, 10),

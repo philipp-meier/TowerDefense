@@ -1,5 +1,5 @@
 import { GameBoard } from "../classes/GameBoard.js";
-import { GameObjectBase } from "../classes/GameObjects.js";
+import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "./AppService.js";
 
@@ -68,7 +68,7 @@ export class HtmlControlBuilder {
 				gameFieldObject.dataset.fieldId = gameField.id.toString();
 				gameFieldObject.dataset.lane = i.toString();
 
-				if (j+1 == gameFields[i].length)
+				if (j + 1 == gameFields[i].length)
 					gameFieldObject.classList.add('last');
 
 				fieldContainer.append(gameFieldObject);
@@ -85,7 +85,22 @@ export class HtmlControlBuilder {
 		gameObjectDiv.style.top = fromElement.style.top;
 		gameObjectDiv.style.left = fromElement.style.left;
 		gameObjectDiv.dataset.gameObjectId = gameObject.getID().toString();
+
+		if (gameObject instanceof GameObject)
+			this.createHealthBar(gameObjectDiv);
+
 		return gameObjectDiv;
+	}
+
+	public static createHealthBar(parent: HTMLDivElement): HTMLDivElement {
+		const healthBarContainer = HtmlControlBuilder.createDiv(parent, 'health-bar');
+		const healthBarValue = HtmlControlBuilder.createDiv(healthBarContainer, 'value');
+		healthBarValue.style.width = '100%';
+
+		healthBarContainer.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
+		healthBarContainer.style.height = 8 + 'px';
+		healthBarContainer.style.position = 'absolute';
+		return healthBarContainer;
 	}
 
 	public static createObject(obj: IRenderableObject): HTMLElement {
