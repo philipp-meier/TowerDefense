@@ -32,6 +32,8 @@ export class UIService implements IUIService {
 	}
 
 	public refreshUI(): void {
+		if (this.m_game.isGameOver())
+			return;
 
 		this.removeDeletedGameObjects();
 
@@ -62,6 +64,12 @@ export class UIService implements IUIService {
 			if (enemyDiv) {
 				const left = Number(enemyDiv.style.left.replace('px', ''));
 				if (left <= 0) {
+					this.m_game.enemyHitsPlayer(enemy);
+					if (this.m_game.isGameOver()) {
+						this.renderMessage('Game Over');
+						HtmlInputService.removeEventListeners(this.m_parentContainer);
+					}
+
 					this.m_game.removeGameObject(enemy);
 					document.querySelector('.game-field')?.removeChild(enemyDiv);
 				} else {

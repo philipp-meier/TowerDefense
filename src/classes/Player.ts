@@ -20,4 +20,11 @@ export class Player {
 	public getCoins(): number {
 		return this.m_Coins;
 	}
+
+	public takeDamage(damage: number): void {
+		if (damage >= this.m_Health)
+			this.m_Health = 0;
+		else
+			this.m_Health -= damage;
+	}
 }

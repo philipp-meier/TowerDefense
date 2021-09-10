@@ -34,4 +34,7 @@ export class HtmlInputService {
 				uiService.hideContextMenu();
 		});
 	}
+	public static removeEventListeners(parent: HTMLElement): void {
+		parent.replaceWith(parent.cloneNode(true));
+	}
 }

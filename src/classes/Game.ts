@@ -27,11 +27,17 @@ export class Game {
 		this.updateLoop(uiService);
 	}
 	private updateLoop(uiService: IUIService): void {
+		if (this.isGameOver())
+			return;
+
 		uiService.refreshUI();
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
 	}
 	private enemyLoop(uiService: IUIService): void {
 		const spawnEnemies = () => {
+			if (this.isGameOver())
+				return;
+
 			const enemy = new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
 			this.spawnGameObject(enemy);
 			uiService.renderEnemy(enemy);
@@ -41,6 +47,9 @@ export class Game {
 	}
 	private bulletLoop(uiService: IUIService): void {
 		const spawnBullets = () => {
+			if (this.isGameOver())
+				return;
+
 			this.m_gameObjects.filter(x => x instanceof Tower).forEach((x) => {
 				const tower = <Tower>x;
 				const bullet = tower.spawnBullet();
@@ -52,7 +61,7 @@ export class Game {
 		setTimeout(spawnBullets, 5000);
 	}
 
-	private getRandomNumber(min: number, max:number): number {
+	private getRandomNumber(min: number, max: number): number {
 		return Math.floor(Math.random() * (max - min) + min);
 	}
 
@@ -77,7 +86,7 @@ export class Game {
 
 	public bulletHitsEnemy(bullet: Bullet, enemy: Enemy): void {
 		if (enemy && bullet) {
-			if (enemy.getHealth()-bullet.getDamage() <= 0) {
+			if (enemy.getHealth() - bullet.getDamage() <= 0) {
 				this.m_player.awardCoins(enemy.getCoins());
 				this.removeGameObject(enemy);
 			} else {
@@ -85,6 +94,14 @@ export class Game {
 			}
 			this.removeGameObject(bullet);
 		}
+	}
+
+	public enemyHitsPlayer(enemy: Enemy): void {
+		this.m_player.takeDamage(enemy.getDamage());
+	}
+
+	public isGameOver(): boolean {
+		return this.m_player.getHealth() <= 0;
 	}
 
 	public getBuyableGameObjectById(id: number): BuyableGameObject | undefined {
