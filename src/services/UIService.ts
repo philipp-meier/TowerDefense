@@ -52,7 +52,7 @@ export class UIService implements IUIService {
 				const width = Number(bulletDiv.style.width.replace('px', ''));
 				if ((left + width) >= AppConfig.fieldWidth) {
 					this.m_game.removeGameObject(bullet);
-					document.querySelector('.game-field')?.removeChild(bulletDiv);
+					this.removeFromParentElement(bulletDiv);
 				} else {
 					bulletDiv.style.left = (left + bullet.getSpeed()) + 'px';
 				}
@@ -71,7 +71,7 @@ export class UIService implements IUIService {
 					}
 
 					this.m_game.removeGameObject(enemy);
-					document.querySelector('.game-field')?.removeChild(enemyDiv);
+					this.removeFromParentElement(enemyDiv);
 				} else {
 					// TODO: Speed
 					enemyDiv.style.left = (left - 1) + 'px';
@@ -104,6 +104,10 @@ export class UIService implements IUIService {
 		this.m_htmlPlayerStatusBar.refreshPlayerStatusBar(this.m_game.getPlayerStatusInfo());
 	}
 
+	private removeFromParentElement(htmlElement: HTMLElement): void {
+		htmlElement.parentNode?.removeChild(htmlElement);
+	}
+
 	public addGameObject(target: never): void {
 		try {
 			const tower = new Tower();
@@ -116,27 +120,22 @@ export class UIService implements IUIService {
 	private removeDeletedGameObjects(): void {
 		const gameObjectFields = GameFieldService.getAllRenderedGameObjects();
 		const existingGameObjects = this.m_game.getGameObjects();
-		const gameBoard = <HTMLDivElement>document.querySelector('.game-field');
 		gameObjectFields.forEach(gameObjectField => {
 			const gameObjectID = GameFieldService.getGameObjectId(gameObjectField);
 			if (gameObjectID && !existingGameObjects.find(x => x.getID() === gameObjectID)) {
-				// TODO: Render towers in div elements.
-				if (gameObjectField.classList.contains('game-field'))
-					this.removeGameObject(gameObjectField);
-				else
-					gameBoard.removeChild(gameObjectField);
+				this.removeFromParentElement(gameObjectField);
 			}
 		});
 	}
 	public renderEnemy(enemy: Enemy): void {
 		const spawnDiv = <HTMLDivElement>document.querySelector(`div.last[data-lane='${enemy.getLane()}']`);
-		const gameBoard = <HTMLDivElement>document.querySelector('.game-field');
-		gameBoard.append(HtmlControlBuilder.createMovingGameObject(spawnDiv, enemy, 'enemy'));
+		const gameBoard = <HTMLDivElement>document.querySelector('.game-board');
+		gameBoard.append(HtmlControlBuilder.createGameObject(spawnDiv, enemy, 'enemy'));
 	}
 	public renderBullet(from: GameObject, bullet: Bullet): void {
 		const gameObjectField = <HTMLDivElement>GameFieldService.getGameObjectDivElement(from.getID());
-		const gameBoard = <HTMLDivElement>document.querySelector('.game-field');
-		gameBoard.append(HtmlControlBuilder.createMovingGameObject(gameObjectField, bullet, 'bullet'));
+		const gameBoard = <HTMLDivElement>document.querySelector('.game-board');
+		gameBoard.append(HtmlControlBuilder.createGameObject(gameObjectField, bullet, 'bullet'));
 	}
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
 		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
@@ -181,21 +180,8 @@ export class UIService implements IUIService {
 	}
 
 	public renderGameObject(gameObject: GameObject, parentField: HTMLDivElement): void {
-		parentField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
-
-		if (!parentField.dataset.gameObjectId)
-			parentField.dataset.gameObjectId = `${gameObject.getID()}`;
-
-		if (!parentField.querySelector('.health-bar'))
-			HtmlControlBuilder.createHealthBar(parentField);
-	}
-	public removeGameObject(gameFieldDiv: HTMLDivElement): void {
-		gameFieldDiv.style.backgroundImage = '';
-		const healthBar = gameFieldDiv.querySelector('.health-bar');
-		if (healthBar)
-			gameFieldDiv.removeChild(healthBar);
-
-		delete gameFieldDiv.dataset.gameObjectId;
+		const gameBoard = <HTMLDivElement>document.querySelector('.game-board');
+		gameBoard.append(HtmlControlBuilder.createGameObject(parentField, gameObject, 'game-object'));
 	}
 
 	public renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void {

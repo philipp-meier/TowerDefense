@@ -77,7 +77,7 @@ export class HtmlControlBuilder {
 		return fieldContainer;
 	}
 
-	public static createMovingGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string): HTMLDivElement {
+	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string): HTMLDivElement {
 		const gameObjectDiv = HtmlControlBuilder.createDiv(null, className);
 		gameObjectDiv.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 		gameObjectDiv.style.height = AppConfig.fieldHeight / AppConfig.rowCount + 'px';
