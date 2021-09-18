@@ -53,10 +53,13 @@ export interface IPriced {
 	getPrice(): number;
 }
 
-// Modifications
-export interface IShootingGameObject {
-	getBulletSvgName(): string;
+export interface IAttackGameObject {
 	getAttackSpeed(): number;
 	getAttackDamage(): number;
+}
+
+// Modifications
+export interface IShootingGameObject extends IAttackGameObject {
+	getBulletSvgName(): string;
 	spawnBullet(): Bullet;
 }

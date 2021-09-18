@@ -1,4 +1,4 @@
-import { IPlayerStatusInfo, IPriced, IUIService } from "../Interfaces.js";
+import { IAttackGameObject, IPlayerStatusInfo, IPriced, IUIService } from "../Interfaces.js";
 import { BuyableGameObject, GameObjectBase } from "./GameObjects.js";
 import { AppConfig } from "../services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
@@ -85,26 +85,26 @@ export class Game {
 
 	public bulletHitsEnemy(bullet: Bullet, enemy: Enemy): void {
 		if (enemy && bullet) {
-			if (enemy.getHealth() - bullet.getDamage() <= 0) {
+			if (enemy.getHealth() - bullet.getAttackDamage() <= 0) {
 				this.m_player.awardCoins(enemy.getCoins());
 				this.removeGameObject(enemy);
 			} else {
-				enemy.takeDamage(bullet.getDamage());
+				enemy.takeDamage(bullet.getAttackDamage());
 			}
 			this.removeGameObject(bullet);
 		}
 	}
 	public enemyHitsTower(enemy: Enemy, tower: Tower): void {
 		if (enemy && tower) {
-			tower.takeDamage(enemy.getDamage());
+			tower.takeDamage(enemy.getAttackDamage());
 			this.removeGameObject(enemy);
 
 			if (tower.getHealth() <= 0)
 				this.removeGameObject(tower);
 		}
 	}
-	public enemyHitsPlayer(enemy: Enemy): void {
-		this.m_player.takeDamage(enemy.getDamage());
+	public enemyHitsPlayer(attackingGameObject: IAttackGameObject): void {
+		this.m_player.takeDamage(attackingGameObject.getAttackDamage());
 	}
 
 	public isGameOver = (): boolean => this.m_player.getHealth() <= 0;

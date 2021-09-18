@@ -53,7 +53,7 @@ export class UIService implements IUIService {
 				if ((left + width) >= AppConfig.fieldWidth) {
 					this.removeGameObject(bullet);
 				} else {
-					bulletDiv.style.left = (left + bullet.getSpeed()) + 'px';
+					bulletDiv.style.left = (left + bullet.getAttackSpeed()) + 'px';
 				}
 			}
 		});
@@ -71,8 +71,7 @@ export class UIService implements IUIService {
 
 					this.removeGameObject(enemy);
 				} else {
-					// TODO: Speed
-					enemyDiv.style.left = (left - 1) + 'px';
+					enemyDiv.style.left = (left - enemy.getMoveSpeed()) + 'px';
 				}
 
 				// Collides with tower

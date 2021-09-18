@@ -1,6 +1,7 @@
+import { IAttackGameObject } from "../Interfaces.js";
 import { GameObjectBase } from "./GameObjects.js";
 
-export class Bullet extends GameObjectBase {
+export class Bullet extends GameObjectBase implements IAttackGameObject {
 	private m_damage: number;
 	private m_speed: number;
 
@@ -10,6 +11,6 @@ export class Bullet extends GameObjectBase {
 		this.m_speed = speed;
 	}
 
-	public getSpeed = (): number => this.m_speed;
-	public getDamage = (): number => this.m_damage;
+	public getAttackSpeed = (): number => this.m_speed;
+	public getAttackDamage = (): number => this.m_damage;
 }
