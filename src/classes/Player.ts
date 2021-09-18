@@ -14,17 +14,13 @@ export class Player {
 	public awardCoins(coins: number): void {
 		this.m_Coins += coins;
 	}
-	public getHealth(): number {
-		return this.m_Health;
-	}
-	public getCoins(): number {
-		return this.m_Coins;
-	}
-
 	public takeDamage(damage: number): void {
 		if (damage >= this.m_Health)
 			this.m_Health = 0;
 		else
 			this.m_Health -= damage;
 	}
+
+	public getHealth = (): number => this.m_Health;
+	public getCoins = (): number => this.m_Coins;
 }

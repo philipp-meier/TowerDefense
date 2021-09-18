@@ -10,8 +10,8 @@ export abstract class GameObjectBase {
 		this.m_id = GameObject.currentId++;
 	}
 
-	public getID(): number { return this.m_id; }
-	public getSvg(): string { return this.m_svg; }
+	public getID = (): number => this.m_id;
+	public getSvg = (): string => this.m_svg;
 }
 export class GameObject extends GameObjectBase {
 	private m_health = 100;
@@ -21,12 +21,12 @@ export class GameObject extends GameObjectBase {
 		super(svg);
 	}
 
-	public getHealth(): number { return this.m_health; }
-	public getArmor(): number { return this.m_armor; }
-
 	public takeDamage(damage: number): void {
 		this.m_health -= damage;
 	}
+
+	public getHealth = (): number => this.m_health;
+	public getArmor = (): number => this.m_armor;
 }
 
 export class BuyableGameObject extends GameObject implements IPriced {
@@ -38,11 +38,11 @@ export class BuyableGameObject extends GameObject implements IPriced {
 		this.m_price = price;
 	}
 
-	public getAssignedGameField(): IGameField | null { return this.m_assignedGameField; }
-	public getOptions(): IGameObjectOption[] { return []; }
-
-	public getPrice(): number { return this.m_price; }
 	public placeObject(field: IGameField): void {
 		this.m_assignedGameField = field;
 	}
+
+	public getAssignedGameField = (): IGameField | null => this.m_assignedGameField;
+	public getOptions = (): IGameObjectOption[] => [];
+	public getPrice = (): number => this.m_price;
 }

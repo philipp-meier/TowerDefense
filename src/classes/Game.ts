@@ -1,4 +1,4 @@
-import { IGameObjectOption, IPlayerStatusInfo, IUIService } from "../Interfaces.js";
+import { IPlayerStatusInfo, IPriced, IUIService } from "../Interfaces.js";
 import { BuyableGameObject, GameObjectBase } from "./GameObjects.js";
 import { AppConfig } from "../services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
@@ -11,6 +11,9 @@ export class Game {
 	private m_player: Player;
 	private m_gameBoard: GameBoard;
 	private m_gameObjects: GameObjectBase[] = [];
+
+	private readonly m_bulletSpawnTimeInMs = 5000;
+	private readonly m_enemySpawnTimeInMs = 10_000;
 
 	constructor() {
 		this.m_player = new Player();
@@ -41,9 +44,9 @@ export class Game {
 			const enemy = new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
 			this.spawnGameObject(enemy);
 			uiService.renderEnemy(enemy);
-			setTimeout(spawnEnemies, 10000);
+			setTimeout(spawnEnemies, this.m_enemySpawnTimeInMs);
 		};
-		setTimeout(spawnEnemies, 10000);
+		setTimeout(spawnEnemies, this.m_enemySpawnTimeInMs);
 	}
 	private bulletLoop(uiService: IUIService): void {
 		const spawnBullets = () => {
@@ -56,23 +59,19 @@ export class Game {
 				this.spawnGameObject(bullet);
 				uiService.renderBullet(tower, bullet);
 			});
-			setTimeout(spawnBullets, 5000);
+			setTimeout(spawnBullets, this.m_bulletSpawnTimeInMs);
 		};
-		setTimeout(spawnBullets, 5000);
-	}
-
-	private getRandomNumber(min: number, max: number): number {
-		return Math.floor(Math.random() * (max - min) + min);
+		setTimeout(spawnBullets, this.m_bulletSpawnTimeInMs);
 	}
 
 	public buyGameObject(gameObject: BuyableGameObject): void {
-		// TODO: Object should not be created at all, if it is too expensive.
-		this.m_player.buyItem(gameObject);
+		this.buy(gameObject);
 		this.m_gameObjects.push(gameObject);
 	}
-	public buyGameObjectOption(option: IGameObjectOption): void {
+	public buy(option: IPriced): void {
 		this.m_player.buyItem(option);
 	}
+
 	public spawnGameObject(gameObject: GameObjectBase): void {
 		this.m_gameObjects.push(gameObject);
 	}
@@ -104,23 +103,25 @@ export class Game {
 				this.removeGameObject(tower);
 		}
 	}
-
 	public enemyHitsPlayer(enemy: Enemy): void {
 		this.m_player.takeDamage(enemy.getDamage());
 	}
 
-	public isGameOver(): boolean {
-		return this.m_player.getHealth() <= 0;
-	}
+	public isGameOver = (): boolean => this.m_player.getHealth() <= 0;
 
-	public getBuyableGameObjectById(id: number): BuyableGameObject | undefined {
-		return <BuyableGameObject | undefined>this.m_gameObjects.find(x => x instanceof BuyableGameObject && x.getID() == id);
-	}
 	public getPlayerStatusInfo(): IPlayerStatusInfo {
 		return {
 			health: this.m_player.getHealth(),
 			coins: this.m_player.getCoins()
 		};
+	}
+
+	public getBuyableGameObjectById(id: number): BuyableGameObject | undefined {
+		return <BuyableGameObject | undefined>this.m_gameObjects.find(x => x instanceof BuyableGameObject && x.getID() == id);
+	}
+
+	private getRandomNumber(min: number, max: number): number {
+		return Math.floor(Math.random() * (max - min) + min);
 	}
 	public getGameObjects(): GameObjectBase[] {
 		return this.m_gameObjects;

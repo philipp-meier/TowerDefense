@@ -10,6 +10,6 @@ export class Bullet extends GameObjectBase {
 		this.m_speed = speed;
 	}
 
-	public getSpeed(): number { return this.m_speed; }
-	public getDamage(): number { return this.m_damage; }
+	public getSpeed = (): number => this.m_speed;
+	public getDamage = (): number => this.m_damage;
 }

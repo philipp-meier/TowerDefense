@@ -160,7 +160,7 @@ export class UIService implements IUIService {
 		if (gameObject) {
 			const execGameObjectOption = (gameObject: GameObject, option: IGameObjectOption) => {
 				try {
-					this.m_game.buyGameObjectOption(option);
+					this.m_game.buy(option);
 					option.execute();
 
 					// Redraw

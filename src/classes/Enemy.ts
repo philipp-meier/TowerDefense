@@ -10,7 +10,7 @@ export class Enemy extends GameObject {
 		this.m_gameBoardLane = lane;
 	}
 
-	public getLane(): number { return this.m_gameBoardLane; }
-	public getCoins(): number { return this.m_coins; }
-	public getDamage(): number { return this.m_damage; }
+	public getLane = (): number => this.m_gameBoardLane;
+	public getCoins = (): number => this.m_coins;
+	public getDamage = (): number => this.m_damage;
 }

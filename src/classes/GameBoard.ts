@@ -20,7 +20,5 @@ export class GameBoard {
 		return gameFields;
 	}
 
-	public GameFields(): IGameField[][] {
-		return this.m_GameFields;
-	}
+	public GameFields = (): IGameField[][] => this.m_GameFields;
 }
