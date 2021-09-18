@@ -1,9 +1,9 @@
 export class GameFieldService {
-	public static isEventTargetGameField(target: EventTarget): boolean {
-		return target && target instanceof HTMLDivElement && this.isGameField(target);
+	public static isEventTargetInteractionField(target: EventTarget): boolean {
+		return target && target instanceof HTMLDivElement && this.isInteractionField(target);
 	}
-	private static isGameField(container: HTMLDivElement): boolean {
-		return container && container.classList.contains('game-field');
+	private static isInteractionField(container: HTMLDivElement): boolean {
+		return container && container.classList.contains('interaction-field');
 	}
 
 	public static getGameObjectIdFromEventTarget(target: EventTarget): number | null {
@@ -28,9 +28,9 @@ export class GameFieldService {
 	}
 
 	public static getAllRenderedGameObjects(): HTMLDivElement[] {
-		const list : HTMLDivElement[] = [];
+		const list: HTMLDivElement[] = [];
 
-		document.querySelectorAll('div[data-game-object-id]').forEach(x => {
+		document.querySelectorAll('div[data-game-object-id]:not(.interaction-field)').forEach(x => {
 			if (x instanceof HTMLDivElement)
 				list.push(x);
 		});

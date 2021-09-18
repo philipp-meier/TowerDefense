@@ -34,14 +34,37 @@
 
 .game-board {
     position: absolute;
+    background: #5d9277;
 
-    .game-field {
-        background: #5d9277;
+    .field-layer,.game-object-layer,.interaction-layer {
+        width: 100%;
+        height: 100%;
         position: absolute;
-        border: 1px solid black;
+    }
 
-        &:hover {
-            background: #526f60;
+    .field-layer {
+        z-index: 0;
+
+        .game-field {
+            background: #5d9277;
+            position: absolute;
+            border: 1px solid black;
+        }
+    }
+
+    .game-object-layer {
+        z-index: 1;
+    }
+
+    .interaction-layer {
+        z-index: 2;
+
+        .interaction-field {
+            position: absolute;
+
+            &:hover {
+                border: 2px solid yellow;
+            }
         }
     }
 }
@@ -166,7 +189,6 @@ a.menu-btn {
 
 .bullet,.enemy,.game-object {
     position: absolute;
-    z-index: 1;
 }
 
 .health-bar {

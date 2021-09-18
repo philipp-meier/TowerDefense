@@ -9,7 +9,7 @@ import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
 import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
 import { HtmlPlayerStatusBar } from "../controls/HtmlPlayerStatusBar.js";
 import { HtmlInputService } from "./HtmlInputService.js";
-import { GameObject } from "../classes/GameObjects.js";
+import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
 import { Bullet } from "../classes/Bullet.js";
 import { Enemy } from "../classes/Enemy.js";
 
@@ -51,8 +51,7 @@ export class UIService implements IUIService {
 				const left = Number(bulletDiv.style.left.replace('px', ''));
 				const width = Number(bulletDiv.style.width.replace('px', ''));
 				if ((left + width) >= AppConfig.fieldWidth) {
-					this.m_game.removeGameObject(bullet);
-					this.removeFromParentElement(bulletDiv);
+					this.removeGameObject(bullet);
 				} else {
 					bulletDiv.style.left = (left + bullet.getSpeed()) + 'px';
 				}
@@ -70,8 +69,7 @@ export class UIService implements IUIService {
 						HtmlInputService.removeEventListeners(this.m_parentContainer);
 					}
 
-					this.m_game.removeGameObject(enemy);
-					this.removeFromParentElement(enemyDiv);
+					this.removeGameObject(enemy);
 				} else {
 					// TODO: Speed
 					enemyDiv.style.left = (left - 1) + 'px';
@@ -104,15 +102,34 @@ export class UIService implements IUIService {
 		this.m_htmlPlayerStatusBar.refreshPlayerStatusBar(this.m_game.getPlayerStatusInfo());
 	}
 
-	private removeFromParentElement(htmlElement: HTMLElement): void {
-		htmlElement.parentNode?.removeChild(htmlElement);
+	private removeGameObject(gameObject: GameObjectBase): void {
+		if (!gameObject)
+			return;
+
+		// Remove game object.
+		this.m_game.removeGameObject(gameObject);
+
+		// Remove ui object.
+		const gameObjectDiv = GameFieldService.getGameObjectDivElement(gameObject.getID());
+		if (!gameObjectDiv)
+			return;
+
+		gameObjectDiv.parentNode?.removeChild(gameObjectDiv);
+
+		// Remove ui object tracking.
+		this.removeGameObjectUiTracking(gameObject.getID());
+	}
+	private removeGameObjectUiTracking(gameObjectID: number): void {
+		const interactionField = document.querySelector(`div.interaction-field[data-game-object-id='${gameObjectID}']`);
+		if (interactionField && interactionField instanceof HTMLDivElement)
+			delete interactionField.dataset.gameObjectId;
 	}
 
 	public addGameObject(target: never): void {
 		try {
 			const tower = new Tower();
 			this.m_game.buyGameObject(tower);
-			this.renderGameObject(tower, <HTMLDivElement>target);
+			this.renderTower(tower, <HTMLDivElement>target);
 		} catch (ex) {
 			this.renderMessage((<Error>ex).message);
 		}
@@ -123,19 +140,20 @@ export class UIService implements IUIService {
 		gameObjectFields.forEach(gameObjectField => {
 			const gameObjectID = GameFieldService.getGameObjectId(gameObjectField);
 			if (gameObjectID && !existingGameObjects.find(x => x.getID() === gameObjectID)) {
-				this.removeFromParentElement(gameObjectField);
+				gameObjectField.parentNode?.removeChild(gameObjectField);
+				this.removeGameObjectUiTracking(gameObjectID);
 			}
 		});
 	}
 	public renderEnemy(enemy: Enemy): void {
 		const spawnDiv = <HTMLDivElement>document.querySelector(`div.last[data-lane='${enemy.getLane()}']`);
-		const gameBoard = <HTMLDivElement>document.querySelector('.game-board');
-		gameBoard.append(HtmlControlBuilder.createGameObject(spawnDiv, enemy, 'enemy'));
+		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
+		gameObjectLayer.append(HtmlControlBuilder.createGameObject(spawnDiv, enemy, 'enemy'));
 	}
 	public renderBullet(from: GameObject, bullet: Bullet): void {
 		const gameObjectField = <HTMLDivElement>GameFieldService.getGameObjectDivElement(from.getID());
-		const gameBoard = <HTMLDivElement>document.querySelector('.game-board');
-		gameBoard.append(HtmlControlBuilder.createGameObject(gameObjectField, bullet, 'bullet'));
+		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
+		gameObjectLayer.append(HtmlControlBuilder.createGameObject(gameObjectField, bullet, 'bullet'));
 	}
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
 		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
@@ -179,9 +197,10 @@ export class UIService implements IUIService {
 		this.m_parentContainer.append(HtmlControlBuilder.createGameBoard(gameBoard));
 	}
 
-	public renderGameObject(gameObject: GameObject, parentField: HTMLDivElement): void {
-		const gameBoard = <HTMLDivElement>document.querySelector('.game-board');
-		gameBoard.append(HtmlControlBuilder.createGameObject(parentField, gameObject, 'game-object'));
+	public renderTower(gameObject: GameObject, parentField: HTMLDivElement): void {
+		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
+		parentField.dataset.gameObjectId = gameObject.getID().toString();
+		gameObjectLayer.append(HtmlControlBuilder.createGameObject(parentField, gameObject, 'game-object'));
 	}
 
 	public renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void {

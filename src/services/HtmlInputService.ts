@@ -7,7 +7,7 @@ export class HtmlInputService {
 			e = e || window.event;
 			const target = e.target;
 
-			if (!target || !GameFieldService.isEventTargetGameField(target))
+			if (!target || !GameFieldService.isEventTargetInteractionField(target))
 				return;
 
 			const gameObjectID = GameFieldService.getGameObjectIdFromEventTarget(target);

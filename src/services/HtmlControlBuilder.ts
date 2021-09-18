@@ -53,16 +53,29 @@ export class HtmlControlBuilder {
 		return container;
 	}
 
-	public static createGameBoard(field: GameBoard): HTMLElement {
-		const gameFields = field.GameFields();
-		const fieldContainer = HtmlControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
+	public static createGameBoard(gameBoard: GameBoard): HTMLElement {
+		const gameBoardContainer = HtmlControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
+
+		const fieldLayer = this.createGameBoardGridLayer(gameBoard, "field-layer", "game-field");
+		gameBoardContainer.append(fieldLayer);
+
+		HtmlControlBuilder.createDiv(gameBoardContainer, "game-object-layer");
+
+		const interactionLayer = this.createGameBoardGridLayer(gameBoard, "interaction-layer", "interaction-field");
+		gameBoardContainer.append(interactionLayer);
+
+		return gameBoardContainer;
+	}
+	private static createGameBoardGridLayer(gameBoard: GameBoard, layerCssClass: string, fieldCssClass: string): HTMLDivElement {
+		const gameFields = gameBoard.GameFields();
 		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
 		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
 
+		const gridLayerContainer = HtmlControlBuilder.createDiv(null, layerCssClass);
 		for (let i = 0; i < gameFields.length; i++) {
 			for (let j = 0; j < gameFields[i].length; j++) {
 				const gameField = gameFields[i][j];
-				const gameFieldObject = HtmlControlBuilder.createObject({ cssClass: "game-field", width: fieldWidth, height: fieldHeight });
+				const gameFieldObject = HtmlControlBuilder.createObject({ cssClass: fieldCssClass, width: fieldWidth, height: fieldHeight });
 				gameFieldObject.style.left = HtmlControlBuilder.getUnitString(j * fieldWidth);
 				gameFieldObject.style.top = HtmlControlBuilder.getUnitString(i * fieldHeight);
 				gameFieldObject.dataset.fieldId = gameField.id.toString();
@@ -71,10 +84,10 @@ export class HtmlControlBuilder {
 				if (j + 1 == gameFields[i].length)
 					gameFieldObject.classList.add('last');
 
-				fieldContainer.append(gameFieldObject);
+				gridLayerContainer.append(gameFieldObject);
 			}
 		}
-		return fieldContainer;
+		return gridLayerContainer;
 	}
 
 	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string): HTMLDivElement {
