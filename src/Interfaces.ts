@@ -18,6 +18,7 @@ export interface IUIService {
 	renderAppTitle(title: string): void;
 	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
 	renderGameBoard(gameBoard: GameBoard): void;
+	renderGameObjectSelectionBar(): void;
 	renderMessageWithTitle(title: string, message: string): Promise<void>;
 	renderMessage(message: string): Promise<void>;
 	registerInteractionHandlers(): void;
@@ -65,4 +66,8 @@ export interface IAttackGameObject {
 export interface IShootingGameObject extends IAttackGameObject {
 	getBulletSvgName(): string;
 	spawnBullet(): Bullet;
+}
+
+export interface ISelectableObject {
+	identifier: string;
 }

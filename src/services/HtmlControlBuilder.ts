@@ -1,5 +1,7 @@
 import { GameBoard } from "../classes/GameBoard.js";
 import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
+import { Rampart } from "../classes/Rampart.js";
+import { Tower } from "../classes/Tower.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "./AppService.js";
 
@@ -82,6 +84,31 @@ export class HtmlControlBuilder {
 			}
 		}
 		return gridLayerContainer;
+	}
+
+	public static createGameObjectSelectionbar(): HTMLDivElement {
+		const renderInfo = { height: 102, width: AppConfig.fieldWidth, cssClass: "selection-bar" };
+		const selectionBar = HtmlControlBuilder.createDiv(null, renderInfo.cssClass);
+		HtmlControlBuilder.SetPosition(selectionBar, renderInfo);
+
+		const templateObjects = [new Tower(), new Rampart()];
+		for (let i = 0; i < templateObjects.length; i++) {
+			const templateObject = templateObjects[i];
+			const selectionDiv = HtmlControlBuilder.createDiv(selectionBar, "selection-item");
+			selectionDiv.dataset.identifier = templateObject.identifier;
+			selectionDiv.onclick = () => {
+				document.querySelectorAll('.selection-bar div.selection-item.selected').forEach(x => {
+					x.classList.remove("selected");
+				});
+				selectionDiv.classList.add("selected");
+			};
+			selectionDiv.style.backgroundImage = `url('${AppConfig.svgPath}${templateObject.getSvg()}')`;
+
+			if (i == 0)
+				selectionDiv.classList.add("selected");
+		}
+
+		return selectionBar;
 	}
 
 	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string): HTMLDivElement {

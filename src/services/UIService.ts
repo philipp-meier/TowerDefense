@@ -12,6 +12,7 @@ import { HtmlInputService } from "./HtmlInputService.js";
 import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
 import { Bullet } from "../classes/Bullet.js";
 import { Enemy } from "../classes/Enemy.js";
+import { Rampart } from "../classes/Rampart.js";
 
 export class UIService implements IUIService {
 
@@ -76,11 +77,11 @@ export class UIService implements IUIService {
 					enemyDiv.style.left = (left - enemy.getMoveSpeed()) + 'px';
 				}
 
-				// Collides with tower
-				this.m_game.getSpawnedTowers().forEach((tower) => {
-					const towerDiv = GameFieldService.getGameObjectDivElement(tower.getID());
-					if (towerDiv && enemyDiv && this.isColliding(enemyDiv, towerDiv)) {
-						this.m_game.enemyHitsTower(enemy, tower);
+				// Collides with bought game object (tower,..)
+				this.m_game.getSpawnedBuyableGameObjects().forEach((gameObject) => {
+					const gameObjectDiv = GameFieldService.getGameObjectDivElement(gameObject.getID());
+					if (gameObjectDiv && enemyDiv && this.isColliding(enemyDiv, gameObjectDiv)) {
+						this.m_game.enemyHitsBuyableGameObject(enemy, gameObject);
 					}
 				});
 			}
@@ -128,9 +129,10 @@ export class UIService implements IUIService {
 
 	public addGameObject(target: never): void {
 		try {
-			const tower = new Tower();
-			this.m_game.buyGameObject(tower);
-			this.renderTower(tower, <HTMLDivElement>target);
+			const gameObjectIdentifier = (<HTMLDivElement>document.querySelector('.selection-item.selected')).dataset.identifier;
+			const gameObject = gameObjectIdentifier === "Tower" ? new Tower() : new Rampart();
+			this.m_game.buyGameObject(gameObject);
+			this.renderTower(gameObject, <HTMLDivElement>target);
 		} catch (ex) {
 			this.renderMessage((<Error>ex).message);
 		}
@@ -202,6 +204,9 @@ export class UIService implements IUIService {
 
 	public renderGameBoard(gameBoard: GameBoard): void {
 		this.m_parentContainer.append(HtmlControlBuilder.createGameBoard(gameBoard));
+	}
+	public renderGameObjectSelectionBar(): void {
+		this.m_parentContainer.append(HtmlControlBuilder.createGameObjectSelectionbar());
 	}
 
 	public renderTower(gameObject: GameObject, parentField: HTMLDivElement): void {

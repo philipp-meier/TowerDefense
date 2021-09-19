@@ -3,6 +3,8 @@ import { BuyableGameObject, GameObject } from "./GameObjects.js";
 import { Bullet } from "./Bullet.js";
 
 export class Tower extends BuyableGameObject implements IShootingGameObject {
+	public identifier = "Tower";
+
 	private m_upgrades = 0;
 	private m_bulletSvg = 'Tower/bullets1.svg';
 	private m_attackSpeed = 5;

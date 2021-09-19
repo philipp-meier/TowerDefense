@@ -23,6 +23,7 @@ export class Game {
 	public start(uiService: IUIService): void {
 		uiService.renderAppTitle(AppConfig.appTitle);
 		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
+		uiService.renderGameObjectSelectionBar();
 		uiService.renderGameBoard(this.m_gameBoard);
 
 		// Show game controls
@@ -34,8 +35,7 @@ export class Game {
 				this.bulletLoop(uiService);
 				this.enemyLoop(uiService);
 				this.updateLoop(uiService);
-			}
-			);
+			});
 	}
 	private updateLoop(uiService: IUIService): void {
 		if (this.isGameOver())
@@ -102,13 +102,13 @@ export class Game {
 			this.removeGameObject(bullet);
 		}
 	}
-	public enemyHitsTower(enemy: Enemy, tower: Tower): void {
-		if (enemy && tower) {
-			tower.takeDamage(enemy.getAttackDamage());
+	public enemyHitsBuyableGameObject(enemy: Enemy, buyableGameObject: BuyableGameObject): void {
+		if (enemy && buyableGameObject) {
+			buyableGameObject.takeDamage(enemy.getAttackDamage());
 			this.removeGameObject(enemy);
 
-			if (tower.getHealth() <= 0)
-				this.removeGameObject(tower);
+			if (buyableGameObject.getHealth() <= 0)
+				this.removeGameObject(buyableGameObject);
 		}
 	}
 	public enemyHitsPlayer(attackingGameObject: IAttackGameObject): void {
@@ -140,7 +140,7 @@ export class Game {
 	public getSpawnedEnemies(): Enemy[] {
 		return <Enemy[]>this.m_gameObjects.filter(x => x instanceof Enemy);
 	}
-	public getSpawnedTowers(): Tower[] {
-		return <Tower[]>this.m_gameObjects.filter(x => x instanceof Tower);
+	public getSpawnedBuyableGameObjects(): BuyableGameObject[] {
+		return <BuyableGameObject[]>this.m_gameObjects.filter(x => x instanceof BuyableGameObject);
 	}
 }

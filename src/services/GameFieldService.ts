@@ -31,8 +31,7 @@ export class GameFieldService {
 		const list: HTMLDivElement[] = [];
 
 		document.querySelectorAll('div[data-game-object-id]:not(.interaction-field)').forEach(x => {
-			if (x instanceof HTMLDivElement)
-				list.push(x);
+			list.push(<HTMLDivElement>x);
 		});
 
 		return list;

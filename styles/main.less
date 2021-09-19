@@ -217,3 +217,20 @@ a.menu-btn {
         height: 100%;
     }
 }
+
+.selection-bar {
+    background: #565656;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+    display: flex;
+
+    .selection-item {
+        width: 100px;
+        height: 100px;
+
+        &.selected {
+            border: 1px solid yellow;
+        }
+    }
+}

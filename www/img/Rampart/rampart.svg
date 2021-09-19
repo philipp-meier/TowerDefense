@@ -1,0 +1,10 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    <g id="Rampart">
+        <title>Layer 1</title>
+        <rect stroke="#000" id="svg_1" height="88.45051" width="17.46475" y="11.40854" x="42.11269" fill="#7f7f7f" />
+        <line stroke="#000" id="svg_3" y2="43.80283" x2="42.39438" y1="100.14074" x1="12.2536" fill="none" />
+        <line id="svg_4" y2="64.64786" x2="42.39438" y1="100.14074" x1="24.08456" stroke="#000" fill="none" />
+        <line stroke="#000" id="svg_5" y2="24.64794" x2="41.831" y1="99.57736" x1="0.70433" fill="none" />
+    </g>
+
+</svg>
