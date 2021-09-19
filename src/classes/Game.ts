@@ -25,9 +25,17 @@ export class Game {
 		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
 		uiService.renderGameBoard(this.m_gameBoard);
 
-		this.bulletLoop(uiService);
-		this.enemyLoop(uiService);
-		this.updateLoop(uiService);
+		// Show game controls
+		uiService.renderMessageWithTitle("Controls", "Left click = Buy tower<br>Right click = Upgrade existing tower")
+			.then(() => {
+				uiService.registerInteractionHandlers();
+
+				// Start game
+				this.bulletLoop(uiService);
+				this.enemyLoop(uiService);
+				this.updateLoop(uiService);
+			}
+			);
 	}
 	private updateLoop(uiService: IUIService): void {
 		if (this.isGameOver())

@@ -27,8 +27,10 @@ export class UIService implements IUIService {
 		this.m_htmlMessageBox = new HtmlMessageBox(container);
 		this.m_htmlPlayerStatusBar = new HtmlPlayerStatusBar();
 		this.m_game = game;
+	}
 
-		HtmlInputService.registerHandlers(container, this);
+	public registerInteractionHandlers(): void {
+		HtmlInputService.registerHandlers(this.m_parentContainer, this);
 	}
 
 	public refreshUI(): void {
@@ -178,8 +180,13 @@ export class UIService implements IUIService {
 		this.m_htmlContextMenu.hide();
 	}
 
-	public renderMessage(message: string): void {
-		this.m_htmlMessageBox.show('Message', message);
+	public renderMessageWithTitle(title: string, message: string): Promise<void> {
+		if (!document.querySelector(".message-box"))
+			return this.m_htmlMessageBox.show(title, message);
+		return Promise.resolve();
+	}
+	public renderMessage(message: string): Promise<void> {
+		return this.renderMessageWithTitle('Message', message);
 	}
 	public renderObject(obj: IRenderableObject): void {
 		this.m_parentContainer.append(HtmlControlBuilder.createObject(obj));

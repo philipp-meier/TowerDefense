@@ -18,7 +18,9 @@ export interface IUIService {
 	renderAppTitle(title: string): void;
 	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
 	renderGameBoard(gameBoard: GameBoard): void;
-	renderMessage(message: string): void;
+	renderMessageWithTitle(title: string, message: string): Promise<void>;
+	renderMessage(message: string): Promise<void>;
+	registerInteractionHandlers(): void;
 	renderBullet(from: GameObject, bullet: Bullet): void;
 	renderEnemy(enemy: Enemy): void;
 	addGameObject(target: never): void;

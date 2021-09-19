@@ -1,36 +1,26 @@
 import { HtmlControlBuilder } from "../services/HtmlControlBuilder.js";
 
 export class HtmlMessageBox {
-	private m_htmlElement: HTMLDivElement;
+	private m_container: HTMLDivElement;
 
 	constructor(p: HTMLDivElement) {
-		this.m_htmlElement = this.buildMessageBox();
-		p.append(this.m_htmlElement);
+		this.m_container = p;
 	}
 
-	private buildMessageBox(): HTMLDivElement {
-		const menu = HtmlControlBuilder.createDiv(null, "message-box hidden");
-		HtmlControlBuilder.createDiv(menu, "title");
-		HtmlControlBuilder.createDiv(menu, "text");
-
-		const commandDiv = HtmlControlBuilder.createDiv(menu, "commands");
-		HtmlControlBuilder.createButton(commandDiv, "OK", () => { this.hide(); });
-
-		return menu;
-	}
-
-	public show(title: string, message: string): void {
-		const titleDiv = this.m_htmlElement.querySelector('div.title');
-		if (titleDiv && titleDiv instanceof HTMLDivElement)
+	public show(title: string, message: string): Promise<void> {
+		return new Promise((resolve) => {
+			const messageBox = HtmlControlBuilder.createDiv(this.m_container, "message-box");
+			const titleDiv = HtmlControlBuilder.createDiv(messageBox, "title");
 			titleDiv.textContent = title;
 
-		const textDiv = this.m_htmlElement.querySelector('div.text');
-		if (textDiv && textDiv instanceof HTMLDivElement)
-			textDiv.textContent = message;
+			const textDiv = HtmlControlBuilder.createDiv(messageBox, "text");
+			textDiv.innerHTML = message;
 
-		this.m_htmlElement.classList.remove('hidden');
-	}
-	public hide(): void {
-		this.m_htmlElement.classList.add('hidden');
+			const commandDiv = HtmlControlBuilder.createDiv(messageBox, "commands");
+			HtmlControlBuilder.createButton(commandDiv, "OK", () => {
+				this.m_container.removeChild(messageBox);
+				resolve();
+			});
+		})
 	}
 }
