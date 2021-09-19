@@ -1,5 +1,5 @@
 import { IGameObjectOption, IShootingGameObject } from "../Interfaces.js";
-import { BuyableGameObject } from "./GameObjects.js";
+import { BuyableGameObject, GameObject } from "./GameObjects.js";
 import { Bullet } from "./Bullet.js";
 
 export class Tower extends BuyableGameObject implements IShootingGameObject {
@@ -27,12 +27,21 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 	}
 
 	public getOptions = (): IGameObjectOption[] => {
+		const options: IGameObjectOption[] = [];
 		if (this.m_upgrades == 0)
-			return [this.createGameObjectOption("Upgrade 1", "Tower/level2.svg", "Tower/bullets2.svg", 50)];
+			options.push(this.createGameObjectOption("Upgrade 1", "Tower/level2.svg", "Tower/bullets2.svg", 50));
 		else if (this.m_upgrades == 1)
-			return [this.createGameObjectOption("Upgrade 2", "Tower/level3.svg", "Tower/bullets3.svg", 100)];
-		else
-			return [];
+			options.push(this.createGameObjectOption("Upgrade 2", "Tower/level3.svg", "Tower/bullets3.svg", 100));
+
+		options.push({
+			title: "Repair",
+			getPrice: () => { return 50; },
+			execute: () => {
+				this.setHealth(GameObject.MaxHealth);
+			}
+		});
+
+		return options;
 	}
 
 	public spawnBullet = (): Bullet => new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);

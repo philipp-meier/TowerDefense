@@ -14,7 +14,9 @@ export abstract class GameObjectBase {
 	public getSvg = (): string => this.m_svg;
 }
 export class GameObject extends GameObjectBase {
-	private m_health = 100;
+	public static MaxHealth = 100;
+
+	private m_health = GameObject.MaxHealth;
 	private m_armor = 0;
 
 	constructor(svg: string) {
@@ -23,6 +25,9 @@ export class GameObject extends GameObjectBase {
 
 	public takeDamage(damage: number): void {
 		this.m_health -= damage;
+	}
+	public setHealth(health: number): void {
+		this.m_health = health;
 	}
 
 	public getHealth = (): number => this.m_health;
