@@ -57,9 +57,9 @@ export class ControlBuilder {
 	public static createGameBoard(gameBoard: GameBoard): HTMLElement {
 		const gameBoardContainer = ControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
 
-		ControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "background", true);
-		ControlBuilder.createDiv(gameBoardContainer, "game-object-layer");
-		ControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "interaction");
+		ControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "background", true).classList.add("layer");
+		ControlBuilder.createDiv(gameBoardContainer, "game-object-layer").classList.add("layer");
+		ControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "interaction").classList.add("layer");
 
 		return gameBoardContainer;
 	}
