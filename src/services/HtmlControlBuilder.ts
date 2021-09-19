@@ -95,6 +95,8 @@ export class HtmlControlBuilder {
 		for (let i = 0; i < templateObjects.length; i++) {
 			const templateObject = templateObjects[i];
 			const selectionDiv = HtmlControlBuilder.createDiv(selectionBar, "selection-item");
+			HtmlControlBuilder.createDiv(selectionDiv, "price").innerText = `${templateObject.getPrice()}$`;
+
 			selectionDiv.dataset.identifier = templateObject.identifier;
 			selectionDiv.onclick = () => {
 				document.querySelectorAll('.selection-bar div.selection-item.selected').forEach(x => {
