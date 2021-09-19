@@ -68,8 +68,8 @@ export class UIService implements IUIService {
 				if (left <= 0) {
 					this.m_game.enemyHitsPlayer(enemy);
 					if (this.m_game.isGameOver()) {
-						this.renderMessage('Game Over');
-						HtmlInputService.removeEventListeners(this.m_parentContainer);
+						// Restart by reloading the page.
+						this.renderMessage('Game Over').then(() => { window.location.reload() });
 					}
 
 					this.removeGameObject(enemy);
