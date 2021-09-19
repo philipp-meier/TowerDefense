@@ -9,17 +9,20 @@ export class HtmlPlayerStatusBar {
 		const container = HtmlControlBuilder.createDiv(parent, renderInfo.cssClass);
 		HtmlControlBuilder.SetPosition(container, renderInfo);
 
-		const healthContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/health.svg`, statusInfo.health, "health");
-		const coinContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/coin.svg`, statusInfo.coins, "coins");
+		const healthContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/health.svg`, statusInfo.health, "health", "Health");
+		const coinContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/coin.svg`, statusInfo.coins, "coins", "Coins");
 
 		container.append(healthContainer);
 		container.append(coinContainer);
 	}
-	private createPlayerStatusBarItem(svgPath: string, value: number, className: string): HTMLDivElement {
+	private createPlayerStatusBarItem(svgPath: string, value: number, className: string, description: string | null = null): HTMLDivElement {
 		const container = HtmlControlBuilder.createDiv(null, className);
 
 		const imgDiv = HtmlControlBuilder.createDiv(container, "icon");
 		imgDiv.style.backgroundImage = `url('${svgPath}')`;
+
+		if (description)
+			container.title = description;
 
 		HtmlControlBuilder.createSpan(container, value.toString(), null);
 		return container;
