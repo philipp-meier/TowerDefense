@@ -87,7 +87,7 @@ export class HtmlControlBuilder {
 	}
 
 	public static createGameObjectSelectionbar(): HTMLDivElement {
-		const renderInfo = { height: 102, width: AppConfig.fieldWidth, cssClass: "selection-bar" };
+		const renderInfo = { height: 102, width: AppConfig.fieldWidth - 6, cssClass: "selection-bar" };
 		const selectionBar = HtmlControlBuilder.createDiv(null, renderInfo.cssClass);
 		HtmlControlBuilder.SetPosition(selectionBar, renderInfo);
 
