@@ -6,7 +6,7 @@ import { AppConfig } from "./AppService.js";
 export class HtmlControlBuilder {
 	private static m_cssUnit = 'px';
 
-	private static createHtmlElement(tagName: string, parent: HTMLElement | null = null, cssClass: string | null = null) {
+	public static createHtmlElement(tagName: string, parent: HTMLElement | null = null, cssClass: string | null = null): HTMLElement {
 		const htmlElement = document.createElement(tagName);
 
 		if (cssClass)
@@ -33,11 +33,6 @@ export class HtmlControlBuilder {
 		span.textContent = text;
 
 		return span;
-	}
-	public static createLinkButton(parent: HTMLElement, cssClass: string | null, onClick: VoidFunction): HTMLAnchorElement {
-		const linkButton = <HTMLAnchorElement>this.createHtmlElement('a', parent, cssClass);
-		linkButton.onclick = onClick;
-		return linkButton;
 	}
 	public static createButton(parent: HTMLElement, text: string, onClick: VoidFunction): HTMLButtonElement {
 		const btn = <HTMLButtonElement>this.createHtmlElement('button', parent);

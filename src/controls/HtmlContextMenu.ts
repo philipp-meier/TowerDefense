@@ -19,12 +19,18 @@ export class HtmlContextMenu {
 	private buildMenuItem(gameObject: GameObject, option: IGameObjectOption, fnExecOptionCallback: ContextMenuExecOptionCallback): HTMLLIElement {
 		const menuItem = HtmlControlBuilder.createListElement(null, "menu-item");
 
-		const btn = HtmlControlBuilder.createLinkButton(menuItem, "menu-btn", () => {
-			fnExecOptionCallback(gameObject, option);
-			this.hide();
-		});
+		const linkButton = <HTMLAnchorElement>HtmlControlBuilder.createHtmlElement('a', menuItem, "menu-btn");
 
-		HtmlControlBuilder.createSpan(btn, option.title, "menu-text");
+		if (option.isAvailable) {
+			linkButton.onclick = () => {
+				fnExecOptionCallback(gameObject, option);
+				this.hide();
+			};
+		} else {
+			linkButton.classList.add('disabled');
+		}
+
+		HtmlControlBuilder.createSpan(linkButton, option.title, "menu-text");
 		return menuItem;
 	}
 

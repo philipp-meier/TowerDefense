@@ -43,6 +43,7 @@ export interface IRenderableText extends IRenderableObject {
 
 export interface IGameObjectOption extends IPriced {
 	title: string;
+	isAvailable: boolean;
 	execute(): void;
 }
 
