@@ -1,18 +1,18 @@
-import { GameBoard } from "../classes/GameBoard.js";
+import { GameBoard } from "../GameBoard.js";
 import { AppConfig } from "./AppService.js";
-import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
-import { Tower } from "../classes/Tower.js";
+import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js";
+import { Tower } from "../gameObjects/Tower.js";
 import { HtmlContextMenu } from "../controls/ContextMenu.js";
-import { Game } from "../classes/Game.js";
+import { Game } from "../Game.js";
 import { GameFieldService } from "./GameFieldService.js";
 import { HtmlMessageBox } from "../controls/MessageBox.js";
 import { HtmlControlBuilder } from "../controls/ControlBuilder.js";
 import { HtmlPlayerStatusBar } from "../controls/PlayerStatusBar.js";
 import { HtmlInputService } from "./InteractionService.js";
-import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
-import { Bullet } from "../classes/Bullet.js";
-import { Enemy } from "../classes/Enemy.js";
-import { Rampart } from "../classes/Rampart.js";
+import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
+import { Bullet } from "../gameObjects/Bullet.js";
+import { Enemy } from "../gameObjects/Enemy.js";
+import { Rampart } from "../gameObjects/Rampart.js";
 
 export class UIService implements IUIService {
 

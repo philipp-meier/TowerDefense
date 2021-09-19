@@ -1,4 +1,4 @@
-import { IPriced } from "../Interfaces.js";
+import { IPriced } from "./Interfaces.js";
 
 export class Player {
 	private m_Coins = 200;

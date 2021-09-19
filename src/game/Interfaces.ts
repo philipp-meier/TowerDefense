@@ -1,7 +1,7 @@
-import { Bullet } from "./classes/Bullet.js";
-import { Enemy } from "./classes/Enemy.js";
-import { GameBoard } from "./classes/GameBoard.js";
-import { GameObject } from "./classes/GameObjects.js";
+import { Bullet } from "./gameObjects/Bullet.js";
+import { Enemy } from "./gameObjects/Enemy.js";
+import { GameBoard } from "./GameBoard.js";
+import { GameObject } from "./gameObjects/GameObjectBase.js";
 
 export interface IAppConfig {
 	appTitle: string;

@@ -1,17 +1,15 @@
 import { IGameObjectOption, IShootingGameObject } from "../Interfaces.js";
-import { BuyableGameObject, GameObject } from "./GameObjects.js";
+import { BuyableGameObject, GameObject } from "./GameObjectBase.js";
 import { Bullet } from "./Bullet.js";
 
 export class Tower extends BuyableGameObject implements IShootingGameObject {
-	public identifier = "Tower";
-
 	private m_upgrades = 0;
 	private m_bulletSvg = 'Tower/bullets1.svg';
 	private m_attackSpeed = 5;
 	private m_attackDamage = 50;
 
 	constructor() {
-		super('Tower/level1.svg', 50);
+		super('Tower', 'Tower/level1.svg', 50);
 	}
 
 	private createGameObjectOption(title: string, svgName: string, bulletSvgName: string, price: number, isAvailable: boolean): IGameObjectOption {

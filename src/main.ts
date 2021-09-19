@@ -1,6 +1,6 @@
-import { UIService } from './services/UIService.js';
-import { AppConfig, AppService } from './services/AppService.js';
-import { Game } from './classes/Game.js';
+import { UIService } from './game/services/UIService.js';
+import { AppConfig, AppService } from './game/services/AppService.js';
+import { Game } from './game/Game.js';
 
 (() => {
 	const main = document.getElementById("main");

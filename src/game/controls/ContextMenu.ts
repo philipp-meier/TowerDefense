@@ -1,4 +1,4 @@
-import { BuyableGameObject, GameObject } from "../classes/GameObjects.js";
+import { BuyableGameObject, GameObject } from "../gameObjects/GameObjectBase.js";
 import { IGameObjectOption } from "../Interfaces.js";
 import { HtmlControlBuilder } from "./ControlBuilder.js";
 

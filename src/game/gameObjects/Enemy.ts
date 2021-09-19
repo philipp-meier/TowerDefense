@@ -1,5 +1,5 @@
 import { IAttackGameObject } from "../Interfaces.js";
-import { GameObject } from "./GameObjects.js";
+import { GameObject } from "./GameObjectBase.js";
 
 export class Enemy extends GameObject implements IAttackGameObject {
 	private m_gameBoardLane: number;

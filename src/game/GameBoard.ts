@@ -1,4 +1,4 @@
-import { IGameField } from "../Interfaces.js";
+import { IGameField } from "./Interfaces.js";
 
 export class GameBoard {
 	private m_GameFields: IGameField[][];

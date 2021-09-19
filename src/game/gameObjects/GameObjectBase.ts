@@ -13,7 +13,8 @@ export abstract class GameObjectBase {
 	public getID = (): number => this.m_id;
 	public getSvg = (): string => this.m_svg;
 }
-export class GameObject extends GameObjectBase {
+
+export abstract class GameObject extends GameObjectBase {
 	public static MaxHealth = 100;
 
 	private m_health = GameObject.MaxHealth;
@@ -34,14 +35,15 @@ export class GameObject extends GameObjectBase {
 	public getArmor = (): number => this.m_armor;
 }
 
-export class BuyableGameObject extends GameObject implements IPriced, ISelectableObject {
-	public identifier = "buyableGameObject";
+export abstract class BuyableGameObject extends GameObject implements IPriced, ISelectableObject {
+	public identifier: string;
 	private m_price: number;
 	private m_assignedGameField: IGameField | null = null;
 
-	constructor(svg: string, price: number) {
+	constructor(identifier: string, svg: string, price: number) {
 		super(svg);
 		this.m_price = price;
+		this.identifier = identifier;
 	}
 
 	public placeObject(field: IGameField): void {

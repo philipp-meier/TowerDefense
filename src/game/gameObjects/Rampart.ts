@@ -1,11 +1,9 @@
 import { IGameObjectOption } from "../Interfaces.js";
-import { BuyableGameObject, GameObject } from "./GameObjects.js";
+import { BuyableGameObject, GameObject } from "./GameObjectBase.js";
 
 export class Rampart extends BuyableGameObject {
-	public identifier = "Rampart";
-
 	constructor() {
-		super('Rampart/rampart.svg', 25);
+		super('Rampart', 'Rampart/rampart.svg', 25);
 	}
 
 	public getOptions = (): IGameObjectOption[] => {

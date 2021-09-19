@@ -1,7 +1,7 @@
-import { GameBoard } from "../classes/GameBoard.js";
-import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
-import { Rampart } from "../classes/Rampart.js";
-import { Tower } from "../classes/Tower.js";
+import { GameBoard } from "../GameBoard.js";
+import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
+import { Rampart } from "../gameObjects/Rampart.js";
+import { Tower } from "../gameObjects/Tower.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "../services/AppService.js";
 

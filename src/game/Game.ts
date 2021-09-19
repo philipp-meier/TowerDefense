@@ -1,11 +1,11 @@
-import { IAttackGameObject, IPlayerStatusInfo, IPriced, IUIService } from "../Interfaces.js";
-import { BuyableGameObject, GameObjectBase } from "./GameObjects.js";
-import { AppConfig } from "../services/AppService.js";
+import { IAttackGameObject, IPlayerStatusInfo, IPriced, IUIService } from "./Interfaces.js";
+import { BuyableGameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
+import { AppConfig } from "./services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
-import { Tower } from "./Tower.js";
-import { Bullet } from "./Bullet.js";
-import { Enemy } from "./Enemy.js";
+import { Tower } from "./gameObjects/Tower.js";
+import { Bullet } from "./gameObjects/Bullet.js";
+import { Enemy } from "./gameObjects/Enemy.js";
 
 export class Game {
 	private m_player: Player;
