@@ -17,8 +17,8 @@ export interface IUIService {
 	renderText(textObj: IRenderableText): void;
 	renderAppTitle(title: string): void;
 	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
-	renderGameBoard(gameBoard: GameBoard): void;
 	renderGameObjectSelectionBar(): void;
+	renderGameBoard(gameBoard: GameBoard): void;
 	renderMessageWithTitle(title: string, message: string): Promise<void>;
 	renderMessage(message: string): Promise<void>;
 	registerInteractionHandlers(): void;
@@ -42,7 +42,7 @@ export interface IRenderableText extends IRenderableObject {
 	text: string;
 }
 
-export interface IGameObjectOption extends IPriced {
+export interface IGameObjectOption extends IPricedObject {
 	title: string;
 	isAvailable: boolean;
 	execute(): void;
@@ -53,21 +53,16 @@ export interface IPlayerStatusInfo {
 	coins: number;
 }
 
-export interface IPriced {
+export interface IPricedObject {
 	getPrice(): number;
 }
 
-export interface IAttackGameObject {
+export interface IAttackingGameObject {
 	getAttackSpeed(): number;
 	getAttackDamage(): number;
 }
 
 // Modifications
-export interface IShootingGameObject extends IAttackGameObject {
-	getBulletSvgName(): string;
+export interface IShootingGameObject extends IAttackingGameObject {
 	spawnBullet(): Bullet;
-}
-
-export interface ISelectableObject {
-	identifier: string;
 }

@@ -1,4 +1,4 @@
-import { IAttackGameObject, IPlayerStatusInfo, IPriced, IUIService } from "./Interfaces.js";
+import { IAttackingGameObject, IPlayerStatusInfo, IPricedObject, IUIService } from "./Interfaces.js";
 import { BuyableGameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
 import { AppConfig } from "./services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
@@ -76,7 +76,7 @@ export class Game {
 		this.buy(gameObject);
 		this.m_gameObjects.push(gameObject);
 	}
-	public buy(option: IPriced): void {
+	public buy(option: IPricedObject): void {
 		this.m_player.buyItem(option);
 	}
 
@@ -111,7 +111,7 @@ export class Game {
 				this.removeGameObject(buyableGameObject);
 		}
 	}
-	public enemyHitsPlayer(attackingGameObject: IAttackGameObject): void {
+	public enemyHitsPlayer(attackingGameObject: IAttackingGameObject): void {
 		this.m_player.takeDamage(attackingGameObject.getAttackDamage());
 	}
 

@@ -1,4 +1,4 @@
-import { IGameField, IGameObjectOption, IPriced, ISelectableObject } from "../Interfaces.js";
+import { IGameObjectOption, IPricedObject } from "../Interfaces.js";
 
 export abstract class GameObjectBase {
 	private static currentId = 1;
@@ -35,10 +35,9 @@ export abstract class GameObject extends GameObjectBase {
 	public getArmor = (): number => this.m_armor;
 }
 
-export abstract class BuyableGameObject extends GameObject implements IPriced, ISelectableObject {
+export abstract class BuyableGameObject extends GameObject implements IPricedObject {
 	public identifier: string;
 	private m_price: number;
-	private m_assignedGameField: IGameField | null = null;
 
 	constructor(identifier: string, svg: string, price: number) {
 		super(svg);
@@ -46,11 +45,6 @@ export abstract class BuyableGameObject extends GameObject implements IPriced, I
 		this.identifier = identifier;
 	}
 
-	public placeObject(field: IGameField): void {
-		this.m_assignedGameField = field;
-	}
-
-	public getAssignedGameField = (): IGameField | null => this.m_assignedGameField;
 	public getOptions = (): IGameObjectOption[] => [];
 	public getPrice = (): number => this.m_price;
 }

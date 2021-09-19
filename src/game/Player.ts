@@ -1,10 +1,10 @@
-import { IPriced } from "./Interfaces.js";
+import { IPricedObject } from "./Interfaces.js";
 
 export class Player {
 	private m_Coins = 200;
 	private m_Health = 100;
 
-	public buyItem(item: IPriced): void {
+	public buyItem(item: IPricedObject): void {
 		if (this.m_Coins < item.getPrice())
 			throw new Error('Item is too expensive.');
 

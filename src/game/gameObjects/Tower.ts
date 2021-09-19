@@ -12,7 +12,7 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 		super('Tower', 'Tower/level1.svg', 50);
 	}
 
-	private createGameObjectOption(title: string, svgName: string, bulletSvgName: string, price: number, isAvailable: boolean): IGameObjectOption {
+	private createUpgradeGameObjectOption(title: string, svgName: string, bulletSvgName: string, price: number, isAvailable: boolean): IGameObjectOption {
 		return {
 			title: `${price}$ - ${title}`,
 			isAvailable: isAvailable,
@@ -30,9 +30,9 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 	public getOptions = (): IGameObjectOption[] => {
 		const options: IGameObjectOption[] = [];
 		if (this.m_upgrades == 0)
-			options.push(this.createGameObjectOption("Upgrade 1", "Tower/level2.svg", "Tower/bullets2.svg", 50, true));
+			options.push(this.createUpgradeGameObjectOption("Upgrade 1", "Tower/level2.svg", "Tower/bullets2.svg", 50, true));
 		else if (this.m_upgrades == 1)
-			options.push(this.createGameObjectOption("Upgrade 2", "Tower/level3.svg", "Tower/bullets3.svg", 100, true));
+			options.push(this.createUpgradeGameObjectOption("Upgrade 2", "Tower/level3.svg", "Tower/bullets3.svg", 100, true));
 
 		options.push({
 			title: "50$ - Repair",
@@ -47,8 +47,6 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 	}
 
 	public spawnBullet = (): Bullet => new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
-
-	public getBulletSvgName = (): string => this.m_bulletSvg;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 	public getAttackDamage = (): number => this.m_attackDamage;
 }

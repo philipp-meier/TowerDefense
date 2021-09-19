@@ -1,7 +1,7 @@
-import { IAttackGameObject } from "../Interfaces.js";
+import { IAttackingGameObject } from "../Interfaces.js";
 import { GameObject } from "./GameObjectBase.js";
 
-export class Enemy extends GameObject implements IAttackGameObject {
+export class Enemy extends GameObject implements IAttackingGameObject {
 	private m_gameBoardLane: number;
 	private m_coins = 50;
 	private m_damage = 20;

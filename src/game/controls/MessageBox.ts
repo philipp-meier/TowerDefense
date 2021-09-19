@@ -1,6 +1,10 @@
-import { HtmlControlBuilder } from "./ControlBuilder.js";
+/*
+	=== Message Box ===
+	Displays a centered message box with an "OK" button.
+*/
+import { ControlBuilder } from "./ControlBuilder.js";
 
-export class HtmlMessageBox {
+export class MessageBox {
 	private m_container: HTMLDivElement;
 
 	constructor(p: HTMLDivElement) {
@@ -9,15 +13,15 @@ export class HtmlMessageBox {
 
 	public show(title: string, message: string): Promise<void> {
 		return new Promise((resolve) => {
-			const messageBox = HtmlControlBuilder.createDiv(this.m_container, "message-box");
-			const titleDiv = HtmlControlBuilder.createDiv(messageBox, "title");
+			const messageBox = ControlBuilder.createDiv(this.m_container, "message-box");
+			const titleDiv = ControlBuilder.createDiv(messageBox, "title");
 			titleDiv.textContent = title;
 
-			const textDiv = HtmlControlBuilder.createDiv(messageBox, "text");
+			const textDiv = ControlBuilder.createDiv(messageBox, "text");
 			textDiv.innerHTML = message;
 
-			const commandDiv = HtmlControlBuilder.createDiv(messageBox, "commands");
-			HtmlControlBuilder.createButton(commandDiv, "OK", () => {
+			const commandDiv = ControlBuilder.createDiv(messageBox, "commands");
+			ControlBuilder.createButton(commandDiv, "OK", () => {
 				this.m_container.removeChild(messageBox);
 				resolve();
 			});

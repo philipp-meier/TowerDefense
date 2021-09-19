@@ -7,16 +7,13 @@ export class Rampart extends BuyableGameObject {
 	}
 
 	public getOptions = (): IGameObjectOption[] => {
-		const options: IGameObjectOption[] = [];
-		options.push({
+		return [{
 			title: "25$ - Repair",
 			isAvailable: this.getHealth() < GameObject.MaxHealth,
 			getPrice: () => { return 25; },
 			execute: () => {
 				this.setHealth(GameObject.MaxHealth);
 			}
-		});
-
-		return options;
+		}];
 	}
 }

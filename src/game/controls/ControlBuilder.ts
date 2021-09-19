@@ -1,3 +1,7 @@
+/*
+	=== Control Builder ===
+	Creates DOM elements and provides helper methods.
+*/
 import { GameBoard } from "../GameBoard.js";
 import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Rampart } from "../gameObjects/Rampart.js";
@@ -5,7 +9,7 @@ import { Tower } from "../gameObjects/Tower.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "../services/AppService.js";
 
-export class HtmlControlBuilder {
+export class ControlBuilder {
 	private static m_cssUnit = 'px';
 
 	public static createHtmlElement(tagName: string, parent: HTMLElement | null = null, cssClass: string | null = null): HTMLElement {
@@ -45,17 +49,17 @@ export class HtmlControlBuilder {
 	}
 
 	public static createText(textObj: IRenderableText): HTMLElement {
-		const container = HtmlControlBuilder.createObject(textObj);
-		HtmlControlBuilder.createSpan(container, textObj.text, null);
+		const container = ControlBuilder.createObject(textObj);
+		ControlBuilder.createSpan(container, textObj.text, null);
 		return container;
 	}
 
 	public static createGameBoard(gameBoard: GameBoard): HTMLElement {
-		const gameBoardContainer = HtmlControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
+		const gameBoardContainer = ControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
 
-		HtmlControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "background", true);
-		HtmlControlBuilder.createDiv(gameBoardContainer, "game-object-layer");
-		HtmlControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "interaction");
+		ControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "background", true);
+		ControlBuilder.createDiv(gameBoardContainer, "game-object-layer");
+		ControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "interaction");
 
 		return gameBoardContainer;
 	}
@@ -64,13 +68,13 @@ export class HtmlControlBuilder {
 		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
 		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
 
-		const gridLayerContainer = HtmlControlBuilder.createDiv(parent, `${typeName}-layer`);
+		const gridLayerContainer = ControlBuilder.createDiv(parent, `${typeName}-layer`);
 		for (let i = 0; i < gameFields.length; i++) {
 			for (let j = 0; j < gameFields[i].length; j++) {
 				const gameField = gameFields[i][j];
-				const gameFieldObject = HtmlControlBuilder.createObject({ cssClass: `${typeName}-field`, width: fieldWidth, height: fieldHeight });
-				gameFieldObject.style.left = HtmlControlBuilder.getUnitString(j * fieldWidth);
-				gameFieldObject.style.top = HtmlControlBuilder.getUnitString(i * fieldHeight);
+				const gameFieldObject = ControlBuilder.createObject({ cssClass: `${typeName}-field`, width: fieldWidth, height: fieldHeight });
+				gameFieldObject.style.left = ControlBuilder.getUnitString(j * fieldWidth);
+				gameFieldObject.style.top = ControlBuilder.getUnitString(i * fieldHeight);
 
 				if (!structureOnly) {
 					gameFieldObject.dataset.fieldId = gameField.id.toString();
@@ -88,14 +92,14 @@ export class HtmlControlBuilder {
 
 	public static createGameObjectSelectionbar(): HTMLDivElement {
 		const renderInfo = { height: 102, width: AppConfig.fieldWidth - 6, cssClass: "selection-bar" };
-		const selectionBar = HtmlControlBuilder.createDiv(null, renderInfo.cssClass);
-		HtmlControlBuilder.SetPosition(selectionBar, renderInfo);
+		const selectionBar = ControlBuilder.createDiv(null, renderInfo.cssClass);
+		ControlBuilder.SetPosition(selectionBar, renderInfo);
 
 		const templateObjects = [new Tower(), new Rampart()];
 		for (let i = 0; i < templateObjects.length; i++) {
 			const templateObject = templateObjects[i];
-			const selectionDiv = HtmlControlBuilder.createDiv(selectionBar, "selection-item");
-			HtmlControlBuilder.createDiv(selectionDiv, "price").innerText = `${templateObject.getPrice()}$`;
+			const selectionDiv = ControlBuilder.createDiv(selectionBar, "selection-item");
+			ControlBuilder.createDiv(selectionDiv, "price").innerText = `${templateObject.getPrice()}$`;
 
 			selectionDiv.dataset.identifier = templateObject.identifier;
 			selectionDiv.onclick = () => {
@@ -114,7 +118,7 @@ export class HtmlControlBuilder {
 	}
 
 	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string): HTMLDivElement {
-		const gameObjectDiv = HtmlControlBuilder.createDiv(null, className);
+		const gameObjectDiv = ControlBuilder.createDiv(null, className);
 		gameObjectDiv.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 		gameObjectDiv.style.height = AppConfig.fieldHeight / AppConfig.rowCount + 'px';
 		gameObjectDiv.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
@@ -123,14 +127,14 @@ export class HtmlControlBuilder {
 		gameObjectDiv.dataset.gameObjectId = gameObject.getID().toString();
 
 		if (gameObject instanceof GameObject)
-			HtmlControlBuilder.createHealthBar(gameObjectDiv);
+			ControlBuilder.createHealthBar(gameObjectDiv);
 
 		return gameObjectDiv;
 	}
 
 	public static createHealthBar(parent: HTMLDivElement): HTMLDivElement {
-		const healthBarContainer = HtmlControlBuilder.createDiv(parent, 'health-bar');
-		const healthBarValue = HtmlControlBuilder.createDiv(healthBarContainer, 'value');
+		const healthBarContainer = ControlBuilder.createDiv(parent, 'health-bar');
+		const healthBarValue = ControlBuilder.createDiv(healthBarContainer, 'value');
 		healthBarValue.style.width = '100%';
 
 		healthBarContainer.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
@@ -140,15 +144,15 @@ export class HtmlControlBuilder {
 	}
 
 	public static createObject(obj: IRenderableObject): HTMLElement {
-		const container = HtmlControlBuilder.createDiv(null, obj.cssClass);
-		HtmlControlBuilder.SetPosition(container, obj);
+		const container = ControlBuilder.createDiv(null, obj.cssClass);
+		ControlBuilder.SetPosition(container, obj);
 		return container;
 	}
 	public static SetPosition(element: HTMLElement, ro: IRenderableObject): void {
-		element.style.width = HtmlControlBuilder.getUnitString(ro.width);
-		element.style.height = HtmlControlBuilder.getUnitString(ro.height);
+		element.style.width = ControlBuilder.getUnitString(ro.width);
+		element.style.height = ControlBuilder.getUnitString(ro.height);
 	}
 	public static getUnitString(n: number): string {
-		return `${n}${HtmlControlBuilder.m_cssUnit}`;
+		return `${n}${ControlBuilder.m_cssUnit}`;
 	}
 }

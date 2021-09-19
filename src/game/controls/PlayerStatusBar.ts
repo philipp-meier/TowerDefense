@@ -1,13 +1,17 @@
+/*
+	=== Player Status Bar ===
+	Displays player relevant information (i.E. health, coins).
+*/
 import { IPlayerStatusInfo } from "../Interfaces.js";
 import { AppConfig } from "../services/AppService.js";
-import { HtmlControlBuilder } from "./ControlBuilder.js";
+import { ControlBuilder } from "./ControlBuilder.js";
 
-export class HtmlPlayerStatusBar {
+export class PlayerStatusBar {
 
 	public createPlayerStatusBar(parent: HTMLElement, statusInfo: IPlayerStatusInfo): void {
 		const renderInfo = { height: 25, width: AppConfig.fieldWidth, cssClass: "player-status-bar" };
-		const container = HtmlControlBuilder.createDiv(parent, renderInfo.cssClass);
-		HtmlControlBuilder.SetPosition(container, renderInfo);
+		const container = ControlBuilder.createDiv(parent, renderInfo.cssClass);
+		ControlBuilder.SetPosition(container, renderInfo);
 
 		const healthContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/health.svg`, statusInfo.health, "health", "Health");
 		const coinContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/coin.svg`, statusInfo.coins, "coins", "Coins");
@@ -16,15 +20,15 @@ export class HtmlPlayerStatusBar {
 		container.append(coinContainer);
 	}
 	private createPlayerStatusBarItem(svgPath: string, value: number, className: string, description: string | null = null): HTMLDivElement {
-		const container = HtmlControlBuilder.createDiv(null, className);
+		const container = ControlBuilder.createDiv(null, className);
 
-		const imgDiv = HtmlControlBuilder.createDiv(container, "icon");
+		const imgDiv = ControlBuilder.createDiv(container, "icon");
 		imgDiv.style.backgroundImage = `url('${svgPath}')`;
 
 		if (description)
 			container.title = description;
 
-		HtmlControlBuilder.createSpan(container, value.toString(), null);
+		ControlBuilder.createSpan(container, value.toString(), null);
 		return container;
 	}
 
