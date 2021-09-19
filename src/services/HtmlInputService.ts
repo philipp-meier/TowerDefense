@@ -4,6 +4,15 @@ import { UIService } from "./UIService.js";
 export class HtmlInputService {
 	public static registerHandlers(parent: HTMLElement, uiService: UIService): void {
 		parent.addEventListener('click', (e) => {
+			if (!uiService.isContextMenuHidden()) {
+				e = e || window.event;
+				const target = e.target;
+				if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
+					uiService.hideContextMenu();
+
+				return;
+			}
+
 			e = e || window.event;
 			const target = e.target;
 
@@ -26,13 +35,6 @@ export class HtmlInputService {
 
 			uiService.showContextMenu(gameObjectID, e.pageX, e.pageY);
 		}, false);
-
-		parent.addEventListener('mousedown', (e) => {
-			e = e || window.event;
-			const target = e.target;
-			if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
-				uiService.hideContextMenu();
-		});
 	}
 	public static removeEventListeners(parent: HTMLElement): void {
 		parent.replaceWith(parent.cloneNode(true));

@@ -179,6 +179,7 @@ export class UIService implements IUIService {
 	public hideContextMenu(): void {
 		this.m_htmlContextMenu.hide();
 	}
+	public isContextMenuHidden = (): boolean => this.m_htmlContextMenu.isHidden();
 
 	public renderMessageWithTitle(title: string, message: string): Promise<void> {
 		if (!document.querySelector(".message-box"))

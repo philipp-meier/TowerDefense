@@ -6,6 +6,7 @@ type ContextMenuExecOptionCallback = (gameObject: GameObject, option: IGameObjec
 
 export class HtmlContextMenu {
 	private m_htmlElement: HTMLUListElement;
+	private m_isHidden = true;
 
 	constructor(p: HTMLDivElement) {
 		this.m_htmlElement = this.buildMenu();
@@ -42,9 +43,13 @@ export class HtmlContextMenu {
 			this.m_htmlElement.style.left = x + "px";
 			this.m_htmlElement.style.top = y + "px";
 			this.m_htmlElement.classList.add('menu-show');
+			this.m_isHidden = false;
 		}
 	}
 	public hide(): void {
 		this.m_htmlElement.classList.remove('menu-show');
+		this.m_isHidden = true;
 	}
+
+	public isHidden = (): boolean => this.m_isHidden;
 }
