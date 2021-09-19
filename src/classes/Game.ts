@@ -27,7 +27,7 @@ export class Game {
 		uiService.renderGameBoard(this.m_gameBoard);
 
 		// Show game controls
-		uiService.renderMessageWithTitle("Controls", "Left click = Buy tower<br>Right click = Upgrade existing tower")
+		uiService.renderMessageWithTitle("Controls", "Left click = Buy selected game object<br>Right click = Upgrade existing game object")
 			.then(() => {
 				uiService.registerInteractionHandlers();
 
