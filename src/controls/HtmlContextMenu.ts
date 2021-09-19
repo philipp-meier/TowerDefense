@@ -30,6 +30,7 @@ export class HtmlContextMenu {
 			linkButton.classList.add('disabled');
 		}
 
+		HtmlControlBuilder.createDiv(linkButton, "icon");
 		HtmlControlBuilder.createSpan(linkButton, option.title, "menu-text");
 		return menuItem;
 	}

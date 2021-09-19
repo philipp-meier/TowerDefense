@@ -128,11 +128,21 @@ button.menu-btn {
 a.menu-btn {
     outline: 0 none;
     text-decoration: none;
+    display: flex;
+    height: 16px;
+
+    &.disabled .icon {
+        width: 20px;
+        background: url('../img/ContextMenu/locked.svg');
+        background-repeat: no-repeat;
+    }
+    .icon {
+        width: 20px;
+        background: url('../img/ContextMenu/upgrade.svg');
+        background-repeat: no-repeat;
+    }
 }
 
-.menu-text {
-    margin-left: 25px;
-}
 
 .menu-item:hover > .menu-btn { 
     color: #fff; 
