@@ -2,13 +2,13 @@ import { GameBoard } from "../classes/GameBoard.js";
 import { AppConfig } from "./AppService.js";
 import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js"
 import { Tower } from "../classes/Tower.js";
-import { HtmlContextMenu } from "../controls/HtmlContextMenu.js";
+import { HtmlContextMenu } from "../controls/ContextMenu.js";
 import { Game } from "../classes/Game.js";
 import { GameFieldService } from "./GameFieldService.js";
-import { HtmlMessageBox } from "../controls/HtmlMessageBox.js";
-import { HtmlControlBuilder } from "./HtmlControlBuilder.js";
-import { HtmlPlayerStatusBar } from "../controls/HtmlPlayerStatusBar.js";
-import { HtmlInputService } from "./HtmlInputService.js";
+import { HtmlMessageBox } from "../controls/MessageBox.js";
+import { HtmlControlBuilder } from "../controls/ControlBuilder.js";
+import { HtmlPlayerStatusBar } from "../controls/PlayerStatusBar.js";
+import { HtmlInputService } from "./InteractionService.js";
 import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
 import { Bullet } from "../classes/Bullet.js";
 import { Enemy } from "../classes/Enemy.js";

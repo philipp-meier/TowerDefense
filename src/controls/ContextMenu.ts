@@ -1,6 +1,6 @@
 import { BuyableGameObject, GameObject } from "../classes/GameObjects.js";
 import { IGameObjectOption } from "../Interfaces.js";
-import { HtmlControlBuilder } from "../services/HtmlControlBuilder.js";
+import { HtmlControlBuilder } from "./ControlBuilder.js";
 
 type ContextMenuExecOptionCallback = (gameObject: GameObject, option: IGameObjectOption) => void;
 

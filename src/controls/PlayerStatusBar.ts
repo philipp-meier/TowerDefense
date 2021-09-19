@@ -1,6 +1,6 @@
 import { IPlayerStatusInfo } from "../Interfaces.js";
 import { AppConfig } from "../services/AppService.js";
-import { HtmlControlBuilder } from "../services/HtmlControlBuilder.js";
+import { HtmlControlBuilder } from "./ControlBuilder.js";
 
 export class HtmlPlayerStatusBar {
 

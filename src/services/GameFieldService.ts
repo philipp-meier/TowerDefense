@@ -30,7 +30,7 @@ export class GameFieldService {
 	public static getAllRenderedGameObjects(): HTMLDivElement[] {
 		const list: HTMLDivElement[] = [];
 
-		document.querySelectorAll('div[data-game-object-id]:not(.interaction-field)').forEach(x => {
+		document.querySelectorAll('div.game-object-layer div[data-game-object-id]').forEach(x => {
 			list.push(<HTMLDivElement>x);
 		});
 

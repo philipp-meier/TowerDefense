@@ -3,7 +3,7 @@ import { GameObject, GameObjectBase } from "../classes/GameObjects.js";
 import { Rampart } from "../classes/Rampart.js";
 import { Tower } from "../classes/Tower.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
-import { AppConfig } from "./AppService.js";
+import { AppConfig } from "../services/AppService.js";
 
 export class HtmlControlBuilder {
 	private static m_cssUnit = 'px';

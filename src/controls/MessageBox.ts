@@ -1,4 +1,4 @@
-import { HtmlControlBuilder } from "../services/HtmlControlBuilder.js";
+import { HtmlControlBuilder } from "./ControlBuilder.js";
 
 export class HtmlMessageBox {
 	private m_container: HTMLDivElement;
