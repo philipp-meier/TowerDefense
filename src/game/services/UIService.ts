@@ -8,7 +8,7 @@ import { MessageBox } from "../controls/MessageBox.js";
 import { ControlBuilder } from "../controls/ControlBuilder.js";
 import { PlayerStatusBar } from "../controls/PlayerStatusBar.js";
 import { InteractionService } from "./InteractionService.js";
-import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
+import { BuyableGameObject, GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Bullet } from "../gameObjects/Bullet.js";
 import { Enemy } from "../gameObjects/Enemy.js";
 import { Rampart } from "../gameObjects/Rampart.js";
@@ -41,22 +41,32 @@ export class UIService implements IUIService {
 		this.m_game.getSpawnedBullets().forEach((bullet) => {
 			const bulletDiv = InteractionService.getGameObjectDivElement(bullet.getID());
 
-			this.m_game.getSpawnedEnemies().forEach((enemy) => {
-				const enemyDiv = InteractionService.getGameObjectDivElement(enemy.getID());
-				if (bulletDiv && enemyDiv && this.isColliding(bulletDiv, enemyDiv)) {
-					this.m_game.bulletHitsEnemy(bullet, enemy);
+			this.m_game.getSpawnedGameObjects().forEach((gameObject) => {
+				// Disable "friendly fire".
+				if ((gameObject instanceof BuyableGameObject && bullet.isEnemyBullet()) ||
+					gameObject instanceof Enemy && !bullet.isEnemyBullet()) {
+
+					const gameObjectDiv = InteractionService.getGameObjectDivElement(gameObject.getID());
+					if (bulletDiv && gameObjectDiv && this.isColliding(bulletDiv, gameObjectDiv))
+						this.m_game.bulletHitsGameObject(bullet, gameObject);
+				}
+
+				// Move bullet
+				if (bulletDiv) {
+					const left = Number(bulletDiv.style.left.replace('px', ''));
+					const width = Number(bulletDiv.style.width.replace('px', ''));
+					const isBeyondBorder = bullet.isEnemyBullet() ?
+						((left + width) <= 0) :
+						((left + width) >= AppConfig.fieldWidth);
+
+					if (isBeyondBorder) {
+						this.removeGameObject(bullet);
+					} else {
+						const moveDirection = bullet.isEnemyBullet() ? -1 : 1;
+						bulletDiv.style.left = (left + bullet.getAttackSpeed() * moveDirection) + 'px';
+					}
 				}
 			});
-
-			if (bulletDiv) {
-				const left = Number(bulletDiv.style.left.replace('px', ''));
-				const width = Number(bulletDiv.style.width.replace('px', ''));
-				if ((left + width) >= AppConfig.fieldWidth) {
-					this.removeGameObject(bullet);
-				} else {
-					bulletDiv.style.left = (left + bullet.getAttackSpeed()) + 'px';
-				}
-			}
 		});
 
 		this.m_game.getSpawnedEnemies().forEach((enemy) => {
@@ -85,10 +95,7 @@ export class UIService implements IUIService {
 			}
 		});
 
-		this.m_game.getGameObjects().forEach((gameObject) => {
-			if (!(gameObject instanceof GameObject))
-				return;
-
+		this.m_game.getSpawnedGameObjects().forEach((gameObject) => {
 			const gameObjectDiv = InteractionService.getGameObjectDivElement(gameObject.getID());
 			if (gameObjectDiv) {
 				// Refresh health bar
@@ -147,10 +154,10 @@ export class UIService implements IUIService {
 	}
 	private removeDeletedGameObjects(): void {
 		const gameObjectFields = this.getAllRenderedGameObjects();
-		const existingGameObjects = this.m_game.getGameObjects();
+		const existingBaseGameObjects = this.m_game.getBaseGameObjects();
 		gameObjectFields.forEach(gameObjectField => {
 			const gameObjectID = InteractionService.getGameObjectId(gameObjectField);
-			if (gameObjectID && !existingGameObjects.find(x => x.getID() === gameObjectID)) {
+			if (gameObjectID && !existingBaseGameObjects.find(x => x.getID() === gameObjectID)) {
 				gameObjectField.parentNode?.removeChild(gameObjectField);
 				this.removeGameObjectUiTracking(gameObjectID);
 			}
@@ -164,7 +171,13 @@ export class UIService implements IUIService {
 	public renderBullet(from: GameObject, bullet: Bullet): void {
 		const gameObjectField = <HTMLDivElement>InteractionService.getGameObjectDivElement(from.getID());
 		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
-		gameObjectLayer.append(ControlBuilder.createGameObject(gameObjectField, bullet, 'bullet'));
+		const bulletDiv = ControlBuilder.createGameObject(gameObjectField, bullet, 'bullet');
+
+		// TODO: Optimize (= enemy bullet spawn point)
+		if (bullet.isEnemyBullet())
+			bulletDiv.style.left = (Number(gameObjectField.style.left.replace('px', '')) - (AppConfig.fieldWidth / AppConfig.columnCount)) + "px";
+
+		gameObjectLayer.append(bulletDiv);
 	}
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
 		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);

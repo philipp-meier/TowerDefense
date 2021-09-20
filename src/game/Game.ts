@@ -1,11 +1,12 @@
-import { IAttackingGameObject, IPlayerStatusInfo, IPricedObject, IUIService } from "./Interfaces.js";
-import { BuyableGameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
+import { IAttackingGameObject, IPlayerStatusInfo, IPricedObject, IShootingGameObject, IUIService } from "./Interfaces.js";
+import { BuyableGameObject, GameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
 import { AppConfig } from "./services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
 import { Tower } from "./gameObjects/Tower.js";
 import { Bullet } from "./gameObjects/Bullet.js";
 import { Enemy } from "./gameObjects/Enemy.js";
+import { ShootingEnemy } from "./gameObjects/ShootingEnemy.js";
 
 export class Game {
 	private m_player: Player;
@@ -49,7 +50,10 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
-			const enemy = new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
+			const enemy = (this.getRandomNumber(0, 50) >= 25) ?
+				new ShootingEnemy(this.getRandomNumber(0, AppConfig.rowCount)) :
+				new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
+
 			this.spawnGameObject(enemy);
 			uiService.renderEnemy(enemy);
 			setTimeout(spawnEnemies, this.m_enemySpawnTimeInMs);
@@ -61,11 +65,14 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
-			this.m_gameObjects.filter(x => x instanceof Tower).forEach((x) => {
-				const tower = <Tower>x;
-				const bullet = tower.spawnBullet();
-				this.spawnGameObject(bullet);
-				uiService.renderBullet(tower, bullet);
+			// TODO: Base class for shooting game objects instead of interfaces?
+			this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
+				if (x instanceof GameObject) {
+					const shootingGameObject = <IShootingGameObject>(<unknown>x);
+					const bullet = shootingGameObject.spawnBullet();
+					this.spawnGameObject(bullet);
+					uiService.renderBullet(x, bullet);
+				}
 			});
 			setTimeout(spawnBullets, this.m_bulletSpawnTimeInMs);
 		};
@@ -91,17 +98,20 @@ export class Game {
 		}
 	}
 
-	public bulletHitsEnemy(bullet: Bullet, enemy: Enemy): void {
-		if (enemy && bullet) {
-			if (enemy.getHealth() - bullet.getAttackDamage() <= 0) {
-				this.m_player.awardCoins(enemy.getCoins());
-				this.removeGameObject(enemy);
+	public bulletHitsGameObject(bullet: Bullet, gameObject: GameObject): void {
+		if (gameObject && bullet) {
+			if (gameObject.getHealth() - bullet.getAttackDamage() <= 0) {
+				if (gameObject instanceof Enemy)
+					this.m_player.awardCoins((<Enemy>gameObject).getCoins());
+
+				this.removeGameObject(gameObject);
 			} else {
-				enemy.takeDamage(bullet.getAttackDamage());
+				gameObject.takeDamage(bullet.getAttackDamage());
 			}
 			this.removeGameObject(bullet);
 		}
 	}
+
 	public enemyHitsBuyableGameObject(enemy: Enemy, buyableGameObject: BuyableGameObject): void {
 		if (enemy && buyableGameObject) {
 			buyableGameObject.takeDamage(enemy.getAttackDamage());
@@ -131,8 +141,11 @@ export class Game {
 	private getRandomNumber(min: number, max: number): number {
 		return Math.floor(Math.random() * (max - min) + min);
 	}
-	public getGameObjects(): GameObjectBase[] {
+	public getBaseGameObjects(): GameObjectBase[] {
 		return this.m_gameObjects;
+	}
+	public getSpawnedGameObjects(): GameObject[] {
+		return <GameObject[]>this.m_gameObjects.filter(x => x instanceof GameObject);
 	}
 	public getSpawnedBullets(): Bullet[] {
 		return <Bullet[]>this.m_gameObjects.filter(x => x instanceof Bullet);

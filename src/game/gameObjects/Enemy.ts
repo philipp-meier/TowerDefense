@@ -3,8 +3,8 @@ import { GameObject } from "./GameObjectBase.js";
 
 export class Enemy extends GameObject implements IAttackingGameObject {
 	private m_gameBoardLane: number;
-	private m_coins = 50;
-	private m_damage = 20;
+	protected m_coins = 50;
+	protected m_damage = 20;
 
 	constructor(lane: number) {
 		super('Enemy/enemy1.svg');
