@@ -57,10 +57,9 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
-			// TODO: Increase enemy damage, armor, attack speed and spawn rates on wave changes.
 			const enemy = this.m_currentWave >= 5 && (this.getRandomNumber(0, 50) >= 25) ?
-				new ShootingEnemy(this.getRandomNumber(0, AppConfig.rowCount)) :
-				new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
+				new ShootingEnemy(this.m_currentWave, this.getRandomNumber(0, AppConfig.rowCount)) :
+				new Enemy(this.m_currentWave, this.getRandomNumber(0, AppConfig.rowCount));
 
 			this.spawnGameObject(enemy);
 			uiService.renderEnemy(enemy);

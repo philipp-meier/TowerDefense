@@ -1,5 +1,5 @@
 import { IGameObjectOption } from "../Interfaces.js";
-import { BuyableGameObject, GameObject } from "./GameObjectBase.js";
+import { BuyableGameObject } from "./GameObjectBase.js";
 
 export class Rampart extends BuyableGameObject {
 	constructor() {
@@ -9,10 +9,10 @@ export class Rampart extends BuyableGameObject {
 	public getOptions = (): IGameObjectOption[] => {
 		return [{
 			title: "25$ - Repair",
-			isAvailable: this.getHealth() < GameObject.MaxHealth,
+			isAvailable: this.getHealth() < this.getMaxHealth(),
 			getPrice: () => { return 25; },
 			execute: () => {
-				this.setHealth(GameObject.MaxHealth);
+				this.setHealth(this.getMaxHealth());
 			}
 		}];
 	}
