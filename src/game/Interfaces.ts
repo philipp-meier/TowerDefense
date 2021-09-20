@@ -51,6 +51,8 @@ export interface IGameObjectOption extends IPricedObject {
 export interface IPlayerStatusInfo {
 	health: number;
 	coins: number;
+	startTime: number;
+	currentWave: number;
 }
 
 export interface IPricedObject {

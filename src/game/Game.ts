@@ -12,9 +12,12 @@ export class Game {
 	private m_player: Player;
 	private m_gameBoard: GameBoard;
 	private m_gameObjects: GameObjectBase[] = [];
+	private m_startTime = Date.now();
+	private m_currentWave = 1;
 
 	private readonly m_bulletSpawnTimeInMs = 5000;
 	private readonly m_enemySpawnTimeInMs = 10_000;
+	private readonly m_waveDurationInMinutes = 1;
 
 	constructor() {
 		this.m_player = new Player();
@@ -22,6 +25,7 @@ export class Game {
 	}
 
 	public start(uiService: IUIService): void {
+		this.m_startTime = Date.now();
 		uiService.renderAppTitle(AppConfig.appTitle);
 		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
 		uiService.renderGameObjectSelectionBar();
@@ -42,6 +46,9 @@ export class Game {
 		if (this.isGameOver())
 			return;
 
+		// Update wave
+		this.m_currentWave = 1 + Math.trunc((Date.now() - this.m_startTime) / (this.m_waveDurationInMinutes * 60000));
+
 		uiService.refreshUI();
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
 	}
@@ -50,7 +57,8 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
-			const enemy = (this.getRandomNumber(0, 50) >= 25) ?
+			// TODO: Increase enemy damage, armor, attack speed and spawn rates on wave changes.
+			const enemy = this.m_currentWave >= 5 && (this.getRandomNumber(0, 50) >= 25) ?
 				new ShootingEnemy(this.getRandomNumber(0, AppConfig.rowCount)) :
 				new Enemy(this.getRandomNumber(0, AppConfig.rowCount));
 
@@ -127,7 +135,9 @@ export class Game {
 	public getPlayerStatusInfo(): IPlayerStatusInfo {
 		return {
 			health: this.m_player.getHealth(),
-			coins: this.m_player.getCoins()
+			coins: this.m_player.getCoins(),
+			startTime: this.m_startTime,
+			currentWave: this.m_currentWave
 		};
 	}
 
