@@ -53,8 +53,8 @@ export class UIService implements IUIService {
 
 				// Move bullet
 				if (bulletDiv) {
-					const left = Number(bulletDiv.style.left.replace('px', ''));
-					const width = Number(bulletDiv.style.width.replace('px', ''));
+					const left = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.left);
+					const width = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.width);
 					const isBeyondBorder = bullet.isEnemyBullet() ?
 						((left + width) <= 0) :
 						((left + width) >= AppConfig.fieldWidth);
@@ -72,7 +72,7 @@ export class UIService implements IUIService {
 		this.m_game.getSpawnedEnemies().forEach((enemy) => {
 			const enemyDiv = InteractionService.getGameObjectDivElement(enemy.getID());
 			if (enemyDiv) {
-				const left = Number(enemyDiv.style.left.replace('px', ''));
+				const left = ControlBuilder.getNumberWithoutUnit(enemyDiv.style.left);
 				if (left <= 0) {
 					this.m_game.enemyHitsPlayer(enemy);
 					if (this.m_game.isGameOver()) {
@@ -171,13 +171,11 @@ export class UIService implements IUIService {
 	public renderBullet(from: GameObject, bullet: Bullet): void {
 		const gameObjectField = <HTMLDivElement>InteractionService.getGameObjectDivElement(from.getID());
 		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
-		const bulletDiv = ControlBuilder.createGameObject(gameObjectField, bullet, 'bullet');
 
-		// TODO: Optimize (= enemy bullet spawn point)
-		if (bullet.isEnemyBullet())
-			bulletDiv.style.left = (Number(gameObjectField.style.left.replace('px', '')) - (AppConfig.fieldWidth / AppConfig.columnCount)) + "px";
+		const offsetLeft = bullet.isEnemyBullet() ?
+			-(AppConfig.fieldWidth / AppConfig.columnCount) : null;
 
-		gameObjectLayer.append(bulletDiv);
+		gameObjectLayer.append(ControlBuilder.createGameObject(gameObjectField, bullet, 'bullet', offsetLeft));
 	}
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
 		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);

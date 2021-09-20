@@ -10,7 +10,6 @@ export class ShootingEnemy extends Enemy implements IShootingGameObject {
 		super(lane);
 	}
 
-	// TODO: Own bullet svgs for "ShootingEnemy".
-	public spawnBullet = (): Bullet => new Bullet('Tower/bullets1.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
+	public spawnBullet = (): Bullet => new Bullet('Enemy/bullets1.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
 	public getAttackSpeed = (): number => 5;
 }

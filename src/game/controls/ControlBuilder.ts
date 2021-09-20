@@ -117,14 +117,18 @@ export class ControlBuilder {
 		return selectionBar;
 	}
 
-	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string): HTMLDivElement {
+	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string, offsetLeft: number | null = null): HTMLDivElement {
 		const gameObjectDiv = ControlBuilder.createDiv(null, className);
 		gameObjectDiv.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
 		gameObjectDiv.style.height = AppConfig.fieldHeight / AppConfig.rowCount + 'px';
 		gameObjectDiv.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
-		gameObjectDiv.style.top = fromElement.style.top;
-		gameObjectDiv.style.left = fromElement.style.left;
 		gameObjectDiv.dataset.gameObjectId = gameObject.getID().toString();
+		gameObjectDiv.style.top = fromElement.style.top;
+
+		if (offsetLeft)
+			gameObjectDiv.style.left = (ControlBuilder.getNumberWithoutUnit(fromElement.style.left) + offsetLeft) + 'px';
+		else
+			gameObjectDiv.style.left = fromElement.style.left;
 
 		if (gameObject instanceof GameObject)
 			ControlBuilder.createHealthBar(gameObjectDiv);
@@ -151,6 +155,9 @@ export class ControlBuilder {
 	public static SetPosition(element: HTMLElement, ro: IRenderableObject): void {
 		element.style.width = ControlBuilder.getUnitString(ro.width);
 		element.style.height = ControlBuilder.getUnitString(ro.height);
+	}
+	public static getNumberWithoutUnit(unitText: string): number {
+		return Number(unitText.replace('px', ''));
 	}
 	public static getUnitString(n: number): string {
 		return `${n}${ControlBuilder.m_cssUnit}`;

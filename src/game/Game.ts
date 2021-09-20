@@ -65,14 +65,11 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
-			// TODO: Base class for shooting game objects instead of interfaces?
 			this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
-				if (x instanceof GameObject) {
-					const shootingGameObject = <IShootingGameObject>(<unknown>x);
-					const bullet = shootingGameObject.spawnBullet();
-					this.spawnGameObject(bullet);
-					uiService.renderBullet(x, bullet);
-				}
+				const shootingGameObject = <IShootingGameObject>(<unknown>x);
+				const bullet = shootingGameObject.spawnBullet();
+				this.spawnGameObject(bullet);
+				uiService.renderBullet(<GameObject>x, bullet);
 			});
 			setTimeout(spawnBullets, this.m_bulletSpawnTimeInMs);
 		};
