@@ -7,22 +7,18 @@ import { AppConfig } from "../services/AppService.js";
 import { ControlBuilder } from "./ControlBuilder.js";
 
 export class PlayerStatusBar {
-	private m_StartTime = Date.now();
 
 	public createPlayerStatusBar(parent: HTMLElement, statusInfo: IPlayerStatusInfo): void {
 		const renderInfo = { height: 25, width: AppConfig.fieldWidth, cssClass: "player-status-bar" };
 		const container = ControlBuilder.createDiv(parent, renderInfo.cssClass);
 		ControlBuilder.SetPosition(container, renderInfo);
 
-		const healthContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/health.svg`, statusInfo.health.toString(), "health", "Health");
-		const coinContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/coin.svg`, statusInfo.coins.toString(), "coins", "Coins");
-		const timerContainer = this.createPlayerStatusBarItem(`${AppConfig.svgPath}StatusBar/timer.svg`, "00:00:00", "timer", "Elapsed time");
-
-		container.append(healthContainer);
-		container.append(coinContainer);
-		container.append(timerContainer);
+		this.createPlayerStatusBarItem(container, `${AppConfig.svgPath}StatusBar/health.svg`, statusInfo.health.toString(), "health", "Health");
+		this.createPlayerStatusBarItem(container, `${AppConfig.svgPath}StatusBar/coin.svg`, statusInfo.coins.toString(), "coins", "Coins");
+		this.createPlayerStatusBarItem(container, `${AppConfig.svgPath}StatusBar/enemyWave.svg`, "1", "enemy-wave", "Current Wave");
+		this.createPlayerStatusBarItem(container, `${AppConfig.svgPath}StatusBar/timer.svg`, "00:00:00", "timer", "Elapsed time");
 	}
-	private createPlayerStatusBarItem(svgPath: string, value: string, className: string, description: string | null = null): HTMLDivElement {
+	private createPlayerStatusBarItem(parent: HTMLElement, svgPath: string, value: string, className: string, description: string | null = null): void {
 		const container = ControlBuilder.createDiv(null, className);
 
 		const imgDiv = ControlBuilder.createDiv(container, "icon");
@@ -32,25 +28,25 @@ export class PlayerStatusBar {
 			container.title = description;
 
 		ControlBuilder.createSpan(container, value.toString(), null);
-		return container;
+		parent.append(container);
 	}
 
 	public refreshPlayerStatusBar(statusInfo: IPlayerStatusInfo): void {
 		const renderInfo = { height: 25, width: AppConfig.fieldWidth, cssClass: "player-status-bar" };
-		const healthSpan = document.querySelector(`div.${renderInfo.cssClass} div.health span`);
-		if (healthSpan && healthSpan instanceof HTMLSpanElement)
-			healthSpan.textContent = statusInfo.health.toString();
 
-		const coinSpan = document.querySelector(`div.${renderInfo.cssClass} div.coins span`);
-		if (coinSpan && coinSpan instanceof HTMLSpanElement)
-			coinSpan.textContent = statusInfo.coins.toString();
+		const updateStatus = (identifier: string, value: string) => {
+			const span = document.querySelector(`div.${renderInfo.cssClass} div.${identifier} span`);
+			if (span && span instanceof HTMLSpanElement)
+				span.textContent = value;
+		};
 
-		const timerSpan = document.querySelector(`div.${renderInfo.cssClass} div.timer span`);
-		if (timerSpan && timerSpan instanceof HTMLSpanElement)
-			timerSpan.textContent = this.getTimeElapsedString();
+		updateStatus("health", statusInfo.health.toString());
+		updateStatus("coins", statusInfo.coins.toString());
+		updateStatus("timer", this.getTimeElapsedString(statusInfo.startTime));
+		updateStatus("enemy-wave", statusInfo.currentWave.toString());
 	}
-	private getTimeElapsedString(): string {
-		const timeElapsed = new Date(Date.now() - this.m_StartTime);
+	private getTimeElapsedString(startTime: number): string {
+		const timeElapsed = new Date(Date.now() - startTime);
 		const formatTime = (time: number) => time.toString().padStart(2, '0');
 		return `${formatTime(timeElapsed.getUTCHours())}:${formatTime(timeElapsed.getUTCMinutes())}:${formatTime(timeElapsed.getUTCSeconds())}`;
 	}

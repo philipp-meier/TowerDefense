@@ -101,7 +101,7 @@ export class UIService implements IUIService {
 				// Refresh health bar
 				const healthBarValueDiv = gameObjectDiv.querySelector('.health-bar > .value');
 				if (healthBarValueDiv && healthBarValueDiv instanceof HTMLDivElement) {
-					healthBarValueDiv.style.width = gameObject.getHealth() + '%';
+					healthBarValueDiv.style.width = gameObject.getHealthInPercent() + '%';
 				}
 			}
 		});

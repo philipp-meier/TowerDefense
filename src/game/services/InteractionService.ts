@@ -7,17 +7,15 @@ import { UIService } from "./UIService.js";
 export class InteractionService {
 	public static registerHandlers(parent: HTMLElement, uiService: UIService): void {
 		parent.addEventListener('click', (e) => {
+			e = e || window.event;
+			const target = e.target;
+
 			if (!uiService.isContextMenuHidden()) {
-				e = e || window.event;
-				const target = e.target;
 				if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
 					uiService.hideContextMenu();
 
 				return;
 			}
-
-			e = e || window.event;
-			const target = e.target;
 
 			if (!target || !InteractionService.isEventTargetInteractionField(target))
 				return;

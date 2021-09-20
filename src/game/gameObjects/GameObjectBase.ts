@@ -15,9 +15,9 @@ export abstract class GameObjectBase {
 }
 
 export abstract class GameObject extends GameObjectBase {
-	public static MaxHealth = 100;
 
-	private m_health = GameObject.MaxHealth;
+	protected m_health = 100;
+	protected m_maxHealth = 100;
 	private m_armor = 0;
 
 	constructor(svg: string) {
@@ -31,8 +31,10 @@ export abstract class GameObject extends GameObjectBase {
 		this.m_health = health;
 	}
 
-	public getHealth = (): number => this.m_health;
 	public getArmor = (): number => this.m_armor;
+	public getHealth = (): number => this.m_health;
+	public getMaxHealth = (): number => this.m_maxHealth;
+	public getHealthInPercent = (): number => this.m_health / this.m_maxHealth * 100;
 }
 
 export abstract class BuyableGameObject extends GameObject implements IPricedObject {

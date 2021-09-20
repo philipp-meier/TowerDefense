@@ -1,5 +1,5 @@
 import { IGameObjectOption, IShootingGameObject } from "../Interfaces.js";
-import { BuyableGameObject, GameObject } from "./GameObjectBase.js";
+import { BuyableGameObject } from "./GameObjectBase.js";
 import { Bullet } from "./Bullet.js";
 
 export class Tower extends BuyableGameObject implements IShootingGameObject {
@@ -36,10 +36,10 @@ export class Tower extends BuyableGameObject implements IShootingGameObject {
 
 		options.push({
 			title: "50$ - Repair",
-			isAvailable: this.getHealth() < GameObject.MaxHealth,
+			isAvailable: this.getHealth() < this.getMaxHealth(),
 			getPrice: () => { return 50; },
 			execute: () => {
-				this.setHealth(GameObject.MaxHealth);
+				this.setHealth(this.getMaxHealth());
 			}
 		});
 
