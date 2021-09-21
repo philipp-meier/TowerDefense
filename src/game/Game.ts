@@ -33,15 +33,19 @@ export class Game {
 		uiService.renderGameBoard(this.m_gameBoard);
 
 		// Show game controls
-		uiService.renderMessageWithTitle("Controls", "Left click = Buy selected game object<br>Right click = Upgrade existing game object")
-			.then(() => {
-				uiService.registerInteractionHandlers();
+		uiService.renderMessageWithTitle("Controls",
+			`Left click = Buy selected game object<br>
+			Right click = Upgrade existing game object<br>
+			<br>
+			Goal: Survive ${AppConfig.enemyWaveGoal} waves.`
+		).then(() => {
+			uiService.registerInteractionHandlers();
 
-				// Start game
-				this.bulletLoop(uiService);
-				this.enemyLoop(uiService);
-				this.updateLoop(uiService);
-			});
+			// Start game
+			this.bulletLoop(uiService);
+			this.enemyLoop(uiService);
+			this.updateLoop(uiService);
+		});
 	}
 	private updateLoop(uiService: IUIService): void {
 		if (this.isGameOver()) {
