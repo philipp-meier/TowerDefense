@@ -2,7 +2,8 @@
 	=== Game Context Menu ===
 	Displays (buyable) options for game objects (i.E. upgrade, repair,...).
 */
-import { BuyableGameObject, GameObject } from "../gameObjects/GameObjectBase.js";
+import { GameObject } from "../gameObjects/GameObjectBase.js";
+import { PlayerGameObjectBase } from "../gameObjects/PlayerObjects.js";
 import { IGameObjectOption } from "../Interfaces.js";
 import { ControlBuilder } from "./ControlBuilder.js";
 
@@ -38,7 +39,7 @@ export class ContextMenu {
 		return menuItem;
 	}
 
-	private prepareContextMenu(gameObject: BuyableGameObject, fnExecOptionCallback: ContextMenuExecOptionCallback): boolean {
+	private prepareContextMenu(gameObject: PlayerGameObjectBase, fnExecOptionCallback: ContextMenuExecOptionCallback): boolean {
 		const options = gameObject.getOptions();
 
 		this.m_ContextMenu.innerText = '';
@@ -48,7 +49,7 @@ export class ContextMenu {
 
 		return options.length > 0;
 	}
-	public show(gameObject: BuyableGameObject, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback): void {
+	public show(gameObject: PlayerGameObjectBase, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback): void {
 		if (this.prepareContextMenu(gameObject, fnExecOptionCallback)) {
 			this.m_ContextMenu.style.left = x + "px";
 			this.m_ContextMenu.style.top = y + "px";

@@ -1,9 +1,9 @@
 import { IAttackingGameObject, IPlayerStatusInfo, IPricedObject, IShootingGameObject, IUIService } from "./Interfaces.js";
-import { BuyableGameObject, GameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
+import { GameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
 import { AppConfig } from "./services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
-import { Tower } from "./gameObjects/PlayerObjects.js";
+import { PlayerGameObjectBase, Tower } from "./gameObjects/PlayerObjects.js";
 import { Bullet } from "./gameObjects/Bullet.js";
 import { Enemy, ShootingEnemy } from "./gameObjects/Enemies.js";
 import { EnemyWaveService } from "./services/EnemyWaveService.js";
@@ -82,7 +82,7 @@ export class Game {
 		setTimeout(spawnBullets, this.m_bulletSpawnTimeInMs);
 	}
 
-	public buyGameObject(gameObject: BuyableGameObject): void {
+	public buyGameObject(gameObject: PlayerGameObjectBase): void {
 		this.buy(gameObject);
 		this.m_gameObjects.push(gameObject);
 	}
@@ -115,13 +115,13 @@ export class Game {
 		}
 	}
 
-	public enemyHitsBuyableGameObject(enemy: Enemy, buyableGameObject: BuyableGameObject): void {
-		if (enemy && buyableGameObject) {
-			buyableGameObject.takeDamage(enemy.getAttackDamage());
+	public enemyHitsPlayerGameObject(enemy: Enemy, playerGameObject: PlayerGameObjectBase): void {
+		if (enemy && playerGameObject) {
+			playerGameObject.takeDamage(enemy.getAttackDamage());
 			this.removeGameObject(enemy);
 
-			if (buyableGameObject.getHealth() <= 0)
-				this.removeGameObject(buyableGameObject);
+			if (playerGameObject.getHealth() <= 0)
+				this.removeGameObject(playerGameObject);
 		}
 	}
 	public enemyHitsPlayer(attackingGameObject: IAttackingGameObject): void {
@@ -139,10 +139,9 @@ export class Game {
 		};
 	}
 
-	public getBuyableGameObjectById(id: number): BuyableGameObject | undefined {
-		return <BuyableGameObject | undefined>this.m_gameObjects.find(x => x instanceof BuyableGameObject && x.getID() == id);
+	public getPlayerGameObjectById(id: number): PlayerGameObjectBase | undefined {
+		return <PlayerGameObjectBase | undefined>this.getSpawnedPlayerGameObjects().find(x => x.getID() == id);
 	}
-
 	public getBaseGameObjects(): GameObjectBase[] {
 		return this.m_gameObjects;
 	}
@@ -155,7 +154,7 @@ export class Game {
 	public getSpawnedEnemies(): Enemy[] {
 		return <Enemy[]>this.m_gameObjects.filter(x => x instanceof Enemy);
 	}
-	public getSpawnedBuyableGameObjects(): BuyableGameObject[] {
-		return <BuyableGameObject[]>this.m_gameObjects.filter(x => x instanceof BuyableGameObject);
+	public getSpawnedPlayerGameObjects(): PlayerGameObjectBase[] {
+		return <PlayerGameObjectBase[]>this.m_gameObjects.filter(x => x instanceof PlayerGameObjectBase);
 	}
 }

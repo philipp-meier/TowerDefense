@@ -1,14 +1,14 @@
 import { GameBoard } from "../GameBoard.js";
 import { AppConfig } from "./AppService.js";
 import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js";
-import { Tower, Rampart } from "../gameObjects/PlayerObjects.js";
+import { Tower, Rampart, PlayerGameObjectBase } from "../gameObjects/PlayerObjects.js";
 import { ContextMenu } from "../controls/ContextMenu.js";
 import { Game } from "../Game.js";
 import { MessageBox } from "../controls/MessageBox.js";
 import { ControlBuilder } from "../controls/ControlBuilder.js";
 import { PlayerStatusBar } from "../controls/PlayerStatusBar.js";
 import { InteractionService } from "./InteractionService.js";
-import { BuyableGameObject, GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
+import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Bullet } from "../gameObjects/Bullet.js";
 import { Enemy } from "../gameObjects/Enemies.js";
 
@@ -42,7 +42,7 @@ export class UIService implements IUIService {
 
 			this.m_game.getSpawnedGameObjects().forEach((gameObject) => {
 				// Disable "friendly fire".
-				if ((gameObject instanceof BuyableGameObject && bullet.isEnemyBullet()) ||
+				if ((gameObject instanceof PlayerGameObjectBase && bullet.isEnemyBullet()) ||
 					gameObject instanceof Enemy && !bullet.isEnemyBullet()) {
 
 					const gameObjectDiv = InteractionService.getGameObjectDivElement(gameObject.getID());
@@ -84,11 +84,11 @@ export class UIService implements IUIService {
 					enemyDiv.style.left = (left - enemy.getMoveSpeed()) + 'px';
 				}
 
-				// Collides with bought game object (tower,..)
-				this.m_game.getSpawnedBuyableGameObjects().forEach((gameObject) => {
+				// Collides with player game object (tower,..)
+				this.m_game.getSpawnedPlayerGameObjects().forEach((gameObject) => {
 					const gameObjectDiv = InteractionService.getGameObjectDivElement(gameObject.getID());
 					if (gameObjectDiv && enemyDiv && this.isColliding(enemyDiv, gameObjectDiv)) {
-						this.m_game.enemyHitsBuyableGameObject(enemy, gameObject);
+						this.m_game.enemyHitsPlayerGameObject(enemy, gameObject);
 					}
 				});
 			}
@@ -177,7 +177,7 @@ export class UIService implements IUIService {
 		gameObjectLayer.append(ControlBuilder.createGameObject(gameObjectField, bullet, 'bullet', offsetLeft));
 	}
 	public showContextMenu(gameObjectID: number, posX: number, posY: number): void {
-		const gameObject = this.m_game.getBuyableGameObjectById(gameObjectID);
+		const gameObject = this.m_game.getPlayerGameObjectById(gameObjectID);
 		if (gameObject) {
 			const execGameObjectOption = (gameObject: GameObject, option: IGameObjectOption) => {
 				try {
