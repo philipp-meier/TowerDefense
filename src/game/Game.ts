@@ -3,10 +3,9 @@ import { BuyableGameObject, GameObject, GameObjectBase } from "./gameObjects/Gam
 import { AppConfig } from "./services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
-import { Tower } from "./gameObjects/Tower.js";
+import { Tower } from "./gameObjects/PlayerObjects.js";
 import { Bullet } from "./gameObjects/Bullet.js";
-import { Enemy } from "./gameObjects/Enemy.js";
-import { ShootingEnemy } from "./gameObjects/ShootingEnemy.js";
+import { Enemy, ShootingEnemy } from "./gameObjects/Enemies.js";
 import { EnemyWaveService } from "./services/EnemyWaveService.js";
 
 export class Game {

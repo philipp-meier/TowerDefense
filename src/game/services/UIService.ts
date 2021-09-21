@@ -1,7 +1,7 @@
 import { GameBoard } from "../GameBoard.js";
 import { AppConfig } from "./AppService.js";
 import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js";
-import { Tower } from "../gameObjects/Tower.js";
+import { Tower, Rampart } from "../gameObjects/PlayerObjects.js";
 import { ContextMenu } from "../controls/ContextMenu.js";
 import { Game } from "../Game.js";
 import { MessageBox } from "../controls/MessageBox.js";
@@ -10,8 +10,7 @@ import { PlayerStatusBar } from "../controls/PlayerStatusBar.js";
 import { InteractionService } from "./InteractionService.js";
 import { BuyableGameObject, GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Bullet } from "../gameObjects/Bullet.js";
-import { Enemy } from "../gameObjects/Enemy.js";
-import { Rampart } from "../gameObjects/Rampart.js";
+import { Enemy } from "../gameObjects/Enemies.js";
 
 export class UIService implements IUIService {
 	private readonly m_parentContainer: HTMLDivElement;
