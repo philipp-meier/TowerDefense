@@ -7,25 +7,27 @@ import { Tower } from "./gameObjects/Tower.js";
 import { Bullet } from "./gameObjects/Bullet.js";
 import { Enemy } from "./gameObjects/Enemy.js";
 import { ShootingEnemy } from "./gameObjects/ShootingEnemy.js";
+import { EnemyWaveService } from "./services/EnemyWaveService.js";
 
 export class Game {
 	private m_player: Player;
 	private m_gameBoard: GameBoard;
 	private m_gameObjects: GameObjectBase[] = [];
+	private m_enemyWaveService: EnemyWaveService;
 	private m_startTime = Date.now();
-	private m_currentWave = 1;
 
 	private readonly m_bulletSpawnTimeInMs = 5000;
-	private readonly m_enemySpawnTimeInMs = 10_000;
-	private readonly m_waveDurationInMinutes = 1;
 
 	constructor() {
 		this.m_player = new Player();
 		this.m_gameBoard = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
+		this.m_enemyWaveService = new EnemyWaveService();
 	}
 
 	public start(uiService: IUIService): void {
 		this.m_startTime = Date.now();
+		this.m_enemyWaveService.init(this.m_startTime);
+
 		uiService.renderAppTitle(AppConfig.appTitle);
 		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
 		uiService.renderGameObjectSelectionBar();
@@ -47,7 +49,7 @@ export class Game {
 			return;
 
 		// Update wave
-		this.m_currentWave = 1 + Math.trunc((Date.now() - this.m_startTime) / (this.m_waveDurationInMinutes * 60000));
+		this.m_enemyWaveService.updateWave();
 
 		uiService.refreshUI();
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
@@ -57,15 +59,13 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
-			const enemy = this.m_currentWave >= 5 && (this.getRandomNumber(0, 50) >= 25) ?
-				new ShootingEnemy(this.m_currentWave, this.getRandomNumber(0, AppConfig.rowCount)) :
-				new Enemy(this.m_currentWave, this.getRandomNumber(0, AppConfig.rowCount));
 
+			const enemy = this.m_enemyWaveService.spawnEnemy();
 			this.spawnGameObject(enemy);
 			uiService.renderEnemy(enemy);
-			setTimeout(spawnEnemies, this.m_enemySpawnTimeInMs);
+			setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
 		};
-		setTimeout(spawnEnemies, this.m_enemySpawnTimeInMs);
+		setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
 	}
 	private bulletLoop(uiService: IUIService): void {
 		const spawnBullets = () => {
@@ -136,7 +136,7 @@ export class Game {
 			health: this.m_player.getHealth(),
 			coins: this.m_player.getCoins(),
 			startTime: this.m_startTime,
-			currentWave: this.m_currentWave
+			currentWave: this.m_enemyWaveService.getCurrentWave()
 		};
 	}
 
@@ -144,9 +144,6 @@ export class Game {
 		return <BuyableGameObject | undefined>this.m_gameObjects.find(x => x instanceof BuyableGameObject && x.getID() == id);
 	}
 
-	private getRandomNumber(min: number, max: number): number {
-		return Math.floor(Math.random() * (max - min) + min);
-	}
 	public getBaseGameObjects(): GameObjectBase[] {
 		return this.m_gameObjects;
 	}
