@@ -10,6 +10,7 @@ export interface IAppConfig {
 	rowCount: number;
 	columnCount: number;
 	svgPath: string;
+	enemyWaveGoal: number;
 }
 
 export interface IUIService {

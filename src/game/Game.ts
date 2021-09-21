@@ -33,19 +33,26 @@ export class Game {
 		uiService.renderGameBoard(this.m_gameBoard);
 
 		// Show game controls
-		uiService.renderMessageWithTitle("Controls", "Left click = Buy selected game object<br>Right click = Upgrade existing game object")
-			.then(() => {
-				uiService.registerInteractionHandlers();
+		uiService.renderMessageWithTitle("Controls",
+			`Left click = Buy selected game object<br>
+			Right click = Upgrade existing game object<br>
+			<br>
+			Goal: Survive ${AppConfig.enemyWaveGoal} waves.`
+		).then(() => {
+			uiService.registerInteractionHandlers();
 
-				// Start game
-				this.bulletLoop(uiService);
-				this.enemyLoop(uiService);
-				this.updateLoop(uiService);
-			});
+			// Start game
+			this.bulletLoop(uiService);
+			this.enemyLoop(uiService);
+			this.updateLoop(uiService);
+		});
 	}
 	private updateLoop(uiService: IUIService): void {
-		if (this.isGameOver())
+		if (this.isGameOver()) {
+			// Restart by reloading the page.
+			uiService.renderMessage(this.getGameOverText()).then(() => { window.location.reload() });
 			return;
+		}
 
 		// Update wave
 		this.m_enemyWaveService.updateWave();
@@ -128,7 +135,11 @@ export class Game {
 		this.m_player.takeDamage(attackingGameObject.getAttackDamage());
 	}
 
-	public isGameOver = (): boolean => this.m_player.getHealth() <= 0;
+	public isGameOver = (): boolean => this.m_player.getHealth() <= 0 || this.isGameWon();
+	private isGameWon = (): boolean => this.m_enemyWaveService.getCurrentWave() >= AppConfig.enemyWaveGoal;
+	public getGameOverText = (): string => this.isGameWon() ?
+		"Congratulations! You survived all enemy waves!" :
+		"Game Over";
 
 	public getPlayerStatusInfo(): IPlayerStatusInfo {
 		return {

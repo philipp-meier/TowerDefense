@@ -6,7 +6,8 @@ export const AppConfig: IAppConfig = {
 	fieldHeight: 600,
 	rowCount: 6,
 	columnCount: 12,
-	svgPath: "img/"
+	svgPath: "img/",
+	enemyWaveGoal: 5
 };
 
 export class AppService {
