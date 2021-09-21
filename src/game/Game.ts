@@ -44,8 +44,11 @@ export class Game {
 			});
 	}
 	private updateLoop(uiService: IUIService): void {
-		if (this.isGameOver())
+		if (this.isGameOver()) {
+			// Restart by reloading the page.
+			uiService.renderMessage(this.getGameOverText()).then(() => { window.location.reload() });
 			return;
+		}
 
 		// Update wave
 		this.m_enemyWaveService.updateWave();
@@ -128,7 +131,11 @@ export class Game {
 		this.m_player.takeDamage(attackingGameObject.getAttackDamage());
 	}
 
-	public isGameOver = (): boolean => this.m_player.getHealth() <= 0;
+	public isGameOver = (): boolean => this.m_player.getHealth() <= 0 || this.isGameWon();
+	private isGameWon = (): boolean => this.m_enemyWaveService.getCurrentWave() >= AppConfig.enemyWaveGoal;
+	public getGameOverText = (): string => this.isGameWon() ?
+		"Congratulations! You survived all enemy waves!" :
+		"Game Over";
 
 	public getPlayerStatusInfo(): IPlayerStatusInfo {
 		return {

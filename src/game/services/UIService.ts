@@ -74,11 +74,6 @@ export class UIService implements IUIService {
 				const left = ControlBuilder.getNumberWithoutUnit(enemyDiv.style.left);
 				if (left <= 0) {
 					this.m_game.enemyHitsPlayer(enemy);
-					if (this.m_game.isGameOver()) {
-						// Restart by reloading the page.
-						this.renderMessage('Game Over').then(() => { window.location.reload() });
-					}
-
 					this.removeGameObject(enemy);
 				} else {
 					enemyDiv.style.left = (left - enemy.getMoveSpeed()) + 'px';
