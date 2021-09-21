@@ -1,8 +1,39 @@
-import { IGameObjectOption, IShootingGameObject } from "../Interfaces.js";
-import { BuyableGameObject } from "./GameObjectBase.js";
+import { IGameObjectOption, IPricedObject, IShootingGameObject } from "../Interfaces.js";
 import { Bullet } from "./Bullet.js";
+import { GameObject } from "./GameObjectBase.js";
 
-export class Tower extends BuyableGameObject implements IShootingGameObject {
+export abstract class PlayerGameObjectBase extends GameObject implements IPricedObject {
+	public identifier: string;
+	private m_price: number;
+
+	constructor(identifier: string, svg: string, price: number) {
+		super(svg);
+		this.m_price = price;
+		this.identifier = identifier;
+	}
+
+	public getOptions = (): IGameObjectOption[] => [];
+	public getPrice = (): number => this.m_price;
+}
+
+export class Rampart extends PlayerGameObjectBase {
+	constructor() {
+		super('Rampart', 'Rampart/rampart.svg', 25);
+	}
+
+	public getOptions = (): IGameObjectOption[] => {
+		return [{
+			title: "25$ - Repair",
+			isAvailable: this.getHealth() < this.getMaxHealth(),
+			getPrice: () => { return 25; },
+			execute: () => {
+				this.setHealth(this.getMaxHealth());
+			}
+		}];
+	}
+}
+
+export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	private m_upgrades = 0;
 	private m_bulletSvg = 'Tower/bullets1.svg';
 	private m_attackSpeed = 5;

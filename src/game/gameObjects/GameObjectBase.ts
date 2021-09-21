@@ -1,5 +1,3 @@
-import { IGameObjectOption, IPricedObject } from "../Interfaces.js";
-
 export abstract class GameObjectBase {
 	private static currentId = 1;
 	private m_id: number;
@@ -35,18 +33,4 @@ export abstract class GameObject extends GameObjectBase {
 	public getHealth = (): number => this.m_health;
 	public getMaxHealth = (): number => this.m_maxHealth;
 	public getHealthInPercent = (): number => this.m_health / this.m_maxHealth * 100;
-}
-
-export abstract class BuyableGameObject extends GameObject implements IPricedObject {
-	public identifier: string;
-	private m_price: number;
-
-	constructor(identifier: string, svg: string, price: number) {
-		super(svg);
-		this.m_price = price;
-		this.identifier = identifier;
-	}
-
-	public getOptions = (): IGameObjectOption[] => [];
-	public getPrice = (): number => this.m_price;
 }

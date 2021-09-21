@@ -1,5 +1,5 @@
 import { Bullet } from "./gameObjects/Bullet.js";
-import { Enemy } from "./gameObjects/Enemy.js";
+import { Enemy } from "./gameObjects/Enemies.js";
 import { GameBoard } from "./GameBoard.js";
 import { GameObject } from "./gameObjects/GameObjectBase.js";
 

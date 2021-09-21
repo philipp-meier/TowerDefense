@@ -4,8 +4,7 @@
 */
 import { GameBoard } from "../GameBoard.js";
 import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
-import { Rampart } from "../gameObjects/Rampart.js";
-import { Tower } from "../gameObjects/Tower.js";
+import { Rampart, Tower } from "../gameObjects/PlayerObjects.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "../services/AppService.js";
 
