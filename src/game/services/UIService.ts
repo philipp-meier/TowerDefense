@@ -59,6 +59,9 @@ export class UIService implements IUIService {
 						((left + width) >= AppConfig.fieldWidth);
 
 					if (isBeyondBorder) {
+						if (bullet.isEnemyBullet())
+							this.m_game.enemyHitsPlayer(bullet);
+
 						this.removeGameObject(bullet);
 					} else {
 						const moveDirection = bullet.isEnemyBullet() ? -1 : 1;
