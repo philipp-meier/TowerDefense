@@ -1,8 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="99.99999999999999" height="99.99999999999999">
-
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
     <g>
         <title>Bullets 1</title>
-        <ellipse ry="2.36363" rx="2.54545" id="svg_6" cy="28.36355" cx="97" stroke="#000" fill="#ff0000" />
-        <ellipse ry="2.36363" rx="2.54545" id="svg_7" cy="35.45445" cx="97" stroke="#000" fill="#ff0000" />
+        <ellipse ry="1.70732" rx="1.70732" id="svg_19" cy="65.97561" cx="50" stroke="#000" fill="#999999" />
+        <ellipse ry="1.70732" rx="1.70732" id="svg_20" cy="57.68293" cx="50" stroke="#000" fill="#999999" />
     </g>
+
 </svg>
