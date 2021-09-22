@@ -10,13 +10,11 @@ export interface IWaveDependentValues {
 }
 
 export abstract class EnemyBase extends GameObject implements IAttackingGameObject {
-	private m_gameBoardLane: number;
 	protected m_coins = 50;
 	protected m_damage = 20;
 
 	constructor(lane: number, svgPath: string, waveValues: IWaveDependentValues) {
-		super(svgPath);
-		this.m_gameBoardLane = lane;
+		super(lane, svgPath);
 
 		// Wave dependent values
 		this.m_damage = waveValues.attackDamage;
@@ -24,7 +22,6 @@ export abstract class EnemyBase extends GameObject implements IAttackingGameObje
 		this.m_maxHealth = waveValues.maxHealth;
 	}
 
-	public getLane = (): number => this.m_gameBoardLane;
 	public getCoins = (): number => this.m_coins;
 	public getAttackSpeed = (): number => { throw new Error('Not supported'); }
 	public getAttackDamage = (): number => this.m_damage;

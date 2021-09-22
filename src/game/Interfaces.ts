@@ -25,7 +25,7 @@ export interface IUIService {
 	registerInteractionHandlers(): void;
 	renderBullet(from: GameObject, bullet: Bullet): void;
 	renderEnemy(enemy: EnemyBase): void;
-	addGameObject(target: never): void;
+	addGameObject(target: HTMLDivElement): void;
 	refreshUI(): void;
 }
 

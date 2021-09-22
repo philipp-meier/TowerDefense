@@ -6,8 +6,8 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 	public identifier: string;
 	private m_price: number;
 
-	constructor(identifier: string, svg: string, price: number) {
-		super(svg);
+	constructor(lane: number, identifier: string, svg: string, price: number) {
+		super(lane, svg);
 		this.m_price = price;
 		this.identifier = identifier;
 	}
@@ -17,8 +17,8 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 }
 
 export class Rampart extends PlayerGameObjectBase {
-	constructor() {
-		super('Rampart', 'Rampart/rampart.svg', 25);
+	constructor(lane: number) {
+		super(lane, 'Rampart', 'Rampart/rampart.svg', 25);
 	}
 
 	public getOptions = (): IGameObjectOption[] => {
@@ -36,11 +36,11 @@ export class Rampart extends PlayerGameObjectBase {
 export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	private m_upgrades = 0;
 	private m_bulletSvg = 'Tower/bullets1.svg';
-	private m_attackSpeed = 5;
-	private m_attackDamage = 50;
+	private m_attackSpeed = 3;
+	private m_attackDamage = 10;
 
-	constructor() {
-		super('Tower', 'Tower/level1.svg', 50);
+	constructor(lane: number) {
+		super(lane, 'Tower', 'Tower/level1.svg', 50);
 	}
 
 	private createUpgradeGameObjectOption(title: string, svgName: string, bulletSvgName: string, price: number, isAvailable: boolean): IGameObjectOption {
@@ -51,8 +51,7 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 				this.m_upgrades++;
 				this.m_svg = svgName;
 				this.m_bulletSvg = bulletSvgName;
-				this.m_attackSpeed += 5;
-				this.m_attackDamage += 50;
+				this.m_attackDamage += 10;
 			},
 			getPrice: () => { return price; }
 		};

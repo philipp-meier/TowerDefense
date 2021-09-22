@@ -49,26 +49,26 @@ export class UIService implements IUIService {
 					if (bulletDiv && gameObjectDiv && this.isColliding(bulletDiv, gameObjectDiv))
 						this.m_game.bulletHitsGameObject(bullet, gameObject);
 				}
-
-				// Move bullet
-				if (bulletDiv) {
-					const left = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.left);
-					const width = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.width);
-					const isBeyondBorder = bullet.isEnemyBullet() ?
-						((left + width) <= 0) :
-						((left + width) >= AppConfig.fieldWidth);
-
-					if (isBeyondBorder) {
-						if (bullet.isEnemyBullet())
-							this.m_game.enemyHitsPlayer(bullet);
-
-						this.removeGameObject(bullet);
-					} else {
-						const moveDirection = bullet.isEnemyBullet() ? -1 : 1;
-						bulletDiv.style.left = ControlBuilder.getUnitString((left + bullet.getAttackSpeed() * moveDirection));
-					}
-				}
 			});
+
+			// Move bullet
+			if (bulletDiv) {
+				const left = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.left);
+				const width = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.width);
+				const isBeyondBorder = bullet.isEnemyBullet() ?
+					((left + width) <= 0) :
+					((left + width) >= AppConfig.fieldWidth);
+
+				if (isBeyondBorder) {
+					if (bullet.isEnemyBullet())
+						this.m_game.enemyHitsPlayer(bullet);
+
+					this.removeGameObject(bullet);
+				} else {
+					const moveDirection = bullet.isEnemyBullet() ? -1 : 1;
+					bulletDiv.style.left = ControlBuilder.getUnitString((left + bullet.getAttackSpeed() * moveDirection));
+				}
+			}
 		});
 
 		this.m_game.getSpawnedEnemies().forEach((enemy) => {
@@ -129,12 +129,13 @@ export class UIService implements IUIService {
 			delete interactionField.dataset.gameObjectId;
 	}
 
-	public addGameObject(target: never): void {
+	public addGameObject(target: HTMLDivElement): void {
 		try {
 			const gameObjectIdentifier = (<HTMLDivElement>document.querySelector('.selection-item.selected')).dataset.identifier;
-			const gameObject = gameObjectIdentifier === "Tower" ? new Tower() : new Rampart();
+			const targetLane = Number(target.dataset.lane || 0);
+			const gameObject = gameObjectIdentifier === "Tower" ? new Tower(targetLane) : new Rampart(targetLane);
 			this.m_game.buyGameObject(gameObject);
-			this.renderTower(gameObject, <HTMLDivElement>target);
+			this.renderTower(gameObject, target);
 		} catch (ex) {
 			this.renderMessage((<Error>ex).message);
 		}

@@ -94,7 +94,7 @@ export class ControlBuilder {
 		const selectionBar = ControlBuilder.createDiv(null, renderInfo.cssClass);
 		ControlBuilder.SetPosition(selectionBar, renderInfo);
 
-		const templateObjects = [new Tower(), new Rampart()];
+		const templateObjects = [new Tower(0), new Rampart(0)];
 		for (let i = 0; i < templateObjects.length; i++) {
 			const templateObject = templateObjects[i];
 			const selectionDiv = ControlBuilder.createDiv(selectionBar, "selection-item");

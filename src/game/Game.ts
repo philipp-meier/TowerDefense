@@ -15,7 +15,7 @@ export class Game {
 	private m_enemyWaveService: EnemyWaveService;
 	private m_startTime = Date.now();
 
-	private readonly m_bulletSpawnTimeInMs = 5000;
+	private readonly m_bulletSpawnTimeInMs = 1000;
 
 	constructor() {
 		this.m_player = new Player();
@@ -65,7 +65,6 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
-
 			const enemy = this.m_enemyWaveService.spawnEnemy();
 			this.spawnGameObject(enemy);
 			uiService.renderEnemy(enemy);
@@ -78,7 +77,12 @@ export class Game {
 			if (this.isGameOver())
 				return;
 
+			const lanesWithEnemies = this.getSpawnedEnemies().map(x => x.getLane());
 			this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
+				// Only shoot if enemy in sight
+				if (x instanceof PlayerGameObjectBase && lanesWithEnemies.indexOf(x.getLane()) < 0)
+					return;
+
 				const shootingGameObject = <IShootingGameObject>(<unknown>x);
 				const bullet = shootingGameObject.spawnBullet();
 				this.spawnGameObject(bullet);

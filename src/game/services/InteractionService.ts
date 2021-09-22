@@ -22,7 +22,7 @@ export class InteractionService {
 
 			const gameObjectID = InteractionService.getGameObjectIdFromEventTarget(target);
 			if (!gameObjectID)
-				uiService.addGameObject(<never>target);
+				uiService.addGameObject(<HTMLDivElement>target);
 		});
 
 		parent.addEventListener('contextmenu', (e) => {
