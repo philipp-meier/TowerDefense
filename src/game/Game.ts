@@ -5,7 +5,7 @@ import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
 import { PlayerGameObjectBase, Tower } from "./gameObjects/PlayerObjects.js";
 import { Bullet } from "./gameObjects/Bullet.js";
-import { Enemy, ShootingEnemy } from "./gameObjects/Enemies.js";
+import { EnemyBase, ShootingEnemy } from "./gameObjects/Enemies.js";
 import { EnemyWaveService } from "./services/EnemyWaveService.js";
 
 export class Game {
@@ -111,8 +111,8 @@ export class Game {
 	public bulletHitsGameObject(bullet: Bullet, gameObject: GameObject): void {
 		if (gameObject && bullet) {
 			if (gameObject.getHealth() - bullet.getAttackDamage() <= 0) {
-				if (gameObject instanceof Enemy)
-					this.m_player.awardCoins((<Enemy>gameObject).getCoins());
+				if (gameObject instanceof EnemyBase)
+					this.m_player.awardCoins((gameObject).getCoins());
 
 				this.removeGameObject(gameObject);
 			} else {
@@ -122,7 +122,7 @@ export class Game {
 		}
 	}
 
-	public enemyHitsPlayerGameObject(enemy: Enemy, playerGameObject: PlayerGameObjectBase): void {
+	public enemyHitsPlayerGameObject(enemy: EnemyBase, playerGameObject: PlayerGameObjectBase): void {
 		if (enemy && playerGameObject) {
 			playerGameObject.takeDamage(enemy.getAttackDamage());
 			this.removeGameObject(enemy);
@@ -162,8 +162,8 @@ export class Game {
 	public getSpawnedBullets(): Bullet[] {
 		return <Bullet[]>this.m_gameObjects.filter(x => x instanceof Bullet);
 	}
-	public getSpawnedEnemies(): Enemy[] {
-		return <Enemy[]>this.m_gameObjects.filter(x => x instanceof Enemy);
+	public getSpawnedEnemies(): EnemyBase[] {
+		return <EnemyBase[]>this.m_gameObjects.filter(x => x instanceof EnemyBase);
 	}
 	public getSpawnedPlayerGameObjects(): PlayerGameObjectBase[] {
 		return <PlayerGameObjectBase[]>this.m_gameObjects.filter(x => x instanceof PlayerGameObjectBase);

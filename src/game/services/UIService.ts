@@ -10,7 +10,7 @@ import { PlayerStatusBar } from "../controls/PlayerStatusBar.js";
 import { InteractionService } from "./InteractionService.js";
 import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Bullet } from "../gameObjects/Bullet.js";
-import { Enemy } from "../gameObjects/Enemies.js";
+import { EnemyBase } from "../gameObjects/Enemies.js";
 
 export class UIService implements IUIService {
 	private readonly m_parentContainer: HTMLDivElement;
@@ -43,7 +43,7 @@ export class UIService implements IUIService {
 			this.m_game.getSpawnedGameObjects().forEach((gameObject) => {
 				// Disable "friendly fire".
 				if ((gameObject instanceof PlayerGameObjectBase && bullet.isEnemyBullet()) ||
-					gameObject instanceof Enemy && !bullet.isEnemyBullet()) {
+					gameObject instanceof EnemyBase && !bullet.isEnemyBullet()) {
 
 					const gameObjectDiv = InteractionService.getGameObjectDivElement(gameObject.getID());
 					if (bulletDiv && gameObjectDiv && this.isColliding(bulletDiv, gameObjectDiv))
@@ -157,7 +157,7 @@ export class UIService implements IUIService {
 			}
 		});
 	}
-	public renderEnemy(enemy: Enemy): void {
+	public renderEnemy(enemy: EnemyBase): void {
 		const spawnDiv = <HTMLDivElement>document.querySelector(`div.last[data-lane='${enemy.getLane()}']`);
 		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
 		gameObjectLayer.append(ControlBuilder.createGameObject(spawnDiv, enemy, 'enemy'));
