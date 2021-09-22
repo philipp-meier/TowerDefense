@@ -24,7 +24,7 @@ export class EnemyWaveService {
 			maxHealth: this.calcValueByWave(100, 30)
 		};
 
-		return this.m_currentWave >= 5 && (this.getRandomNumber(0, 50) >= 25) ?
+		return this.m_currentWave >= 2 && (this.getRandomNumber(0, 50) >= 25) ?
 			new ShootingEnemy(this.m_currentWave, this.getRandomNumber(0, AppConfig.rowCount), waveDependentWalues) :
 			new Enemy(this.m_currentWave, this.getRandomNumber(0, AppConfig.rowCount), waveDependentWalues);
 	}
