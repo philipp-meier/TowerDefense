@@ -15,7 +15,7 @@ export class Game {
 	private m_enemyWaveService: EnemyWaveService;
 	private m_startTime = Date.now();
 
-	private readonly m_bulletSpawnTimeInMs = 1000;
+	private readonly m_bulletSpawnTimeInMs = 300;
 
 	constructor() {
 		this.m_player = new Player();

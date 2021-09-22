@@ -1,4 +1,4 @@
-import { Enemy, EnemyBase, IWaveDependentValues, ShootingEnemy } from "../gameObjects/Enemies.js";
+import { Enemy, EnemyBase, ShootingEnemy } from "../gameObjects/Enemies.js";
 import { AppConfig } from "./AppService.js";
 
 export class EnemyWaveService {
@@ -17,16 +17,24 @@ export class EnemyWaveService {
 	}
 
 	public spawnEnemy(): EnemyBase {
-		const waveDependentWalues: IWaveDependentValues = {
-			health: this.calcValueByWave(100, 30),
-			maxHealth: this.calcValueByWave(100, 30),
-			attackDamage: this.calcValueByWave(25, 20),
-			attackSpeed: 5
-		};
+		const spawnLane = this.getRandomNumber(0, AppConfig.rowCount);
 
-		return this.m_currentWave >= 2 && (this.getRandomNumber(0, 100) >= 50) ?
-			new ShootingEnemy(this.getRandomNumber(0, AppConfig.rowCount), waveDependentWalues) :
-			new Enemy(this.getRandomNumber(0, AppConfig.rowCount), waveDependentWalues);
+		if (this.m_currentWave >= 2 && this.getRandomNumber(0, 100) >= 50) {
+			return new ShootingEnemy(spawnLane, {
+				health: this.calcValueByWave(100, 30),
+				maxHealth: this.calcValueByWave(100, 30),
+				attackDamage: this.calcValueByWave(8, 20),
+				attackSpeed: 5
+			});
+		}
+		else {
+			return new Enemy(spawnLane, {
+				health: this.calcValueByWave(100, 30),
+				maxHealth: this.calcValueByWave(100, 30),
+				attackDamage: this.calcValueByWave(25, 20),
+				attackSpeed: 5
+			});
+		}
 	}
 
 	public calcValueByWave(value: number, percentIncrPerWave: number): number {

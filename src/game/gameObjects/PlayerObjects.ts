@@ -40,8 +40,8 @@ export class Rampart extends PlayerGameObjectBase {
 export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	private m_upgrades = 0;
 	private m_bulletSvg = 'Tower/bullets1.svg';
-	private m_attackSpeed = 3;
-	private m_attackDamage = 10;
+	private m_attackSpeed = 8;
+	private m_attackDamage = 5;
 
 	constructor(lane: number) {
 		super(lane, 'Tower', 'Tower/level1.svg', 50);
