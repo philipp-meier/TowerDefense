@@ -17,15 +17,19 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 }
 
 export class Rampart extends PlayerGameObjectBase {
+
+	protected m_health = 250;
+	protected m_maxHealth = 250;
+
 	constructor(lane: number) {
-		super(lane, 'Rampart', 'Rampart/rampart.svg', 25);
+		super(lane, 'Rampart', 'Rampart/rampart.svg', 50);
 	}
 
 	public getOptions = (): IGameObjectOption[] => {
 		return [{
-			title: "25$ - Repair",
+			title: "50$ - Repair",
 			isAvailable: this.getHealth() < this.getMaxHealth(),
-			getPrice: () => { return 25; },
+			getPrice: () => { return 50; },
 			execute: () => {
 				this.setHealth(this.getMaxHealth());
 			}

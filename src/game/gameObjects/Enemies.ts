@@ -11,7 +11,7 @@ export interface IWaveDependentValues {
 
 export abstract class EnemyBase extends GameObject implements IAttackingGameObject {
 	protected m_coins = 50;
-	protected m_damage = 20;
+	protected m_damage = 30;
 
 	constructor(lane: number, svgPath: string, waveValues: IWaveDependentValues) {
 		super(lane, svgPath);
@@ -36,8 +36,8 @@ export class Enemy extends EnemyBase {
 
 export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
 	protected m_coins = 75;
-	protected m_damage = 30;
-	protected m_attackSpeed = 5;
+	protected m_damage = 25;
+	protected m_attackSpeed = 4;
 
 	constructor(lane: number, waveValues: IWaveDependentValues) {
 		super(lane, "Enemy/shootingEnemy1.svg", waveValues);

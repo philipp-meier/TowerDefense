@@ -6,7 +6,7 @@ export class EnemyWaveService {
 	private m_startTime: number = Date.now();
 
 	private readonly m_waveDurationInMinutes = 1;
-	private readonly m_enemySpawnTimeInMs = 10_000;
+	private readonly m_enemySpawnTimeInMs = 3000;
 
 	public init(startTime: number): void {
 		this.m_startTime = startTime;
@@ -18,13 +18,13 @@ export class EnemyWaveService {
 
 	public spawnEnemy(): EnemyBase {
 		const waveDependentWalues: IWaveDependentValues = {
-			attackDamage: this.calcValueByWave(20, 20),
-			attackSpeed: this.calcValueByWave(5, 10),
 			health: this.calcValueByWave(100, 30),
-			maxHealth: this.calcValueByWave(100, 30)
+			maxHealth: this.calcValueByWave(100, 30),
+			attackDamage: this.calcValueByWave(25, 20),
+			attackSpeed: 5
 		};
 
-		return this.m_currentWave >= 2 && (this.getRandomNumber(0, 50) >= 25) ?
+		return this.m_currentWave >= 2 && (this.getRandomNumber(0, 100) >= 50) ?
 			new ShootingEnemy(this.getRandomNumber(0, AppConfig.rowCount), waveDependentWalues) :
 			new Enemy(this.getRandomNumber(0, AppConfig.rowCount), waveDependentWalues);
 	}
@@ -36,7 +36,7 @@ export class EnemyWaveService {
 		return value + ((value / 100) * percentIncrPerWave * this.m_currentWave);
 	}
 
-	public getEnemySpawnRateInSeconds = (): number => this.m_enemySpawnTimeInMs;
+	public getEnemySpawnRateInSeconds = (): number => this.m_enemySpawnTimeInMs - (this.m_currentWave * 200);
 	public getCurrentWave = (): number => this.m_currentWave;
 
 	private getRandomNumber = (min: number, max: number): number => Math.floor(Math.random() * (max - min) + min);
