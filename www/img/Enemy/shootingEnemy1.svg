@@ -1,11 +1,19 @@
 <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
     <g>
         <title>Shooting Enemy 1</title>
-        <ellipse ry="16.32231" rx="29.44215" id="svg_7" cy="41.1157" cx="59.40082" stroke="#000" fill="#191919" />
-        <rect id="svg_6" height="34.91735" width="80.3719" y="41.1157" x="9.29752" stroke="#000" fill="#999999" />
-        <ellipse ry="14.97934" rx="14.04959" id="svg_3" cy="84.81404" cx="28.92562" stroke="#000" fill="#000000" />
-        <ellipse ry="14.97934" rx="14.04959" id="svg_5" cy="85.02066" cx="70.45455" stroke="#000" fill="#000000" />
-        <rect id="svg_8" height="5.16529" width="39.2562" y="57.02479" x="1.03306" stroke="#000" fill="#b2b2b2" />
-        <rect id="svg_9" height="5.16529" width="39.2562" y="49.58677" x="0.82644" stroke="#000" fill="#b2b2b2" />
+        <ellipse stroke="#000" fill="#191919" cx="62.02277" cy="51.60351" id="svg_7" rx="26.8202" ry="13.15158" />
+        <rect stroke="#000" fill="#999999" x="9.29752" y="48.06692" width="80.3719" height="30.52711" id="svg_6" />
+        <ellipse fill="#000000" stroke="#000" cx="28.92562" cy="84.81404" id="svg_3" rx="14.04959" ry="14.97934" />
+        <ellipse fill="#000000" stroke="#000" cx="70.45455" cy="85.02066" id="svg_5" rx="14.04959" ry="14.97934" />
+        <rect stroke="#000" fill="#333333" x="1.31425" y="64.34287" width="84.37816" height="3.33602" id="svg_8" />
+        <rect stroke="#000" id="svg_10" height="6.21951" width="2.92683" y="62.80488" x="32.43903" fill="#999999" />
+        <rect stroke="#000" id="svg_11" height="5.97561" width="39.14634" y="62.92683" x="47.43903" fill="#999999" />
+        <rect stroke="#000" fill="#333333" x="1.19229" y="56.05018" width="84.37816" height="3.33602" id="svg_12" />
+        <rect stroke="#000" id="svg_13" height="9.63415" width="2.43902" y="78.78049" x="87.31708" fill="#999999" />
+        <rect stroke="#000" id="svg_14" height="5.97561" width="39.14634" y="54.63415" x="47.31708" fill="#999999" />
+        <rect stroke="#000" id="svg_15" height="6.21951" width="2.92683" y="54.39024" x="32.31707" fill="#999999" />
+        <rect stroke="#000" id="svg_16" height="9.63415" width="2.43902" y="38.41463" x="11.70732" fill="#999999" />
+        <rect stroke="#000" id="svg_18" height="9.63415" width="2.43902" y="78.78049" x="9.26829" fill="#999999" />
     </g>
+
 </svg>
