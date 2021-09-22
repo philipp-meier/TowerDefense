@@ -51,8 +51,8 @@ export class ContextMenu {
 	}
 	public show(gameObject: PlayerGameObjectBase, x: number, y: number, fnExecOptionCallback: ContextMenuExecOptionCallback): void {
 		if (this.prepareContextMenu(gameObject, fnExecOptionCallback)) {
-			this.m_ContextMenu.style.left = x + "px";
-			this.m_ContextMenu.style.top = y + "px";
+			this.m_ContextMenu.style.left = ControlBuilder.getUnitString(x);
+			this.m_ContextMenu.style.top = ControlBuilder.getUnitString(y);
 			this.m_ContextMenu.classList.add('menu-show');
 			this.m_isHidden = false;
 		}

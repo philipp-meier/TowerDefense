@@ -1,5 +1,5 @@
 import { Bullet } from "./gameObjects/Bullet.js";
-import { Enemy } from "./gameObjects/Enemies.js";
+import { EnemyBase } from "./gameObjects/Enemies.js";
 import { GameBoard } from "./GameBoard.js";
 import { GameObject } from "./gameObjects/GameObjectBase.js";
 
@@ -24,7 +24,7 @@ export interface IUIService {
 	renderMessage(message: string): Promise<void>;
 	registerInteractionHandlers(): void;
 	renderBullet(from: GameObject, bullet: Bullet): void;
-	renderEnemy(enemy: Enemy): void;
+	renderEnemy(enemy: EnemyBase): void;
 	addGameObject(target: never): void;
 	refreshUI(): void;
 }
