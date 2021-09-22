@@ -62,7 +62,7 @@ export class UIService implements IUIService {
 						this.removeGameObject(bullet);
 					} else {
 						const moveDirection = bullet.isEnemyBullet() ? -1 : 1;
-						bulletDiv.style.left = (left + bullet.getAttackSpeed() * moveDirection) + 'px';
+						bulletDiv.style.left = ControlBuilder.getUnitString((left + bullet.getAttackSpeed() * moveDirection));
 					}
 				}
 			});
@@ -76,7 +76,7 @@ export class UIService implements IUIService {
 					this.m_game.enemyHitsPlayer(enemy);
 					this.removeGameObject(enemy);
 				} else {
-					enemyDiv.style.left = (left - enemy.getMoveSpeed()) + 'px';
+					enemyDiv.style.left = ControlBuilder.getUnitString(left - enemy.getMoveSpeed());
 				}
 
 				// Collides with player game object (tower,..)

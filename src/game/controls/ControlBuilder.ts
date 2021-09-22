@@ -9,7 +9,7 @@ import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 import { AppConfig } from "../services/AppService.js";
 
 export class ControlBuilder {
-	private static m_cssUnit = 'px';
+	public static CssUnit = 'px';
 
 	public static createHtmlElement(tagName: string, parent: HTMLElement | null = null, cssClass: string | null = null): HTMLElement {
 		const htmlElement = document.createElement(tagName);
@@ -119,13 +119,13 @@ export class ControlBuilder {
 	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string, offsetLeft: number | null = null): HTMLDivElement {
 		const gameObjectDiv = ControlBuilder.createDiv(null, className);
 		gameObjectDiv.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
-		gameObjectDiv.style.height = AppConfig.fieldHeight / AppConfig.rowCount + 'px';
-		gameObjectDiv.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
+		gameObjectDiv.style.height = ControlBuilder.getUnitString(AppConfig.fieldHeight / AppConfig.rowCount);
+		gameObjectDiv.style.width = ControlBuilder.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
 		gameObjectDiv.dataset.gameObjectId = gameObject.getID().toString();
 		gameObjectDiv.style.top = fromElement.style.top;
 
 		if (offsetLeft)
-			gameObjectDiv.style.left = (ControlBuilder.getNumberWithoutUnit(fromElement.style.left) + offsetLeft) + 'px';
+			gameObjectDiv.style.left = ControlBuilder.addToUnitString(fromElement.style.left, offsetLeft);
 		else
 			gameObjectDiv.style.left = fromElement.style.left;
 
@@ -140,8 +140,8 @@ export class ControlBuilder {
 		const healthBarValue = ControlBuilder.createDiv(healthBarContainer, 'value');
 		healthBarValue.style.width = '100%';
 
-		healthBarContainer.style.width = AppConfig.fieldWidth / AppConfig.columnCount + 'px';
-		healthBarContainer.style.height = 8 + 'px';
+		healthBarContainer.style.width = ControlBuilder.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
+		healthBarContainer.style.height = ControlBuilder.getUnitString(8);
 		healthBarContainer.style.position = 'absolute';
 		return healthBarContainer;
 	}
@@ -155,10 +155,14 @@ export class ControlBuilder {
 		element.style.width = ControlBuilder.getUnitString(ro.width);
 		element.style.height = ControlBuilder.getUnitString(ro.height);
 	}
+	private static addToUnitString(unitString: string, value: number): string {
+		const currentValue = ControlBuilder.getNumberWithoutUnit(unitString);
+		return ControlBuilder.getUnitString(currentValue + value);
+	}
 	public static getNumberWithoutUnit(unitText: string): number {
-		return Number(unitText.replace('px', ''));
+		return Number(unitText.replace(ControlBuilder.CssUnit, ''));
 	}
 	public static getUnitString(n: number): string {
-		return `${n}${ControlBuilder.m_cssUnit}`;
+		return `${n}${ControlBuilder.CssUnit}`;
 	}
 }
