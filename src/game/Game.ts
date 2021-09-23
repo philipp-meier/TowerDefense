@@ -40,7 +40,7 @@ export class Game {
 			uiService.registerInteractionHandlers();
 
 			// Start game
-			this.bulletLoop(uiService);
+			this.updateBullets(uiService);
 			this.enemyLoop(uiService);
 			this.updateLoop(uiService);
 		});
@@ -55,8 +55,30 @@ export class Game {
 		// Update wave
 		this.m_enemyWaveService.updateWave();
 
+		// Bullets
+		this.updateBullets(uiService);
+
 		uiService.refreshUI();
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
+	}
+	private updateBullets(uiService: IUIService): void {
+		if (this.isGameOver())
+			return;
+
+		const lanesWithEnemies = this.getSpawnedEnemies().map(x => x.getLane());
+		this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
+			const shootingGameObject = <IShootingGameObject>(<unknown>x);
+			if (!shootingGameObject.isBulletSpawnable())
+				return;
+
+			// Only shoot if enemy in sight
+			if (x instanceof PlayerGameObjectBase && lanesWithEnemies.indexOf(x.getLane()) < 0)
+				return;
+
+			const bullet = shootingGameObject.spawnBullet();
+			this.spawnGameObject(bullet);
+			uiService.renderBullet(<GameObject>x, bullet);
+		});
 	}
 	private enemyLoop(uiService: IUIService): void {
 		const spawnEnemies = () => {
@@ -69,26 +91,6 @@ export class Game {
 			setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
 		};
 		setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
-	}
-	private bulletLoop(uiService: IUIService): void {
-		const spawnBullets = () => {
-			if (this.isGameOver())
-				return;
-
-			const lanesWithEnemies = this.getSpawnedEnemies().map(x => x.getLane());
-			this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
-				// Only shoot if enemy in sight
-				if (x instanceof PlayerGameObjectBase && lanesWithEnemies.indexOf(x.getLane()) < 0)
-					return;
-
-				const shootingGameObject = <IShootingGameObject>(<unknown>x);
-				const bullet = shootingGameObject.spawnBullet();
-				this.spawnGameObject(bullet);
-				uiService.renderBullet(<GameObject>x, bullet);
-			});
-			setTimeout(spawnBullets, GameSettings.bulletSpawnTimeInMs);
-		};
-		setTimeout(spawnBullets, GameSettings.bulletSpawnTimeInMs);
 	}
 
 	public buyGameObject(gameObject: PlayerGameObjectBase): void {

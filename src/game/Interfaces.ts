@@ -55,8 +55,7 @@ export interface IAttackingGameObject {
 	getAttackSpeed(): number;
 	getAttackDamage(): number;
 }
-
-// Modifications
 export interface IShootingGameObject extends IAttackingGameObject {
+	isBulletSpawnable(): boolean;
 	spawnBullet(): Bullet;
 }

@@ -37,17 +37,27 @@ export class Enemy extends EnemyBase {
 }
 
 export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
-	private m_attackSpeed;
+	private m_attackSpeed: number;
+	private m_isBulletSpawnable: boolean;
 
 	constructor(lane: number, waveValues: IWaveDependentValues) {
 		super(lane, "Enemy/shootingEnemy1.svg", waveValues);
 
 		// Wave dependent values
+		this.m_isBulletSpawnable = true;
 		this.m_attackSpeed = waveValues.attackSpeed;
 	}
 
-	public spawnBullet = (): Bullet => new Bullet('Enemy/bullets1.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
+	public spawnBullet(): Bullet {
+		if (!this.m_isBulletSpawnable)
+			throw new Error("Bullet not spawnable.");
 
+		this.m_isBulletSpawnable = false;
+		setTimeout(() => { this.m_isBulletSpawnable = true; }, GameSettings.shootingEnemyBulletSpawnTimeInMs);
+		return new Bullet('Enemy/bullets1.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
+	}
+
+	public isBulletSpawnable = (): boolean => this.m_isBulletSpawnable;
 	public getCoins = (): number => GameSettings.shootingEnemyCoins;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 }

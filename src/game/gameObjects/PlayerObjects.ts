@@ -43,12 +43,14 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	private m_bulletSvg: string;
 	private m_attackSpeed: number;
 	private m_attackDamage: number;
+	private m_isBulletSpawnable: boolean;
 
 	constructor(lane: number) {
 		super(lane, "Tower", "Tower/level1.svg", GameSettings.towerPrice);
 
 		this.m_bulletSvg = "Tower/bullets1.svg";
 		this.m_currentUpgradeLevel = 0;
+		this.m_isBulletSpawnable = true;
 		this.m_health = GameSettings.towerHealth;
 		this.m_maxHealth = GameSettings.towerHealth;
 		this.m_attackSpeed = GameSettings.towerAttackSpeed;
@@ -80,7 +82,16 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 		return options;
 	}
 
-	public spawnBullet = (): Bullet => new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
+	public spawnBullet(): Bullet {
+		if (!this.m_isBulletSpawnable)
+			throw new Error("Bullet not spawnable.");
+
+		this.m_isBulletSpawnable = false;
+		setTimeout(() => { this.m_isBulletSpawnable = true; }, GameSettings.towerBulletSpawnTimeInMs);
+		return new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
+	}
+
+	public isBulletSpawnable = (): boolean => this.m_isBulletSpawnable;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 	public getAttackDamage = (): number => this.m_attackDamage;
 }

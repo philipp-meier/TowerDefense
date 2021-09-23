@@ -23,6 +23,7 @@ export const GameSettings = {
 	// === Player Game Objects ===
 	// Tower
 	towerHealth: 100,
+	towerBulletSpawnTimeInMs: 500,
 	towerAttackDamage: 5,
 	towerAttackSpeed: 8,
 	towerPrice: 50,
@@ -46,6 +47,7 @@ export const GameSettings = {
 
 	// Shooting Enemy
 	shootingEnemyHealth: 100,
+	shootingEnemyBulletSpawnTimeInMs: 2000,
 	shootingEnemyCoins: 50,
 	shootingEnemyAttackDamage: 8,
 	shootingEnemyAttackSpeed: 5,
