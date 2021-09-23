@@ -16,10 +16,6 @@ export const GameSettings = {
 	enemySpawnTimeDecreasePerWaveInMs: 200,
 	bulletSpawnTimeInMs: 300,
 
-	// Player configuration
-	playerCoinsStart: 200,
-	playerHealthStart: 100,
-
 	// === Player Game Objects ===
 	// Tower
 	towerHealth: 100,
