@@ -4,6 +4,7 @@ import { GameBoard } from "./GameBoard.js";
 import { GameObject } from "./gameObjects/GameObjectBase.js";
 
 export interface IUIService {
+	ensureScreenSizeSupported(showMessageOnFail: boolean): boolean;
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
 	renderAppTitle(title: string): void;

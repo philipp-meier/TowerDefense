@@ -27,6 +27,15 @@ export class UIService implements IUIService {
 		this.m_game = game;
 	}
 
+	public ensureScreenSizeSupported(showMessageOnFail = false): boolean {
+		const isSupported = window.innerHeight > GameSettings.fieldHeight && window.innerWidth > GameSettings.fieldWidth;
+
+		if (!isSupported && showMessageOnFail)
+			this.renderMessage(`Resolution not supported! (Min.: ${GameSettings.fieldWidth}x${GameSettings.fieldHeight})`);
+
+		return isSupported;
+	}
+
 	public registerInteractionHandlers(): void {
 		InteractionService.registerHandlers(this.m_parentContainer, this);
 	}
