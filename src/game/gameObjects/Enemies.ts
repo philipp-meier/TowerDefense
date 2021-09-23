@@ -21,22 +21,6 @@ export abstract class EnemyBase extends GameObject implements IAttackingGameObje
 		this.m_maxHealth = waveValues.health;
 	}
 
-	protected abstract getDamageSvg1(): string;
-	protected abstract getDamageSvg2(): string;
-
-	public takeDamage(damage: number): void {
-		this.m_health -= damage;
-
-		const healthInPercent = this.getHealthInPercent();
-		if (healthInPercent > 25 && healthInPercent <= 70 && this.m_svg !== this.getDamageSvg1()) {
-			this.m_svg = this.getDamageSvg1();
-			this.m_hasSvgChanged = true;
-		} else if (healthInPercent <= 25 && this.m_svg !== this.getDamageSvg2()) {
-			this.m_svg = this.getDamageSvg2();
-			this.m_hasSvgChanged = true;
-		}
-	}
-
 	public abstract getCoins(): number;
 	public abstract getAttackSpeed(): number;
 	public getAttackDamage = (): number => this.m_damage;

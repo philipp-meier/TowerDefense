@@ -1,0 +1,36 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    <g id="Rampart Damaged 2">
+        <title>Layer 1</title>
+        <rect fill="#7f7f7f" x="42.11269" y="11.40854" width="17.46475" height="88.45051" id="svg_1" stroke="#000" />
+        <line fill="none" x1="12.2536" y1="100.14074" x2="42.39438" y2="43.80283" id="svg_3" stroke="#000" />
+        <line fill="none" stroke="#000" x1="24.08456" y1="100.14074" x2="42.39438" y2="64.64786" id="svg_4" />
+        <line fill="none" x1="0.70433" y1="99.57736" x2="41.831" y2="24.64794" id="svg_5" stroke="#000" />
+        <line id="svg_2" y2="90.96813" x2="45.86778" y1="98.17002" x1="58.61866" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_6" y2="78.92563" x2="51.88903" y1="80.81465" x1="58.61866" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_7" y2="52.59741" x2="48.58324" y1="51.6529" x1="58.73673" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_8" y2="22.25502" x2="44.68714" y1="23.3176" x1="57.31996" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_9" y2="38.54782" x2="49.40969" y1="40.55491" x1="57.79222" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_10" y2="62.51477" x2="43.86069" y1="70.30697" x1="55.66707" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_11" y2="39.6104" x2="44.33295" y1="45.04133" x1="54.2503" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_12" y2="30.04723" x2="56.61158" y1="32.40851" x1="46.1039" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_13" y2="80.46046" x2="44.68714" y1="77.03661" x1="50.59033" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_14" y2="85.65526" x2="44.21488" y1="89.4333" x1="54.48643" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_15" y2="50.94452" x2="47.16648" y1="62.27864" x1="55.19481" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_17" y2="16.82409" x2="56.37545" y1="17.65054" x1="46.81229" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_18" y2="75.73791" x2="57.31996" y1="72.66825" x1="43.03425" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+    </g>
+
+</svg>
