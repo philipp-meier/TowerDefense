@@ -12,36 +12,33 @@ export const GameSettings = {
 	svgPath: "img/",
 
 	// Spawn time
-	enemySpawnTimeInMs: 3000,
+	enemySpawnTimeInMs: 6000,
 	enemySpawnTimeDecreasePerWaveInMs: 200,
 	bulletSpawnTimeInMs: 300,
-
-	// Player configuration
-	playerCoinsStart: 200,
-	playerHealthStart: 100,
 
 	// === Player Game Objects ===
 	// Tower
 	towerHealth: 100,
-	towerBulletSpawnTimeInMs: 500,
-	towerAttackDamage: 5,
-	towerAttackSpeed: 8,
+	towerBulletSpawnTimeInMs: 2500,
+	towerAttackDamage: 20,
+	towerAttackSpeed: 6,
 	towerPrice: 50,
 	towerRepairPrice: 50,
-	towerUpgradeDamageIncrease: 10,
+	towerUpgradeDamageIncrease: 5,
 	towerUpgrade1Price: 50,
 	towerUpgrade2Price: 100,
 
 	// Rampart
-	rampartHealth: 250,
+	rampartHealth: 200,
 	rampartPrice: 50,
 	rampartRepairPrice: 50,
 
 	// === Enemy Game Objects ===
+	enemyMoveSpeed: 0.5,
 	// Enemy
 	enemyHealth: 100,
 	enemyCoins: 50,
-	enemyAttackDamage: 25,
+	enemyAttackDamage: 30,
 	enemyHealthIncreasePerWaveInPercent: 30,
 	enemyDamageIncreasePerWaveInPercent: 20,
 

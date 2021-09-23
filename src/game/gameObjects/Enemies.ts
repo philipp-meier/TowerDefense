@@ -10,10 +10,12 @@ export interface IWaveDependentValues {
 }
 
 export abstract class EnemyBase extends GameObject implements IAttackingGameObject {
-	private m_damage;
+	private m_damage: number;
+	private m_moveSpeed: number;
 
 	constructor(lane: number, svgPath: string, waveValues: IWaveDependentValues) {
 		super(lane, svgPath);
+		this.m_moveSpeed = GameSettings.enemyMoveSpeed;
 
 		// Wave dependent values
 		this.m_damage = waveValues.attackDamage;
@@ -24,7 +26,7 @@ export abstract class EnemyBase extends GameObject implements IAttackingGameObje
 	public abstract getCoins(): number;
 	public abstract getAttackSpeed(): number;
 	public getAttackDamage = (): number => this.m_damage;
-	public getMoveSpeed = (): number => 1;
+	public getMoveSpeed = (): number => this.m_moveSpeed;
 }
 
 export class Enemy extends EnemyBase {

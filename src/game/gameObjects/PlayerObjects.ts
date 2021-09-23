@@ -19,13 +19,14 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 	public getPrice = (): number => this.m_price;
 	public getClassIdentifier = (): string => this.m_classIdentifier;
 
+	protected getFullHealthSvg = (): string => this.m_initialSvg;
 	protected createRepairOption(repairPrice: number): IGameObjectOption {
 		return {
 			title: `${repairPrice}$ - Repair`,
 			isAvailable: this.getHealth() < this.getMaxHealth(),
 			getPrice: () => repairPrice,
 			execute: () => {
-				this.m_svg = this.m_initialSvg;
+				this.m_svg = this.getFullHealthSvg();
 				this.m_hasSvgChanged = true;
 				this.setHealth(this.getMaxHealth());
 			}
@@ -105,6 +106,7 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 	public getAttackDamage = (): number => this.m_attackDamage;
 
+	protected getFullHealthSvg = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}.svg`;
 	protected getDamageSvg1 = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}_damaged1.svg`;
 	protected getDamageSvg2 = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}_damaged2.svg`;
 }
