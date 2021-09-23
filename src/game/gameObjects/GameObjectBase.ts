@@ -15,6 +15,7 @@ export abstract class GameObjectBase {
 export abstract class GameObject extends GameObjectBase {
 	protected m_health = 100;
 	protected m_maxHealth = 100;
+	protected m_hasSvgChanged = false;
 	private m_gameBoardLane: number;
 
 	constructor(lane: number, svg: string) {
@@ -33,4 +34,7 @@ export abstract class GameObject extends GameObjectBase {
 	public getMaxHealth = (): number => this.m_maxHealth;
 	public getHealthInPercent = (): number => this.m_health / this.m_maxHealth * 100;
 	public getLane = (): number => this.m_gameBoardLane;
+
+	public hasSvgChanged = (): boolean => this.m_hasSvgChanged;
+	public acknowledgeSvgChange = (): void => { this.m_hasSvgChanged = false; }
 }
