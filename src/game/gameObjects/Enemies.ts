@@ -35,8 +35,8 @@ export class Enemy extends EnemyBase {
 	public getCoins = (): number => GameSettings.enemyCoins;
 	public getAttackSpeed = (): number => { throw new Error('Not supported'); }
 
-	protected getDamageSvg1 = (): string => "Enemy/enemyDamaged1.svg";
-	protected getDamageSvg2 = (): string => "Enemy/enemyDamaged2.svg";
+	protected getDamageSvg1 = (): string => "Enemy/enemy_damaged1.svg";
+	protected getDamageSvg2 = (): string => "Enemy/enemy_damaged2.svg";
 }
 
 export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
@@ -64,6 +64,6 @@ export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
 	public getCoins = (): number => GameSettings.shootingEnemyCoins;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 
-	protected getDamageSvg1 = (): string => "Enemy/shootingEnemyDamaged1.svg";
-	protected getDamageSvg2 = (): string => "Enemy/shootingEnemyDamaged2.svg";
+	protected getDamageSvg1 = (): string => "Enemy/shootingEnemy_damaged1.svg";
+	protected getDamageSvg2 = (): string => "Enemy/shootingEnemy_damaged2.svg";
 }
