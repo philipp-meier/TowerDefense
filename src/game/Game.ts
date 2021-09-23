@@ -1,12 +1,12 @@
 import { IAttackingGameObject, IPlayerStatusInfo, IPricedObject, IShootingGameObject, IUIService } from "./Interfaces.js";
 import { GameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
-import { AppConfig } from "./services/AppService.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
-import { PlayerGameObjectBase, Tower } from "./gameObjects/PlayerObjects.js";
+import { PlayerGameObjectBase, Rampart, Tower } from "./gameObjects/PlayerObjects.js";
 import { Bullet } from "./gameObjects/Bullet.js";
 import { EnemyBase, ShootingEnemy } from "./gameObjects/Enemies.js";
 import { EnemyWaveService } from "./services/EnemyWaveService.js";
+import { GameSettings } from "./GameSettings.js";
 
 export class Game {
 	private m_player: Player;
@@ -15,11 +15,9 @@ export class Game {
 	private m_enemyWaveService: EnemyWaveService;
 	private m_startTime = Date.now();
 
-	private readonly m_bulletSpawnTimeInMs = 5000;
-
 	constructor() {
 		this.m_player = new Player();
-		this.m_gameBoard = new GameBoard(AppConfig.rowCount, AppConfig.columnCount);
+		this.m_gameBoard = new GameBoard(GameSettings.rowCount, GameSettings.columnCount);
 		this.m_enemyWaveService = new EnemyWaveService();
 	}
 
@@ -27,7 +25,7 @@ export class Game {
 		this.m_startTime = Date.now();
 		this.m_enemyWaveService.init(this.m_startTime);
 
-		uiService.renderAppTitle(AppConfig.appTitle);
+		uiService.renderAppTitle(GameSettings.appTitle);
 		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
 		uiService.renderGameObjectSelectionBar();
 		uiService.renderGameBoard(this.m_gameBoard);
@@ -37,12 +35,12 @@ export class Game {
 			`Left click = Buy selected game object<br>
 			Right click = Upgrade existing game object<br>
 			<br>
-			Goal: Survive ${AppConfig.enemyWaveGoal} waves.`
+			Goal: Survive ${GameSettings.goalInEnemyWaves} waves.`
 		).then(() => {
 			uiService.registerInteractionHandlers();
 
 			// Start game
-			this.bulletLoop(uiService);
+			this.updateBullets(uiService);
 			this.enemyLoop(uiService);
 			this.updateLoop(uiService);
 		});
@@ -57,14 +55,35 @@ export class Game {
 		// Update wave
 		this.m_enemyWaveService.updateWave();
 
+		// Bullets
+		this.updateBullets(uiService);
+
 		uiService.refreshUI();
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
+	}
+	private updateBullets(uiService: IUIService): void {
+		if (this.isGameOver())
+			return;
+
+		const lanesWithEnemies = this.getSpawnedEnemies().map(x => x.getLane());
+		this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
+			const shootingGameObject = <IShootingGameObject>(<unknown>x);
+			if (!shootingGameObject.isBulletSpawnable())
+				return;
+
+			// Only shoot if enemy in sight
+			if (x instanceof PlayerGameObjectBase && lanesWithEnemies.indexOf(x.getLane()) < 0)
+				return;
+
+			const bullet = shootingGameObject.spawnBullet();
+			this.spawnGameObject(bullet);
+			uiService.renderBullet(<GameObject>x, bullet);
+		});
 	}
 	private enemyLoop(uiService: IUIService): void {
 		const spawnEnemies = () => {
 			if (this.isGameOver())
 				return;
-
 
 			const enemy = this.m_enemyWaveService.spawnEnemy();
 			this.spawnGameObject(enemy);
@@ -72,21 +91,6 @@ export class Game {
 			setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
 		};
 		setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
-	}
-	private bulletLoop(uiService: IUIService): void {
-		const spawnBullets = () => {
-			if (this.isGameOver())
-				return;
-
-			this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
-				const shootingGameObject = <IShootingGameObject>(<unknown>x);
-				const bullet = shootingGameObject.spawnBullet();
-				this.spawnGameObject(bullet);
-				uiService.renderBullet(<GameObject>x, bullet);
-			});
-			setTimeout(spawnBullets, this.m_bulletSpawnTimeInMs);
-		};
-		setTimeout(spawnBullets, this.m_bulletSpawnTimeInMs);
 	}
 
 	public buyGameObject(gameObject: PlayerGameObjectBase): void {
@@ -136,7 +140,7 @@ export class Game {
 	}
 
 	public isGameOver = (): boolean => this.m_player.getHealth() <= 0 || this.isGameWon();
-	private isGameWon = (): boolean => this.m_enemyWaveService.getCurrentWave() >= AppConfig.enemyWaveGoal;
+	private isGameWon = (): boolean => this.m_enemyWaveService.getCurrentWave() >= GameSettings.goalInEnemyWaves;
 	public getGameOverText = (): string => this.isGameWon() ?
 		"Congratulations! You survived all enemy waves!" :
 		"Game Over";
@@ -148,6 +152,10 @@ export class Game {
 			startTime: this.m_startTime,
 			currentWave: this.m_enemyWaveService.getCurrentWave()
 		};
+	}
+
+	public getSelectableGameObjectTemplates(): PlayerGameObjectBase[] {
+		return [new Tower(0), new Rampart(0)];
 	}
 
 	public getPlayerGameObjectById(id: number): PlayerGameObjectBase | undefined {

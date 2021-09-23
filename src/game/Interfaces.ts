@@ -3,17 +3,8 @@ import { EnemyBase } from "./gameObjects/Enemies.js";
 import { GameBoard } from "./GameBoard.js";
 import { GameObject } from "./gameObjects/GameObjectBase.js";
 
-export interface IAppConfig {
-	appTitle: string;
-	fieldWidth: number;
-	fieldHeight: number;
-	rowCount: number;
-	columnCount: number;
-	svgPath: string;
-	enemyWaveGoal: number;
-}
-
 export interface IUIService {
+	ensureScreenSizeSupported(showMessageOnFail: boolean): boolean;
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
 	renderAppTitle(title: string): void;
@@ -25,7 +16,7 @@ export interface IUIService {
 	registerInteractionHandlers(): void;
 	renderBullet(from: GameObject, bullet: Bullet): void;
 	renderEnemy(enemy: EnemyBase): void;
-	addGameObject(target: never): void;
+	addGameObject(target: HTMLDivElement): void;
 	refreshUI(): void;
 }
 
@@ -64,8 +55,7 @@ export interface IAttackingGameObject {
 	getAttackSpeed(): number;
 	getAttackDamage(): number;
 }
-
-// Modifications
 export interface IShootingGameObject extends IAttackingGameObject {
+	isBulletSpawnable(): boolean;
 	spawnBullet(): Bullet;
 }

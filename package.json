@@ -4,7 +4,7 @@
 		"test": "env TS_NODE_PROJECT=\"test/tsconfig.testing.json\" mocha --require ts-node/register 'test/**/*.ts'",
 		"lint": "eslint . --ext .ts",
 		"lint-and-fix": "eslint . --ext .ts --fix",
-		"run": "npm run test && npm run lint && npm run build && http-server www"
+		"run": "npm run lint && npm run build && http-server www"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.2.21",

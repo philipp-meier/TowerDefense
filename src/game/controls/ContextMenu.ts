@@ -1,13 +1,12 @@
 /*
 	=== Game Context Menu ===
-	Displays (buyable) options for game objects (i.E. upgrade, repair,...).
+	Displays (buyable) options for player game objects (i.E. upgrade, repair,...).
 */
-import { GameObject } from "../gameObjects/GameObjectBase.js";
 import { PlayerGameObjectBase } from "../gameObjects/PlayerObjects.js";
 import { IGameObjectOption } from "../Interfaces.js";
 import { ControlBuilder } from "./ControlBuilder.js";
 
-type ContextMenuExecOptionCallback = (gameObject: GameObject, option: IGameObjectOption) => void;
+type ContextMenuExecOptionCallback = (gameObject: PlayerGameObjectBase, option: IGameObjectOption) => void;
 
 export class ContextMenu {
 	private m_ContextMenu: HTMLUListElement;
@@ -21,7 +20,7 @@ export class ContextMenu {
 	private buildContextMenu(): HTMLUListElement {
 		return ControlBuilder.createUListElement(null, "menu");
 	}
-	private buildMenuItem(gameObject: GameObject, option: IGameObjectOption, fnExecOptionCallback: ContextMenuExecOptionCallback): HTMLLIElement {
+	private buildMenuItem(gameObject: PlayerGameObjectBase, option: IGameObjectOption, fnExecOptionCallback: ContextMenuExecOptionCallback): HTMLLIElement {
 		const menuItem = ControlBuilder.createListElement(null, "menu-item");
 		const linkButton = <HTMLAnchorElement>ControlBuilder.createHtmlElement('a', menuItem, "menu-btn");
 

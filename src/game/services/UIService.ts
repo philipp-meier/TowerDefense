@@ -1,5 +1,4 @@
 import { GameBoard } from "../GameBoard.js";
-import { AppConfig } from "./AppService.js";
 import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js";
 import { Tower, Rampart, PlayerGameObjectBase } from "../gameObjects/PlayerObjects.js";
 import { ContextMenu } from "../controls/ContextMenu.js";
@@ -11,6 +10,7 @@ import { InteractionService } from "./InteractionService.js";
 import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Bullet } from "../gameObjects/Bullet.js";
 import { EnemyBase } from "../gameObjects/Enemies.js";
+import { GameSettings } from "../GameSettings.js";
 
 export class UIService implements IUIService {
 	private readonly m_parentContainer: HTMLDivElement;
@@ -25,6 +25,15 @@ export class UIService implements IUIService {
 		this.m_htmlMessageBox = new MessageBox(container);
 		this.m_htmlPlayerStatusBar = new PlayerStatusBar();
 		this.m_game = game;
+	}
+
+	public ensureScreenSizeSupported(showMessageOnFail = false): boolean {
+		const isSupported = window.innerHeight > GameSettings.fieldHeight && window.innerWidth > GameSettings.fieldWidth;
+
+		if (!isSupported && showMessageOnFail)
+			this.renderMessage(`Resolution not supported! (Min.: ${GameSettings.fieldWidth}x${GameSettings.fieldHeight})`);
+
+		return isSupported;
 	}
 
 	public registerInteractionHandlers(): void {
@@ -49,26 +58,26 @@ export class UIService implements IUIService {
 					if (bulletDiv && gameObjectDiv && this.isColliding(bulletDiv, gameObjectDiv))
 						this.m_game.bulletHitsGameObject(bullet, gameObject);
 				}
-
-				// Move bullet
-				if (bulletDiv) {
-					const left = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.left);
-					const width = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.width);
-					const isBeyondBorder = bullet.isEnemyBullet() ?
-						((left + width) <= 0) :
-						((left + width) >= AppConfig.fieldWidth);
-
-					if (isBeyondBorder) {
-						if (bullet.isEnemyBullet())
-							this.m_game.enemyHitsPlayer(bullet);
-
-						this.removeGameObject(bullet);
-					} else {
-						const moveDirection = bullet.isEnemyBullet() ? -1 : 1;
-						bulletDiv.style.left = ControlBuilder.getUnitString((left + bullet.getAttackSpeed() * moveDirection));
-					}
-				}
 			});
+
+			// Move bullet
+			if (bulletDiv) {
+				const left = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.left);
+				const width = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.width);
+				const isBeyondBorder = bullet.isEnemyBullet() ?
+					((left + width) <= 0) :
+					((left + width) >= GameSettings.fieldWidth);
+
+				if (isBeyondBorder) {
+					if (bullet.isEnemyBullet())
+						this.m_game.enemyHitsPlayer(bullet);
+
+					this.removeGameObject(bullet);
+				} else {
+					const moveDirection = bullet.isEnemyBullet() ? -1 : 1;
+					bulletDiv.style.left = ControlBuilder.getUnitString((left + bullet.getAttackSpeed() * moveDirection));
+				}
+			}
 		});
 
 		this.m_game.getSpawnedEnemies().forEach((enemy) => {
@@ -129,12 +138,13 @@ export class UIService implements IUIService {
 			delete interactionField.dataset.gameObjectId;
 	}
 
-	public addGameObject(target: never): void {
+	public addGameObject(target: HTMLDivElement): void {
 		try {
-			const gameObjectIdentifier = (<HTMLDivElement>document.querySelector('.selection-item.selected')).dataset.identifier;
-			const gameObject = gameObjectIdentifier === "Tower" ? new Tower() : new Rampart();
+			const gameObjectClassIdentifier = (<HTMLDivElement>document.querySelector('.selection-item.selected')).dataset.classIdentifier;
+			const targetLane = Number(target.dataset.lane || 0);
+			const gameObject = gameObjectClassIdentifier === "Tower" ? new Tower(targetLane) : new Rampart(targetLane);
 			this.m_game.buyGameObject(gameObject);
-			this.renderTower(gameObject, <HTMLDivElement>target);
+			this.renderTower(gameObject, target);
 		} catch (ex) {
 			this.renderMessage((<Error>ex).message);
 		}
@@ -170,7 +180,7 @@ export class UIService implements IUIService {
 		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
 
 		const offsetLeft = bullet.isEnemyBullet() ?
-			-(AppConfig.fieldWidth / AppConfig.columnCount) : null;
+			-(GameSettings.fieldWidth / GameSettings.columnCount) : null;
 
 		gameObjectLayer.append(ControlBuilder.createGameObject(gameObjectField, bullet, 'bullet', offsetLeft));
 	}
@@ -185,7 +195,7 @@ export class UIService implements IUIService {
 					// Redraw
 					const gameObjectField = InteractionService.getGameObjectDivElement(gameObject.getID());
 					if (gameObjectField)
-						gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+						gameObjectField.style.backgroundImage = `url('${GameSettings.svgPath}${gameObject.getSvg()}')`;
 				} catch (ex) {
 					this.renderMessage((<Error>ex).message);
 				}
@@ -212,7 +222,7 @@ export class UIService implements IUIService {
 	}
 
 	public renderAppTitle(title: string): void {
-		this.renderText({ cssClass: "app-title", width: AppConfig.fieldWidth, height: 25, text: title });
+		this.renderText({ cssClass: "app-title", width: GameSettings.fieldWidth, height: 25, text: title });
 	}
 	public renderText(textObj: IRenderableText): void {
 		this.m_parentContainer.append(ControlBuilder.createText(textObj));
@@ -222,7 +232,7 @@ export class UIService implements IUIService {
 		this.m_parentContainer.append(ControlBuilder.createGameBoard(gameBoard));
 	}
 	public renderGameObjectSelectionBar(): void {
-		this.m_parentContainer.append(ControlBuilder.createGameObjectSelectionbar());
+		this.m_parentContainer.append(ControlBuilder.createGameObjectSelectionbar(this.m_game.getSelectableGameObjectTemplates()));
 	}
 
 	public renderTower(gameObject: GameObject, parentField: HTMLDivElement): void {
@@ -236,8 +246,8 @@ export class UIService implements IUIService {
 	}
 
 	private isColliding(a: HTMLDivElement, b: HTMLDivElement): boolean {
-		const width = AppConfig.fieldWidth / AppConfig.columnCount;
-		const height = AppConfig.fieldHeight / AppConfig.rowCount;
+		const width = GameSettings.fieldWidth / GameSettings.columnCount;
+		const height = GameSettings.fieldHeight / GameSettings.rowCount;
 
 		const rect1 = {
 			x: parseInt(a.style.left, 10),
