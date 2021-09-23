@@ -6,9 +6,11 @@ import { GameObject } from "./GameObjectBase.js";
 export abstract class PlayerGameObjectBase extends GameObject implements IPricedObject {
 	private m_classIdentifier: string;
 	private m_price: number;
+	private m_initialSvg: string;
 
 	constructor(lane: number, classIdentifier: string, svg: string, price: number) {
 		super(lane, svg);
+		this.m_initialSvg = svg;
 		this.m_price = price;
 		this.m_classIdentifier = classIdentifier;
 	}
@@ -22,7 +24,11 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 			title: `${repairPrice}$ - Repair`,
 			isAvailable: this.getHealth() < this.getMaxHealth(),
 			getPrice: () => repairPrice,
-			execute: () => this.setHealth(this.getMaxHealth())
+			execute: () => {
+				this.m_svg = this.m_initialSvg;
+				this.m_hasSvgChanged = true;
+				this.setHealth(this.getMaxHealth());
+			}
 		};
 	}
 }
