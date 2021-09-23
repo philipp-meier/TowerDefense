@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100">
+    <g id="Tower_Level3_Damaged1">
+        <title>Layer 1</title>
+        <g stroke="null" id="svg_5">
+            <rect stroke="#000" id="svg_3" height="5.59783" width="45.37691" y="4.40614" x="48.67366" fill="#999999" />
+            <rect stroke="#000" id="svg_4" height="5.59783" width="45.37691" y="13.44879" x="48.67366" fill="#999999" />
+            <ellipse stroke="#000" ry="23.25255" rx="31.04735" id="svg_2" cy="24.21387" cx="39.46181" fill="#191919" />
+            <rect stroke="#000" id="svg_1" height="77.93908" width="70.96538" y="22.06085" x="3.97912" fill="#565656" />
+        </g>
+        <rect stroke="#000" fill="#999999" x="28.34526" y="26.66667" width="64.83581" height="4.81013" id="svg_6" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="34.49275" width="64.83581" height="4.81013" id="svg_7" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="42.31884" width="64.83581" height="4.81013" id="svg_8" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="49.85507" width="64.83581" height="4.81013" id="svg_9" />
+        <rect stroke="#000" fill="#999999" x="28.63511" y="58.26087" width="64.83581" height="4.81013" id="svg_10" />
+        <line id="svg_6" y2="73.41102" x2="52.54237" y1="76.05932" x1="75.3178" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_7" y2="65.57203" x2="43.22034" y1="69.27966" x1="74.57627" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_8" y2="56.14407" x2="36.97034" y1="56.5678" x1="70.86864" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_9" y2="46.18644" x2="36.22881" y1="47.77542" x1="70.12712" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+    </g>
+
+</svg>

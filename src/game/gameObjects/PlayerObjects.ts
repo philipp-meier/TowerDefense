@@ -6,9 +6,11 @@ import { GameObject } from "./GameObjectBase.js";
 export abstract class PlayerGameObjectBase extends GameObject implements IPricedObject {
 	private m_classIdentifier: string;
 	private m_price: number;
+	private m_initialSvg: string;
 
 	constructor(lane: number, classIdentifier: string, svg: string, price: number) {
 		super(lane, svg);
+		this.m_initialSvg = svg;
 		this.m_price = price;
 		this.m_classIdentifier = classIdentifier;
 	}
@@ -22,20 +24,27 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 			title: `${repairPrice}$ - Repair`,
 			isAvailable: this.getHealth() < this.getMaxHealth(),
 			getPrice: () => repairPrice,
-			execute: () => this.setHealth(this.getMaxHealth())
+			execute: () => {
+				this.m_svg = this.m_initialSvg;
+				this.m_hasSvgChanged = true;
+				this.setHealth(this.getMaxHealth());
+			}
 		};
 	}
 }
 
 export class Rampart extends PlayerGameObjectBase {
 	constructor(lane: number) {
-		super(lane, 'Rampart', 'Rampart/rampart.svg', GameSettings.rampartPrice);
+		super(lane, "Rampart", "Rampart/rampart.svg", GameSettings.rampartPrice);
 
 		this.m_health = GameSettings.rampartHealth;
 		this.m_maxHealth = GameSettings.rampartHealth;
 	}
 
 	public getOptions = (): IGameObjectOption[] => [this.createRepairOption(GameSettings.rampartRepairPrice)];
+
+	protected getDamageSvg1 = (): string => "Rampart/rampart_damaged1.svg";
+	protected getDamageSvg2 = (): string => "Rampart/rampart_damaged2.svg";
 }
 
 export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
@@ -66,6 +75,7 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 				this.m_svg = svgName;
 				this.m_bulletSvg = bulletSvgName;
 				this.m_attackDamage += GameSettings.towerUpgradeDamageIncrease;
+				this.m_hasSvgChanged = true;
 			},
 			getPrice: () => price
 		};
@@ -94,4 +104,7 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	public isBulletSpawnable = (): boolean => this.m_isBulletSpawnable;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 	public getAttackDamage = (): number => this.m_attackDamage;
+
+	protected getDamageSvg1 = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}_damaged1.svg`;
+	protected getDamageSvg2 = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}_damaged2.svg`;
 }

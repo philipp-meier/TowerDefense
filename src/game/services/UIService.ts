@@ -109,6 +109,12 @@ export class UIService implements IUIService {
 				if (healthBarValueDiv && healthBarValueDiv instanceof HTMLDivElement) {
 					healthBarValueDiv.style.width = gameObject.getHealthInPercent() + '%';
 				}
+
+				// Refresh svg
+				if (gameObject.hasSvgChanged()) {
+					gameObjectDiv.style.backgroundImage = `url('${GameSettings.svgPath}${gameObject.getSvg()}')`;
+					gameObject.acknowledgeSvgChange();
+				}
 			}
 		});
 

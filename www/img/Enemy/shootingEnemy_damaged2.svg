@@ -1,0 +1,81 @@
+<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg">
+    <g>
+        <title>Shooting Enemy Damaged 2</title>
+        <ellipse ry="13.15158" rx="26.8202" id="svg_7" cy="51.60351" cx="62.02277" fill="#191919" stroke="#000" />
+        <rect id="svg_6" height="30.52711" width="80.3719" y="48.06692" x="9.29752" fill="#999999" stroke="#000" />
+        <ellipse ry="14.97934" rx="14.04959" id="svg_3" cy="84.81404" cx="28.92562" stroke="#000" fill="#000000" />
+        <ellipse ry="14.97934" rx="14.04959" id="svg_5" cy="85.02066" cx="70.45455" stroke="#000" fill="#000000" />
+        <rect id="svg_8" height="3.33602" width="84.37816" y="64.34287" x="1.31425" fill="#333333" stroke="#000" />
+        <rect fill="#999999" x="32.43903" y="62.80488" width="2.92683" height="6.21951" id="svg_10" stroke="#000" />
+        <rect fill="#999999" x="47.43903" y="62.92683" width="39.14634" height="5.97561" id="svg_11" stroke="#000" />
+        <rect id="svg_12" height="3.33602" width="84.37816" y="56.05018" x="1.19229" fill="#333333" stroke="#000" />
+        <rect fill="#999999" x="87.31708" y="78.78049" width="2.43902" height="9.63415" id="svg_13" stroke="#000" />
+        <rect fill="#999999" x="47.31708" y="54.63415" width="39.14634" height="5.97561" id="svg_14" stroke="#000" />
+        <rect fill="#999999" x="32.31707" y="54.39024" width="2.92683" height="6.21951" id="svg_15" stroke="#000" />
+        <rect fill="#999999" x="11.70732" y="38.41463" width="2.43902" height="9.63415" id="svg_16" stroke="#000" />
+        <rect fill="#999999" x="9.26829" y="78.78049" width="2.43902" height="9.63415" id="svg_18" stroke="#000" />
+        <line id="svg_1" y2="48.80294" x2="45.32089" y1="52.5026" x1="9.52115" stroke-dasharray="5,2,2,2" stroke="#000"
+            fill="none" />
+        <line id="svg_2" y2="73.50367" x2="17.24693" y1="75.78876" x1="9.73878" stroke-dasharray="5,2,2,2" stroke="#000"
+            fill="none" />
+        <line id="svg_4" y2="56.74634" x2="25.51678" y1="58.48736" x1="10.28285" stroke-dasharray="5,2,2,2"
+            stroke="#000" fill="none" />
+        <line stroke-dasharray="5,5" id="svg_9" y2="50.43514" x2="82.64403" y1="52.28498" x1="52.61142" stroke="#000"
+            fill="none" />
+        <line id="svg_17" y2="64.58094" x2="80.35894" y1="67.30128" x1="56.74634" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_19" y2="71.43621" x2="61.0989" y1="76.8769" x1="43.57987" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_20" y2="74.80943" x2="85.90844" y1="70.67451" x1="80.0325" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line stroke="#000" id="svg_21" y2="49.99989" x2="88.19353" y1="53.69956" x1="82.09996" stroke-dasharray="5,5"
+            fill="none" />
+        <line id="svg_22" y2="40.31546" x2="53.80837" y1="42.38292" x1="45.97378" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_23" y2="43.57987" x2="71.10977" y1="46.30022" x1="63.92805" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_24" y2="57.50804" x2="66.6484" y1="58.37855" x1="59.24906" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_25" y2="42.38292" x2="12.45912" y1="44.66801" x1="11.69743" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_26" y2="84.38505" x2="10.50048" y1="85.79963" x1="9.73878" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line stroke="#000" id="svg_27" y2="84.27624" x2="89.06404" y1="85.69082" x1="87.43184" stroke-dasharray="5,5"
+            fill="none" />
+        <line id="svg_28" y2="65.8867" x2="20.40253" y1="65.77789" x1="5.71267" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_29" y2="56.96397" x2="14.74421" y1="57.39923" x1="1.57774" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_30" y2="65.99552" x2="33.89544" y1="63.92805" x1="32.58968" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_31" y2="57.1816" x2="34.22189" y1="59.35787" x1="32.48086" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_32" y2="59.03143" x2="55.22295" y1="56.96397" x1="48.80294" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_33" y2="57.72567" x2="83.51454" y1="58.48736" x1="68.06298" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_34" y2="64.68975" x2="65.45145" y1="64.90738" x1="50.21751" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_35" y2="66.6484" x2="83.29691" y1="67.51891" x1="71.21858" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_36" y2="74.15655" x2="50.76158" y1="70.13044" x1="38.68325" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_37" y2="69.36874" x2="22.46999" y1="69.91281" x1="10.82692" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_38" y2="42.27411" x2="70.89214" y1="44.45038" x1="45.42971" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_39" y2="57.94329" x2="44.45038" y1="57.29041" x1="37.70393" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_40" y2="66.75721" x2="44.23276" y1="64.90738" x1="38.248" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_41" y2="61.31652" x2="45.86496" y1="62.62229" x1="11.4798" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_42" y2="64.03687" x2="88.19353" y1="76.44164" x1="86.12607" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_43" y2="46.51785" x2="84.38505" y1="43.25343" x1="74.70062" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+        <line id="svg_44" y2="52.61142" x2="47.7148" y1="53.04667" x1="25.73441" stroke-dasharray="5,5" stroke="#000"
+            fill="none" />
+    </g>
+
+</svg>
