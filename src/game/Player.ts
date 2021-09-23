@@ -1,8 +1,9 @@
+import { GameSettings } from "./GameSettings.js";
 import { IPricedObject } from "./Interfaces.js";
 
 export class Player {
-	private m_Coins = 200;
-	private m_Health = 100;
+	private m_Coins = GameSettings.playerCoinsStart;
+	private m_Health = GameSettings.playerHealthStart;
 
 	public buyItem(item: IPricedObject): void {
 		if (this.m_Coins < item.getPrice())

@@ -5,8 +5,8 @@
 import { GameBoard } from "../GameBoard.js";
 import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Rampart, Tower } from "../gameObjects/PlayerObjects.js";
+import { GameSettings } from "../GameSettings.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
-import { AppConfig } from "../services/AppService.js";
 
 export class ControlBuilder {
 	public static CssUnit = 'px';
@@ -54,7 +54,7 @@ export class ControlBuilder {
 	}
 
 	public static createGameBoard(gameBoard: GameBoard): HTMLElement {
-		const gameBoardContainer = ControlBuilder.createObject({ cssClass: "game-board", width: AppConfig.fieldWidth, height: AppConfig.fieldHeight });
+		const gameBoardContainer = ControlBuilder.createObject({ cssClass: "game-board", width: GameSettings.fieldWidth, height: GameSettings.fieldHeight });
 
 		ControlBuilder.createGameBoardGridLayer(gameBoardContainer, gameBoard, "background", true).classList.add("layer");
 		ControlBuilder.createDiv(gameBoardContainer, "game-object-layer").classList.add("layer");
@@ -64,8 +64,8 @@ export class ControlBuilder {
 	}
 	private static createGameBoardGridLayer(parent: HTMLElement, gameBoard: GameBoard, typeName: string, structureOnly = false): HTMLDivElement {
 		const gameFields = gameBoard.GameFields();
-		const fieldHeight = AppConfig.fieldHeight / AppConfig.rowCount;
-		const fieldWidth = AppConfig.fieldWidth / AppConfig.columnCount;
+		const fieldHeight = GameSettings.fieldHeight / GameSettings.rowCount;
+		const fieldWidth = GameSettings.fieldWidth / GameSettings.columnCount;
 
 		const gridLayerContainer = ControlBuilder.createDiv(parent, `${typeName}-layer`);
 		for (let i = 0; i < gameFields.length; i++) {
@@ -90,7 +90,7 @@ export class ControlBuilder {
 	}
 
 	public static createGameObjectSelectionbar(): HTMLDivElement {
-		const renderInfo = { height: 102, width: AppConfig.fieldWidth - 6, cssClass: "selection-bar" };
+		const renderInfo = { height: 102, width: GameSettings.fieldWidth - 6, cssClass: "selection-bar" };
 		const selectionBar = ControlBuilder.createDiv(null, renderInfo.cssClass);
 		ControlBuilder.SetPosition(selectionBar, renderInfo);
 
@@ -107,7 +107,7 @@ export class ControlBuilder {
 				});
 				selectionDiv.classList.add("selected");
 			};
-			selectionDiv.style.backgroundImage = `url('${AppConfig.svgPath}${templateObject.getSvg()}')`;
+			selectionDiv.style.backgroundImage = `url('${GameSettings.svgPath}${templateObject.getSvg()}')`;
 
 			if (i == 0)
 				selectionDiv.classList.add("selected");
@@ -118,9 +118,9 @@ export class ControlBuilder {
 
 	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string, offsetLeft: number | null = null): HTMLDivElement {
 		const gameObjectDiv = ControlBuilder.createDiv(null, className);
-		gameObjectDiv.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
-		gameObjectDiv.style.height = ControlBuilder.getUnitString(AppConfig.fieldHeight / AppConfig.rowCount);
-		gameObjectDiv.style.width = ControlBuilder.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
+		gameObjectDiv.style.backgroundImage = `url('${GameSettings.svgPath}${gameObject.getSvg()}')`;
+		gameObjectDiv.style.height = ControlBuilder.getUnitString(GameSettings.fieldHeight / GameSettings.rowCount);
+		gameObjectDiv.style.width = ControlBuilder.getUnitString(GameSettings.fieldWidth / GameSettings.columnCount);
 		gameObjectDiv.dataset.gameObjectId = gameObject.getID().toString();
 		gameObjectDiv.style.top = fromElement.style.top;
 
@@ -140,7 +140,7 @@ export class ControlBuilder {
 		const healthBarValue = ControlBuilder.createDiv(healthBarContainer, 'value');
 		healthBarValue.style.width = '100%';
 
-		healthBarContainer.style.width = ControlBuilder.getUnitString(AppConfig.fieldWidth / AppConfig.columnCount);
+		healthBarContainer.style.width = ControlBuilder.getUnitString(GameSettings.fieldWidth / GameSettings.columnCount);
 		healthBarContainer.style.height = ControlBuilder.getUnitString(8);
 		healthBarContainer.style.position = 'absolute';
 		return healthBarContainer;

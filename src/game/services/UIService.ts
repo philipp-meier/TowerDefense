@@ -1,5 +1,4 @@
 import { GameBoard } from "../GameBoard.js";
-import { AppConfig } from "./AppService.js";
 import { IGameObjectOption, IPlayerStatusInfo, IRenderableObject, IRenderableText, IUIService } from "../Interfaces.js";
 import { Tower, Rampart, PlayerGameObjectBase } from "../gameObjects/PlayerObjects.js";
 import { ContextMenu } from "../controls/ContextMenu.js";
@@ -11,6 +10,7 @@ import { InteractionService } from "./InteractionService.js";
 import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
 import { Bullet } from "../gameObjects/Bullet.js";
 import { EnemyBase } from "../gameObjects/Enemies.js";
+import { GameSettings } from "../GameSettings.js";
 
 export class UIService implements IUIService {
 	private readonly m_parentContainer: HTMLDivElement;
@@ -57,7 +57,7 @@ export class UIService implements IUIService {
 				const width = ControlBuilder.getNumberWithoutUnit(bulletDiv.style.width);
 				const isBeyondBorder = bullet.isEnemyBullet() ?
 					((left + width) <= 0) :
-					((left + width) >= AppConfig.fieldWidth);
+					((left + width) >= GameSettings.fieldWidth);
 
 				if (isBeyondBorder) {
 					if (bullet.isEnemyBullet())
@@ -171,7 +171,7 @@ export class UIService implements IUIService {
 		const gameObjectLayer = <HTMLDivElement>document.querySelector('.game-object-layer');
 
 		const offsetLeft = bullet.isEnemyBullet() ?
-			-(AppConfig.fieldWidth / AppConfig.columnCount) : null;
+			-(GameSettings.fieldWidth / GameSettings.columnCount) : null;
 
 		gameObjectLayer.append(ControlBuilder.createGameObject(gameObjectField, bullet, 'bullet', offsetLeft));
 	}
@@ -186,7 +186,7 @@ export class UIService implements IUIService {
 					// Redraw
 					const gameObjectField = InteractionService.getGameObjectDivElement(gameObject.getID());
 					if (gameObjectField)
-						gameObjectField.style.backgroundImage = `url('${AppConfig.svgPath}${gameObject.getSvg()}')`;
+						gameObjectField.style.backgroundImage = `url('${GameSettings.svgPath}${gameObject.getSvg()}')`;
 				} catch (ex) {
 					this.renderMessage((<Error>ex).message);
 				}
@@ -213,7 +213,7 @@ export class UIService implements IUIService {
 	}
 
 	public renderAppTitle(title: string): void {
-		this.renderText({ cssClass: "app-title", width: AppConfig.fieldWidth, height: 25, text: title });
+		this.renderText({ cssClass: "app-title", width: GameSettings.fieldWidth, height: 25, text: title });
 	}
 	public renderText(textObj: IRenderableText): void {
 		this.m_parentContainer.append(ControlBuilder.createText(textObj));
@@ -237,8 +237,8 @@ export class UIService implements IUIService {
 	}
 
 	private isColliding(a: HTMLDivElement, b: HTMLDivElement): boolean {
-		const width = AppConfig.fieldWidth / AppConfig.columnCount;
-		const height = AppConfig.fieldHeight / AppConfig.rowCount;
+		const width = GameSettings.fieldWidth / GameSettings.columnCount;
+		const height = GameSettings.fieldHeight / GameSettings.rowCount;
 
 		const rect1 = {
 			x: parseInt(a.style.left, 10),

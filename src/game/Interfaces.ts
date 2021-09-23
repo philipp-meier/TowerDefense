@@ -3,16 +3,6 @@ import { EnemyBase } from "./gameObjects/Enemies.js";
 import { GameBoard } from "./GameBoard.js";
 import { GameObject } from "./gameObjects/GameObjectBase.js";
 
-export interface IAppConfig {
-	appTitle: string;
-	fieldWidth: number;
-	fieldHeight: number;
-	rowCount: number;
-	columnCount: number;
-	svgPath: string;
-	enemyWaveGoal: number;
-}
-
 export interface IUIService {
 	renderObject(obj: IRenderableObject): void;
 	renderText(textObj: IRenderableText): void;
