@@ -22,9 +22,6 @@ export class Game {
 	}
 
 	public start(uiService: IUIService): void {
-		this.m_startTime = Date.now();
-		this.m_enemyWaveService.init(this.m_startTime);
-
 		uiService.renderAppTitle(GameSettings.appTitle);
 		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
 		uiService.renderGameObjectSelectionBar();
@@ -37,6 +34,9 @@ export class Game {
 			<br>
 			Goal: Survive ${GameSettings.goalInEnemyWaves} waves.`
 		).then(() => {
+			this.m_startTime = Date.now();
+			this.m_enemyWaveService.init(this.m_startTime);
+
 			uiService.registerInteractionHandlers();
 
 			// Start game
@@ -140,7 +140,7 @@ export class Game {
 	}
 
 	public isGameOver = (): boolean => this.m_player.getHealth() <= 0 || this.isGameWon();
-	private isGameWon = (): boolean => this.m_enemyWaveService.getCurrentWave() >= GameSettings.goalInEnemyWaves;
+	private isGameWon = (): boolean => this.m_enemyWaveService.getCurrentWave() >= GameSettings.goalInEnemyWaves + 1;
 	public getGameOverText = (): string => this.isGameWon() ?
 		"Congratulations! You survived all enemy waves!" :
 		"Game Over";

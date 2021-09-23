@@ -13,8 +13,8 @@ export class PlayerStatusBar {
 		const statusBar = ControlBuilder.createDiv(parent, renderInfo.cssClass);
 		ControlBuilder.SetPosition(statusBar, renderInfo);
 
-		this.createPlayerStatusBarItem(statusBar, "health.svg", statusInfo.health.toString(), "health", "Health");
-		this.createPlayerStatusBarItem(statusBar, "coin.svg", statusInfo.coins.toString(), "coins", "Coins");
+		this.createPlayerStatusBarItem(statusBar, "health.svg", statusInfo.health.toFixed(), "health", "Health");
+		this.createPlayerStatusBarItem(statusBar, "coin.svg", statusInfo.coins.toFixed(), "coins", "Coins");
 		this.createPlayerStatusBarItem(statusBar, "enemyWave.svg", "1", "enemy-wave", "Current Wave");
 		this.createPlayerStatusBarItem(statusBar, "timer.svg", "00:00:00", "timer", "Elapsed time");
 	}
@@ -36,8 +36,8 @@ export class PlayerStatusBar {
 				span.textContent = value;
 		};
 
-		updateStatus("health", statusInfo.health.toString());
-		updateStatus("coins", statusInfo.coins.toString());
+		updateStatus("health", statusInfo.health.toFixed());
+		updateStatus("coins", statusInfo.coins.toFixed());
 		updateStatus("timer", this.getTimeElapsedString(statusInfo.startTime));
 		updateStatus("enemy-wave", statusInfo.currentWave.toString());
 	}
