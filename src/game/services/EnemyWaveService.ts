@@ -19,7 +19,6 @@ export class EnemyWaveService {
 		if (this.m_currentWave >= 2 && this.getRandomNumber(0, 100) >= 50) {
 			return new ShootingEnemy(spawnLane, {
 				health: this.calcValueByWave(GameSettings.shootingEnemyHealth, GameSettings.shootingEnemyHealthIncreasePerWaveInPercent),
-				maxHealth: this.calcValueByWave(GameSettings.shootingEnemyHealth, GameSettings.shootingEnemyHealthIncreasePerWaveInPercent),
 				attackDamage: this.calcValueByWave(GameSettings.shootingEnemyAttackDamage, GameSettings.shootingEnemyDamageIncreasePerWaveInPercent),
 				attackSpeed: GameSettings.shootingEnemyAttackSpeed
 			});
@@ -27,14 +26,14 @@ export class EnemyWaveService {
 		else {
 			return new Enemy(spawnLane, {
 				health: this.calcValueByWave(GameSettings.enemyHealth, GameSettings.enemyHealthIncreasePerWaveInPercent),
-				maxHealth: this.calcValueByWave(GameSettings.enemyHealth, GameSettings.enemyHealthIncreasePerWaveInPercent),
 				attackDamage: this.calcValueByWave(GameSettings.enemyAttackDamage, GameSettings.enemyDamageIncreasePerWaveInPercent),
 				attackSpeed: 1
 			});
 		}
 	}
 
-	public calcValueByWave(value: number, percentIncrPerWave: number): number {
+	private getRandomNumber = (min: number, max: number): number => Math.floor(Math.random() * (max - min) + min);
+	private calcValueByWave(value: number, percentIncrPerWave: number): number {
 		if (this.m_currentWave <= 1)
 			return value;
 
@@ -43,6 +42,4 @@ export class EnemyWaveService {
 
 	public getEnemySpawnRateInSeconds = (): number => GameSettings.enemySpawnTimeInMs - (this.m_currentWave * GameSettings.enemySpawnTimeDecreasePerWaveInMs);
 	public getCurrentWave = (): number => this.m_currentWave;
-
-	private getRandomNumber = (min: number, max: number): number => Math.floor(Math.random() * (max - min) + min);
 }

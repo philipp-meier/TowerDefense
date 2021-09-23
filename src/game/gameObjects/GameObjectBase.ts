@@ -5,7 +5,7 @@ export abstract class GameObjectBase {
 
 	constructor(svg: string) {
 		this.m_svg = svg;
-		this.m_id = GameObject.currentId++;
+		this.m_id = GameObjectBase.currentId++;
 	}
 
 	public getID = (): number => this.m_id;
@@ -13,10 +13,8 @@ export abstract class GameObjectBase {
 }
 
 export abstract class GameObject extends GameObjectBase {
-
 	protected m_health = 100;
 	protected m_maxHealth = 100;
-	private m_armor = 0;
 	private m_gameBoardLane: number;
 
 	constructor(lane: number, svg: string) {
@@ -31,7 +29,6 @@ export abstract class GameObject extends GameObjectBase {
 		this.m_health = health;
 	}
 
-	public getArmor = (): number => this.m_armor;
 	public getHealth = (): number => this.m_health;
 	public getMaxHealth = (): number => this.m_maxHealth;
 	public getHealthInPercent = (): number => this.m_health / this.m_maxHealth * 100;

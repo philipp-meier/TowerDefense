@@ -7,8 +7,7 @@ import { UIService } from "./UIService.js";
 export class InteractionService {
 	public static registerHandlers(parent: HTMLElement, uiService: UIService): void {
 		parent.addEventListener('click', (e) => {
-			e = e || window.event;
-			const target = e.target;
+			const target = (e || window.event).target;
 
 			if (!uiService.isContextMenuHidden()) {
 				if (!target || !(target instanceof HTMLAnchorElement || target instanceof HTMLSpanElement))
@@ -26,15 +25,15 @@ export class InteractionService {
 		});
 
 		parent.addEventListener('contextmenu', (e) => {
-			e = e || window.event;
-			e.preventDefault();
+			const event = e || window.event;
+			event.preventDefault();
 
-			const target = e.target;
+			const target = event.target;
 			const gameObjectID = target && InteractionService.getGameObjectIdFromEventTarget(target);
 			if (!gameObjectID)
 				return;
 
-			uiService.showContextMenu(gameObjectID, e.pageX, e.pageY);
+			uiService.showContextMenu(gameObjectID, event.pageX, event.pageY);
 		}, false);
 	}
 

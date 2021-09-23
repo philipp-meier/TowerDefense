@@ -2,7 +2,7 @@ import { IAttackingGameObject, IPlayerStatusInfo, IPricedObject, IShootingGameOb
 import { GameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
 import { GameBoard } from "./GameBoard.js";
 import { Player } from "./Player.js";
-import { PlayerGameObjectBase, Tower } from "./gameObjects/PlayerObjects.js";
+import { PlayerGameObjectBase, Rampart, Tower } from "./gameObjects/PlayerObjects.js";
 import { Bullet } from "./gameObjects/Bullet.js";
 import { EnemyBase, ShootingEnemy } from "./gameObjects/Enemies.js";
 import { EnemyWaveService } from "./services/EnemyWaveService.js";
@@ -150,6 +150,10 @@ export class Game {
 			startTime: this.m_startTime,
 			currentWave: this.m_enemyWaveService.getCurrentWave()
 		};
+	}
+
+	public getSelectableGameObjectTemplates(): PlayerGameObjectBase[] {
+		return [new Tower(0), new Rampart(0)];
 	}
 
 	public getPlayerGameObjectById(id: number): PlayerGameObjectBase | undefined {

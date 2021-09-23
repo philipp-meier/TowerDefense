@@ -39,12 +39,14 @@ export const GameSettings = {
 	// === Enemy Game Objects ===
 	// Enemy
 	enemyHealth: 100,
+	enemyCoins: 50,
 	enemyAttackDamage: 25,
 	enemyHealthIncreasePerWaveInPercent: 30,
 	enemyDamageIncreasePerWaveInPercent: 20,
 
 	// Shooting Enemy
 	shootingEnemyHealth: 100,
+	shootingEnemyCoins: 50,
 	shootingEnemyAttackDamage: 8,
 	shootingEnemyAttackSpeed: 5,
 	shootingEnemyHealthIncreasePerWaveInPercent: 30,

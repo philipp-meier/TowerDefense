@@ -140,9 +140,9 @@ export class UIService implements IUIService {
 
 	public addGameObject(target: HTMLDivElement): void {
 		try {
-			const gameObjectIdentifier = (<HTMLDivElement>document.querySelector('.selection-item.selected')).dataset.identifier;
+			const gameObjectClassIdentifier = (<HTMLDivElement>document.querySelector('.selection-item.selected')).dataset.classIdentifier;
 			const targetLane = Number(target.dataset.lane || 0);
-			const gameObject = gameObjectIdentifier === "Tower" ? new Tower(targetLane) : new Rampart(targetLane);
+			const gameObject = gameObjectClassIdentifier === "Tower" ? new Tower(targetLane) : new Rampart(targetLane);
 			this.m_game.buyGameObject(gameObject);
 			this.renderTower(gameObject, target);
 		} catch (ex) {
@@ -232,7 +232,7 @@ export class UIService implements IUIService {
 		this.m_parentContainer.append(ControlBuilder.createGameBoard(gameBoard));
 	}
 	public renderGameObjectSelectionBar(): void {
-		this.m_parentContainer.append(ControlBuilder.createGameObjectSelectionbar());
+		this.m_parentContainer.append(ControlBuilder.createGameObjectSelectionbar(this.m_game.getSelectableGameObjectTemplates()));
 	}
 
 	public renderTower(gameObject: GameObject, parentField: HTMLDivElement): void {

@@ -4,7 +4,7 @@
 */
 import { GameBoard } from "../GameBoard.js";
 import { GameObject, GameObjectBase } from "../gameObjects/GameObjectBase.js";
-import { Rampart, Tower } from "../gameObjects/PlayerObjects.js";
+import { PlayerGameObjectBase } from "../gameObjects/PlayerObjects.js";
 import { GameSettings } from "../GameSettings.js";
 import { IRenderableObject, IRenderableText } from "../Interfaces.js";
 
@@ -89,18 +89,17 @@ export class ControlBuilder {
 		return gridLayerContainer;
 	}
 
-	public static createGameObjectSelectionbar(): HTMLDivElement {
+	public static createGameObjectSelectionbar(selectableGameObjects: PlayerGameObjectBase[]): HTMLDivElement {
 		const renderInfo = { height: 102, width: GameSettings.fieldWidth - 6, cssClass: "selection-bar" };
 		const selectionBar = ControlBuilder.createDiv(null, renderInfo.cssClass);
 		ControlBuilder.SetPosition(selectionBar, renderInfo);
 
-		const templateObjects = [new Tower(0), new Rampart(0)];
-		for (let i = 0; i < templateObjects.length; i++) {
-			const templateObject = templateObjects[i];
+		for (let i = 0; i < selectableGameObjects.length; i++) {
+			const templateObject = selectableGameObjects[i];
 			const selectionDiv = ControlBuilder.createDiv(selectionBar, "selection-item");
 			ControlBuilder.createDiv(selectionDiv, "price").innerText = `${templateObject.getPrice()}$`;
 
-			selectionDiv.dataset.identifier = templateObject.identifier;
+			selectionDiv.dataset.classIdentifier = templateObject.getClassIdentifier();
 			selectionDiv.onclick = () => {
 				document.querySelectorAll('.selection-bar div.selection-item.selected').forEach(x => {
 					x.classList.remove("selected");
@@ -137,12 +136,10 @@ export class ControlBuilder {
 
 	public static createHealthBar(parent: HTMLDivElement): HTMLDivElement {
 		const healthBarContainer = ControlBuilder.createDiv(parent, 'health-bar');
-		const healthBarValue = ControlBuilder.createDiv(healthBarContainer, 'value');
-		healthBarValue.style.width = '100%';
+		ControlBuilder.createDiv(healthBarContainer, 'value');
 
 		healthBarContainer.style.width = ControlBuilder.getUnitString(GameSettings.fieldWidth / GameSettings.columnCount);
 		healthBarContainer.style.height = ControlBuilder.getUnitString(8);
-		healthBarContainer.style.position = 'absolute';
 		return healthBarContainer;
 	}
 
