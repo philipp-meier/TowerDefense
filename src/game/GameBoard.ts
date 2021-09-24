@@ -1,3 +1,7 @@
+/*
+	=== Game Board ===
+	Creates the game board structure according to the GameSettings.
+*/
 import { IGameField } from "./Interfaces.js";
 
 export class GameBoard {

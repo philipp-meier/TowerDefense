@@ -1,3 +1,7 @@
+/*
+	=== Game ===
+	Contains the core logic of the game (Goal, GameObjects, Rules, Logic).
+*/
 import { IAttackingGameObject, IPlayerStatusInfo, IPricedObject, IShootingGameObject, IUIService } from "./Interfaces.js";
 import { GameObject, GameObjectBase } from "./gameObjects/GameObjectBase.js";
 import { GameBoard } from "./GameBoard.js";
@@ -7,6 +11,7 @@ import { Bullet } from "./gameObjects/Bullet.js";
 import { EnemyBase, ShootingEnemy } from "./gameObjects/Enemies.js";
 import { EnemyWaveService } from "./services/EnemyWaveService.js";
 import { GameSettings } from "./GameSettings.js";
+import { CollisionService } from "./services/CollisionService.js";
 
 export class Game {
 	private m_player: Player;
@@ -22,10 +27,7 @@ export class Game {
 	}
 
 	public start(uiService: IUIService): void {
-		uiService.renderAppTitle(GameSettings.appTitle);
-		uiService.renderPlayerStatusBar(this.getPlayerStatusInfo());
-		uiService.renderGameObjectSelectionBar();
-		uiService.renderGameBoard(this.m_gameBoard);
+		uiService.init();
 
 		// Show game controls
 		uiService.renderMessageWithTitle("Controls",
@@ -37,14 +39,46 @@ export class Game {
 			this.m_startTime = Date.now();
 			this.m_enemyWaveService.init(this.m_startTime);
 
+			// Sets up the user interaction service
 			uiService.registerInteractionHandlers();
 
 			// Start game
-			this.updateBullets(uiService);
-			this.enemyLoop(uiService);
+			this.enemyLoop();
 			this.updateLoop(uiService);
 		});
 	}
+
+	public buyGameObject(classIdentifier: string, lane: number, positionX: number): number {
+		const gameObject = classIdentifier === "Tower" ?
+			new Tower(lane, positionX) :
+			new Rampart(lane, positionX);
+
+		this.buy(gameObject);
+		this.m_gameObjects.push(gameObject);
+
+		return gameObject.getID();
+	}
+	public buy(option: IPricedObject): void {
+		this.m_player.buyItem(option);
+	}
+
+	public getPlayerStatusInfo(): IPlayerStatusInfo {
+		return {
+			health: this.m_player.getHealth(),
+			coins: this.m_player.getCoins(),
+			startTime: this.m_startTime,
+			currentWave: this.m_enemyWaveService.getCurrentWave()
+		};
+	}
+
+	public getPlayerGameObjectById(id: number): PlayerGameObjectBase | undefined {
+		return <PlayerGameObjectBase | undefined>this.getSpawnedPlayerGameObjects().find(x => x.getID() == id);
+	}
+
+	public getGameBoard = (): GameBoard => this.m_gameBoard;
+	public getSelectableGameObjectTemplates = (): PlayerGameObjectBase[] => [new Tower(0, 0), new Rampart(0, 0)];
+	public getSpawnedBaseGameObjects = (): GameObjectBase[] => this.m_gameObjects;
+
 	private updateLoop(uiService: IUIService): void {
 		if (this.isGameOver()) {
 			// Restart by reloading the page.
@@ -56,55 +90,87 @@ export class Game {
 		this.m_enemyWaveService.updateWave();
 
 		// Bullets
-		this.updateBullets(uiService);
+		this.updateBullets();
+
+		// Collisions
+		this.updateCollisions();
+
+		this.m_gameObjects.forEach((gameObject) => gameObject.update());
 
 		uiService.refreshUI();
 		window.requestAnimationFrame(() => { this.updateLoop(uiService); });
 	}
-	private updateBullets(uiService: IUIService): void {
-		if (this.isGameOver())
-			return;
+	private updateCollisions(): void {
+		this.getSpawnedBullets().forEach((bullet) => {
+			this.getSpawnedGameObjects().forEach((gameObject) => {
+				// Disable "friendly fire".
+				if ((gameObject instanceof PlayerGameObjectBase && bullet.isEnemyBullet()) ||
+					gameObject instanceof EnemyBase && !bullet.isEnemyBullet()) {
 
+					if (CollisionService.isColliding(bullet, gameObject))
+						this.bulletHitsGameObject(bullet, gameObject);
+				}
+			});
+
+			const positionX = bullet.getPositionX();
+			const width = GameSettings.singleFieldWidth;
+			const isBeyondBorder = bullet.isEnemyBullet() ?
+				((positionX + width) <= 0) :
+				((positionX + width) >= GameSettings.fieldWidth);
+
+			if (isBeyondBorder) {
+				if (bullet.isEnemyBullet())
+					this.enemyHitsPlayer(bullet);
+
+				this.removeGameObject(bullet);
+			}
+		});
+
+		this.getSpawnedEnemies().forEach((enemy) => {
+			if (enemy.getPositionX() <= 0) {
+				this.enemyHitsPlayer(enemy);
+				this.removeGameObject(enemy);
+			}
+
+			// Collides with player game object (tower,..)
+			this.getSpawnedPlayerGameObjects().forEach((gameObject) => {
+				if (CollisionService.isColliding(enemy, gameObject)) {
+					this.enemyHitsPlayerGameObject(enemy, gameObject);
+				}
+			});
+		});
+	}
+	private updateBullets(): void {
 		const lanesWithEnemies = this.getSpawnedEnemies().map(x => x.getLane());
 		this.m_gameObjects.filter(x => x instanceof Tower || x instanceof ShootingEnemy).forEach((x) => {
 			const shootingGameObject = <IShootingGameObject>(<unknown>x);
 			if (!shootingGameObject.isBulletSpawnable())
 				return;
 
-			// Only shoot if enemy in sight
+			// Only shoot if enemy is in sight
 			if (x instanceof PlayerGameObjectBase && lanesWithEnemies.indexOf(x.getLane()) < 0)
 				return;
 
 			const bullet = shootingGameObject.spawnBullet();
 			this.spawnGameObject(bullet);
-			uiService.renderBullet(<GameObject>x, bullet);
 		});
 	}
-	private enemyLoop(uiService: IUIService): void {
+	private enemyLoop(): void {
 		const spawnEnemies = () => {
 			if (this.isGameOver())
 				return;
 
 			const enemy = this.m_enemyWaveService.spawnEnemy();
 			this.spawnGameObject(enemy);
-			uiService.renderEnemy(enemy);
 			setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
 		};
 		setTimeout(spawnEnemies, this.m_enemyWaveService.getEnemySpawnRateInSeconds());
 	}
 
-	public buyGameObject(gameObject: PlayerGameObjectBase): void {
-		this.buy(gameObject);
+	private spawnGameObject(gameObject: GameObjectBase): void {
 		this.m_gameObjects.push(gameObject);
 	}
-	public buy(option: IPricedObject): void {
-		this.m_player.buyItem(option);
-	}
-
-	public spawnGameObject(gameObject: GameObjectBase): void {
-		this.m_gameObjects.push(gameObject);
-	}
-	public removeGameObject(gameObject: GameObjectBase): void {
+	private removeGameObject(gameObject: GameObjectBase): void {
 		const item = this.m_gameObjects.find(x => x.getID() == gameObject.getID());
 		if (item) {
 			const index = this.m_gameObjects.indexOf(item);
@@ -112,7 +178,7 @@ export class Game {
 		}
 	}
 
-	public bulletHitsGameObject(bullet: Bullet, gameObject: GameObject): void {
+	private bulletHitsGameObject(bullet: Bullet, gameObject: GameObject): void {
 		if (gameObject && bullet) {
 			if (gameObject.getHealth() - bullet.getAttackDamage() <= 0) {
 				if (gameObject instanceof EnemyBase)
@@ -125,8 +191,7 @@ export class Game {
 			this.removeGameObject(bullet);
 		}
 	}
-
-	public enemyHitsPlayerGameObject(enemy: EnemyBase, playerGameObject: PlayerGameObjectBase): void {
+	private enemyHitsPlayerGameObject(enemy: EnemyBase, playerGameObject: PlayerGameObjectBase): void {
 		if (enemy && playerGameObject) {
 			playerGameObject.takeDamage(enemy.getAttackDamage());
 			this.removeGameObject(enemy);
@@ -135,45 +200,26 @@ export class Game {
 				this.removeGameObject(playerGameObject);
 		}
 	}
-	public enemyHitsPlayer(attackingGameObject: IAttackingGameObject): void {
+	private enemyHitsPlayer(attackingGameObject: IAttackingGameObject): void {
 		this.m_player.takeDamage(attackingGameObject.getAttackDamage());
 	}
 
-	public isGameOver = (): boolean => this.m_player.getHealth() <= 0 || this.isGameWon();
+	private isGameOver = (): boolean => this.m_player.getHealth() <= 0 || this.isGameWon();
 	private isGameWon = (): boolean => this.m_enemyWaveService.getCurrentWave() >= GameSettings.goalInEnemyWaves + 1;
-	public getGameOverText = (): string => this.isGameWon() ?
+	private getGameOverText = (): string => this.isGameWon() ?
 		"Congratulations! You survived all enemy waves!" :
 		"Game Over";
 
-	public getPlayerStatusInfo(): IPlayerStatusInfo {
-		return {
-			health: this.m_player.getHealth(),
-			coins: this.m_player.getCoins(),
-			startTime: this.m_startTime,
-			currentWave: this.m_enemyWaveService.getCurrentWave()
-		};
-	}
-
-	public getSelectableGameObjectTemplates(): PlayerGameObjectBase[] {
-		return [new Tower(0), new Rampart(0)];
-	}
-
-	public getPlayerGameObjectById(id: number): PlayerGameObjectBase | undefined {
-		return <PlayerGameObjectBase | undefined>this.getSpawnedPlayerGameObjects().find(x => x.getID() == id);
-	}
-	public getBaseGameObjects(): GameObjectBase[] {
-		return this.m_gameObjects;
-	}
-	public getSpawnedGameObjects(): GameObject[] {
+	private getSpawnedGameObjects(): GameObject[] {
 		return <GameObject[]>this.m_gameObjects.filter(x => x instanceof GameObject);
 	}
-	public getSpawnedBullets(): Bullet[] {
+	private getSpawnedBullets(): Bullet[] {
 		return <Bullet[]>this.m_gameObjects.filter(x => x instanceof Bullet);
 	}
-	public getSpawnedEnemies(): EnemyBase[] {
+	private getSpawnedEnemies(): EnemyBase[] {
 		return <EnemyBase[]>this.m_gameObjects.filter(x => x instanceof EnemyBase);
 	}
-	public getSpawnedPlayerGameObjects(): PlayerGameObjectBase[] {
+	private getSpawnedPlayerGameObjects(): PlayerGameObjectBase[] {
 		return <PlayerGameObjectBase[]>this.m_gameObjects.filter(x => x instanceof PlayerGameObjectBase);
 	}
 }

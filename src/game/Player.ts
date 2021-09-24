@@ -1,3 +1,8 @@
+/*
+	=== Player ===
+	Keeps track of player relevant values (coins, health) and provides
+	functions to change them accordingly.
+*/
 import { IPricedObject } from "./Interfaces.js";
 
 export class Player {

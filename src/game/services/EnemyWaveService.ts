@@ -1,3 +1,8 @@
+/*
+	=== Enemy Wave Service ===
+	Is responsible for keeping track of the current enemy wave and enemy wave adjustments.
+	This service decides which enemy will be spawned and defines the corresponding (attack-)values.
+*/
 import { Enemy, EnemyBase, ShootingEnemy } from "../gameObjects/Enemies.js";
 import { GameSettings } from "../GameSettings.js";
 

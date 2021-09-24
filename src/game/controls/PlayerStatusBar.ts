@@ -1,6 +1,6 @@
 /*
 	=== Player Status Bar ===
-	Displays player relevant information (i.E. health, coins, elapsed time).
+	Displays player relevant information (i.E. health, coins, elapsed time, current enemy wave).
 */
 import { GameSettings } from "../GameSettings.js";
 import { IPlayerStatusInfo } from "../Interfaces.js";

@@ -1,22 +1,16 @@
+/*
+	=== Interfaces ===
+	Contains all game relevant interfaces.
+*/
 import { Bullet } from "./gameObjects/Bullet.js";
-import { EnemyBase } from "./gameObjects/Enemies.js";
-import { GameBoard } from "./GameBoard.js";
 import { GameObject } from "./gameObjects/GameObjectBase.js";
 
 export interface IUIService {
 	ensureScreenSizeSupported(showMessageOnFail: boolean): boolean;
-	renderObject(obj: IRenderableObject): void;
-	renderText(textObj: IRenderableText): void;
-	renderAppTitle(title: string): void;
-	renderPlayerStatusBar(statusInfo: IPlayerStatusInfo): void;
-	renderGameObjectSelectionBar(): void;
-	renderGameBoard(gameBoard: GameBoard): void;
+	init(): void;
+	registerInteractionHandlers(): void;
 	renderMessageWithTitle(title: string, message: string): Promise<void>;
 	renderMessage(message: string): Promise<void>;
-	registerInteractionHandlers(): void;
-	renderBullet(from: GameObject, bullet: Bullet): void;
-	renderEnemy(enemy: EnemyBase): void;
-	addGameObject(target: HTMLDivElement): void;
 	refreshUI(): void;
 }
 

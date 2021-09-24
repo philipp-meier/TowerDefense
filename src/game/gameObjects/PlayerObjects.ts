@@ -1,3 +1,8 @@
+/*
+	=== Player Game Objects ===
+	Contains all player game objects. Player game objects are stationary objects like "Rampart" and "Tower",
+	which may offer options like (for example) upgrades. New player game objects can be derived from "PlayerGameObjectBase".
+*/
 import { GameSettings } from "../GameSettings.js";
 import { IGameObjectOption, IPricedObject, IShootingGameObject } from "../Interfaces.js";
 import { Bullet } from "./Bullet.js";
@@ -8,8 +13,8 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 	private m_price: number;
 	private m_initialSvg: string;
 
-	constructor(lane: number, classIdentifier: string, svg: string, price: number) {
-		super(lane, svg);
+	constructor(lane: number, posX: number, classIdentifier: string, svg: string, price: number) {
+		super(lane, posX, svg);
 		this.m_initialSvg = svg;
 		this.m_price = price;
 		this.m_classIdentifier = classIdentifier;
@@ -32,11 +37,13 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 			}
 		};
 	}
+
+	protected isStationary = (): boolean => true;
 }
 
 export class Rampart extends PlayerGameObjectBase {
-	constructor(lane: number) {
-		super(lane, "Rampart", "Rampart/rampart.svg", GameSettings.rampartPrice);
+	constructor(lane: number, posX: number) {
+		super(lane, posX, "Rampart", "Rampart/rampart.svg", GameSettings.rampartPrice);
 
 		this.m_health = GameSettings.rampartHealth;
 		this.m_maxHealth = GameSettings.rampartHealth;
@@ -55,8 +62,8 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	private m_attackDamage: number;
 	private m_isBulletSpawnable: boolean;
 
-	constructor(lane: number) {
-		super(lane, "Tower", "Tower/level1.svg", GameSettings.towerPrice);
+	constructor(lane: number, posX: number) {
+		super(lane, posX, "Tower", "Tower/level1.svg", GameSettings.towerPrice);
 
 		this.m_bulletSvg = "Tower/bullets1.svg";
 		this.m_currentUpgradeLevel = 0;
@@ -99,7 +106,7 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 
 		this.m_isBulletSpawnable = false;
 		setTimeout(() => { this.m_isBulletSpawnable = true; }, GameSettings.towerBulletSpawnTimeInMs);
-		return new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
+		return new Bullet(this.getLane(), this.getPositionX(), this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
 	}
 
 	public isBulletSpawnable = (): boolean => this.m_isBulletSpawnable;
