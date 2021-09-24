@@ -74,14 +74,15 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 		this.m_attackDamage = GameSettings.towerAttackDamage;
 	}
 
-	private createUpgradeGameObjectOption(title: string, svgName: string, bulletSvgName: string, price: number, isAvailable: boolean): IGameObjectOption {
+	private createUpgradeGameObjectOption(title: string, price: number, isAvailable = true): IGameObjectOption {
 		return {
 			title: `${price}$ - ${title}`,
 			isAvailable: isAvailable,
 			execute: () => {
 				this.m_currentUpgradeLevel++;
-				this.m_svg = svgName;
-				this.m_bulletSvg = bulletSvgName;
+
+				this.m_svg = this.getTowerSvg(this.m_currentUpgradeLevel);
+				this.m_bulletSvg = this.getBulletSvg(this.m_currentUpgradeLevel);
 				this.m_attackDamage += GameSettings.towerUpgradeDamageIncrease;
 				this.m_hasSvgChanged = true;
 			},
@@ -92,9 +93,9 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	public getOptions = (): IGameObjectOption[] => {
 		const options: IGameObjectOption[] = [];
 		if (this.m_currentUpgradeLevel == 0)
-			options.push(this.createUpgradeGameObjectOption("Upgrade 1", this.getTowerSvg(1), this.getBulletSvg(1), GameSettings.towerUpgrade1Price, true));
+			options.push(this.createUpgradeGameObjectOption("Upgrade 1", GameSettings.towerUpgrade1Price));
 		else if (this.m_currentUpgradeLevel == 1)
-			options.push(this.createUpgradeGameObjectOption("Upgrade 2", this.getTowerSvg(2), this.getBulletSvg(2), GameSettings.towerUpgrade2Price, true));
+			options.push(this.createUpgradeGameObjectOption("Upgrade 2", GameSettings.towerUpgrade2Price));
 
 		options.push(this.createRepairOption(GameSettings.towerRepairPrice));
 		return options;
@@ -113,9 +114,10 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 	public getAttackDamage = (): number => this.m_attackDamage;
 
-	private getTowerSvg = (upgradeLevel: number): string => `tower/upgrade${upgradeLevel}/base.svg`;
-	private getBulletSvg = (upgradeLevel: number): string => `tower/upgrade${upgradeLevel}/bullets.svg`;
 	protected getFullHealthSvg = (): string => this.getTowerSvg(this.m_currentUpgradeLevel);
 	protected getDamageSvg1 = (): string => `tower/upgrade${this.m_currentUpgradeLevel}/damaged1.svg`;
 	protected getDamageSvg2 = (): string => `tower/upgrade${this.m_currentUpgradeLevel}/damaged2.svg`;
+
+	private getTowerSvg = (upgradeLevel: number): string => `tower/upgrade${upgradeLevel}/base.svg`;
+	private getBulletSvg = (upgradeLevel: number): string => `tower/upgrade${upgradeLevel}/bullets.svg`;
 }
