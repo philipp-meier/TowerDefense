@@ -22,17 +22,10 @@ export class ControlBuilder {
 
 		return htmlElement;
 	}
+
 	public static createDiv(parent: HTMLElement | null = null, cssClass: string | null = null): HTMLDivElement {
 		return <HTMLDivElement>this.createHtmlElement('div', parent, cssClass);
 	}
-
-	public static createUListElement(parent: HTMLElement | null, cssClass: string | null = null): HTMLUListElement {
-		return <HTMLUListElement>this.createHtmlElement('ul', parent, cssClass);
-	}
-	public static createListElement(parent: HTMLElement | null, cssClass: string | null): HTMLLIElement {
-		return <HTMLLIElement>this.createHtmlElement('li', parent, cssClass);
-	}
-
 	public static createSpan(parent: HTMLElement, text: string, cssClass: string | null = null): HTMLSpanElement {
 		const span = <HTMLSpanElement>this.createHtmlElement('span', parent, cssClass);
 		span.textContent = text;
@@ -46,7 +39,6 @@ export class ControlBuilder {
 		btn.onclick = onClick;
 		return btn;
 	}
-
 	public static createText(textObj: IRenderableText): HTMLElement {
 		const container = ControlBuilder.createObject(textObj);
 		ControlBuilder.createSpan(container, textObj.text, null);
@@ -64,8 +56,8 @@ export class ControlBuilder {
 	}
 	private static createGameBoardGridLayer(parent: HTMLElement, gameBoard: GameBoard, typeName: string, structureOnly = false): HTMLDivElement {
 		const gameFields = gameBoard.GameFields();
-		const fieldHeight = GameSettings.fieldHeight / GameSettings.rowCount;
-		const fieldWidth = GameSettings.fieldWidth / GameSettings.columnCount;
+		const fieldHeight = GameSettings.singleFieldHeight;
+		const fieldWidth = GameSettings.singleFieldWidth;
 
 		const gridLayerContainer = ControlBuilder.createDiv(parent, `${typeName}-layer`);
 		for (let i = 0; i < gameFields.length; i++) {
@@ -89,7 +81,7 @@ export class ControlBuilder {
 		return gridLayerContainer;
 	}
 
-	public static createGameObjectSelectionbar(selectableGameObjects: PlayerGameObjectBase[]): HTMLDivElement {
+	public static createGameObjectSelectionBar(selectableGameObjects: PlayerGameObjectBase[]): HTMLDivElement {
 		const renderInfo = { height: 102, width: GameSettings.fieldWidth - 6, cssClass: "selection-bar" };
 		const selectionBar = ControlBuilder.createDiv(null, renderInfo.cssClass);
 		ControlBuilder.SetPosition(selectionBar, renderInfo);
@@ -115,51 +107,49 @@ export class ControlBuilder {
 		return selectionBar;
 	}
 
-	public static createGameObject(fromElement: HTMLDivElement, gameObject: GameObjectBase, className: string, offsetLeft: number | null = null): HTMLDivElement {
+	public static createGameObject(gameObject: GameObjectBase, className: string, offsetLeft = 0): HTMLDivElement {
 		const gameObjectDiv = ControlBuilder.createDiv(null, className);
 		gameObjectDiv.style.backgroundImage = `url('${GameSettings.svgPath}${gameObject.getSvg()}')`;
-		gameObjectDiv.style.height = ControlBuilder.getUnitString(GameSettings.fieldHeight / GameSettings.rowCount);
-		gameObjectDiv.style.width = ControlBuilder.getUnitString(GameSettings.fieldWidth / GameSettings.columnCount);
 		gameObjectDiv.dataset.gameObjectId = gameObject.getID().toString();
-		gameObjectDiv.style.top = fromElement.style.top;
 
-		if (offsetLeft)
-			gameObjectDiv.style.left = ControlBuilder.addToUnitString(fromElement.style.left, offsetLeft);
-		else
-			gameObjectDiv.style.left = fromElement.style.left;
+		gameObjectDiv.style.height = ControlBuilder.getUnitString(GameSettings.singleFieldHeight);
+		gameObjectDiv.style.width = ControlBuilder.getUnitString(GameSettings.singleFieldWidth);
+		gameObjectDiv.style.top = ControlBuilder.getUnitString(gameObject.getLane() * GameSettings.singleFieldHeight);
+		gameObjectDiv.style.left = ControlBuilder.getUnitString(gameObject.getPositionX() + offsetLeft);
 
 		if (gameObject instanceof GameObject)
 			ControlBuilder.createHealthBar(gameObjectDiv);
 
 		return gameObjectDiv;
 	}
-
-	public static createHealthBar(parent: HTMLDivElement): HTMLDivElement {
+	private static createHealthBar(parent: HTMLDivElement): HTMLDivElement {
 		const healthBarContainer = ControlBuilder.createDiv(parent, 'health-bar');
 		ControlBuilder.createDiv(healthBarContainer, 'value');
 
-		healthBarContainer.style.width = ControlBuilder.getUnitString(GameSettings.fieldWidth / GameSettings.columnCount);
+		healthBarContainer.style.width = ControlBuilder.getUnitString(GameSettings.singleFieldWidth);
 		healthBarContainer.style.height = ControlBuilder.getUnitString(8);
 		return healthBarContainer;
 	}
-
-	public static createObject(obj: IRenderableObject): HTMLElement {
+	private static createObject(obj: IRenderableObject): HTMLElement {
 		const container = ControlBuilder.createDiv(null, obj.cssClass);
 		ControlBuilder.SetPosition(container, obj);
 		return container;
 	}
+
 	public static SetPosition(element: HTMLElement, ro: IRenderableObject): void {
 		element.style.width = ControlBuilder.getUnitString(ro.width);
 		element.style.height = ControlBuilder.getUnitString(ro.height);
-	}
-	private static addToUnitString(unitString: string, value: number): string {
-		const currentValue = ControlBuilder.getNumberWithoutUnit(unitString);
-		return ControlBuilder.getUnitString(currentValue + value);
 	}
 	public static getNumberWithoutUnit(unitText: string): number {
 		return Number(unitText.replace(ControlBuilder.CssUnit, ''));
 	}
 	public static getUnitString(n: number): string {
 		return `${n}${ControlBuilder.CssUnit}`;
+	}
+	public static getGameObjectId(container: HTMLDivElement): number | null {
+		if (container && container.dataset.gameObjectId)
+			return parseInt(container.dataset.gameObjectId);
+
+		return null;
 	}
 }

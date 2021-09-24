@@ -1,26 +1,48 @@
+/*
+	=== Game Objects ===
+	Contains the base game objects, from which enemy- and player game objects are derived.
+	Behavior which is defined here, will apply to all game objects.
+*/
 export abstract class GameObjectBase {
 	private static currentId = 1;
-	private m_id: number;
 	protected m_svg: string;
 
-	constructor(svg: string) {
-		this.m_svg = svg;
+	private m_id: number;
+	private m_posX: number;
+	private m_gameBoardLane: number;
+	private m_moveSpeed: number;
+
+	constructor(lane: number, posX: number, svg: string, moveSpeed = 0) {
 		this.m_id = GameObjectBase.currentId++;
+		this.m_svg = svg;
+		this.m_gameBoardLane = lane;
+		this.m_posX = posX;
+		this.m_moveSpeed = moveSpeed;
+	}
+
+	public update(): void {
+		if (!this.isStationary()) {
+			// Move game object
+			this.m_posX += (this.m_moveSpeed * this.getMoveDirection());
+		}
 	}
 
 	public getID = (): number => this.m_id;
 	public getSvg = (): string => this.m_svg;
+	public getPositionX = (): number => this.m_posX;
+	public getLane = (): number => this.m_gameBoardLane;
+
+	protected abstract isStationary(): boolean;
+	protected getMoveDirection = (): number => 1; // 1 = Left to right, -1 = Right to left
 }
 
 export abstract class GameObject extends GameObjectBase {
 	protected m_health = 100;
 	protected m_maxHealth = 100;
 	protected m_hasSvgChanged = false;
-	private m_gameBoardLane: number;
 
-	constructor(lane: number, svg: string) {
-		super(svg);
-		this.m_gameBoardLane = lane;
+	constructor(lane: number, posX: number, svg: string, moveSpeed = 0) {
+		super(lane, posX, svg, moveSpeed);
 	}
 
 	public takeDamage(damage: number): void {
@@ -43,7 +65,6 @@ export abstract class GameObject extends GameObjectBase {
 	public getHealth = (): number => this.m_health;
 	public getMaxHealth = (): number => this.m_maxHealth;
 	public getHealthInPercent = (): number => this.m_health / this.m_maxHealth * 100;
-	public getLane = (): number => this.m_gameBoardLane;
 
 	public hasSvgChanged = (): boolean => this.m_hasSvgChanged;
 	public acknowledgeSvgChange = (): void => { this.m_hasSvgChanged = false; }

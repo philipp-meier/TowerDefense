@@ -1,3 +1,8 @@
+/*
+	=== Enemies ===
+	Contains all enemy game objects. The classes "Enemy" and "ShootingEnemy" can also be used as base classes
+	for new enemy types, since all values and images can be configured individually.
+*/
 import { GameSettings } from "../GameSettings.js";
 import { IAttackingGameObject, IShootingGameObject } from "../Interfaces.js";
 import { Bullet } from "./Bullet.js";
@@ -11,11 +16,9 @@ export interface IWaveDependentValues {
 
 export abstract class EnemyBase extends GameObject implements IAttackingGameObject {
 	private m_damage: number;
-	private m_moveSpeed: number;
 
 	constructor(lane: number, svgPath: string, waveValues: IWaveDependentValues) {
-		super(lane, svgPath);
-		this.m_moveSpeed = GameSettings.enemyMoveSpeed;
+		super(lane, (GameSettings.fieldWidth - GameSettings.singleFieldWidth), svgPath, GameSettings.enemyMoveSpeed);
 
 		// Wave dependent values
 		this.m_damage = waveValues.attackDamage;
@@ -26,19 +29,21 @@ export abstract class EnemyBase extends GameObject implements IAttackingGameObje
 	public abstract getCoins(): number;
 	public abstract getAttackSpeed(): number;
 	public getAttackDamage = (): number => this.m_damage;
-	public getMoveSpeed = (): number => this.m_moveSpeed;
+
+	protected isStationary = (): boolean => false;
+	protected getMoveDirection = (): number => -1;
 }
 
 export class Enemy extends EnemyBase {
 	constructor(lane: number, waveValues: IWaveDependentValues) {
-		super(lane, "Enemy/enemy.svg", waveValues);
+		super(lane, "enemy/base.svg", waveValues);
 	}
 
 	public getCoins = (): number => GameSettings.enemyCoins;
 	public getAttackSpeed = (): number => { throw new Error('Not supported'); }
 
-	protected getDamageSvg1 = (): string => "Enemy/enemy_damaged1.svg";
-	protected getDamageSvg2 = (): string => "Enemy/enemy_damaged2.svg";
+	protected getDamageSvg1 = (): string => "enemy/damaged1.svg";
+	protected getDamageSvg2 = (): string => "enemy/damaged2.svg";
 }
 
 export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
@@ -46,7 +51,7 @@ export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
 	private m_isBulletSpawnable: boolean;
 
 	constructor(lane: number, waveValues: IWaveDependentValues) {
-		super(lane, "Enemy/shootingEnemy.svg", waveValues);
+		super(lane, "shootingEnemy/base.svg", waveValues);
 
 		// Wave dependent values
 		this.m_isBulletSpawnable = true;
@@ -59,13 +64,13 @@ export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
 
 		this.m_isBulletSpawnable = false;
 		setTimeout(() => { this.m_isBulletSpawnable = true; }, GameSettings.shootingEnemyBulletSpawnTimeInMs);
-		return new Bullet('Enemy/bullets.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
+		return new Bullet(this.getLane(), this.getPositionX(), 'shootingEnemy/bullets.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
 	}
 
 	public isBulletSpawnable = (): boolean => this.m_isBulletSpawnable;
 	public getCoins = (): number => GameSettings.shootingEnemyCoins;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 
-	protected getDamageSvg1 = (): string => "Enemy/shootingEnemy_damaged1.svg";
-	protected getDamageSvg2 = (): string => "Enemy/shootingEnemy_damaged2.svg";
+	protected getDamageSvg1 = (): string => "shootingEnemy/damaged1.svg";
+	protected getDamageSvg2 = (): string => "shootingEnemy/damaged2.svg";
 }

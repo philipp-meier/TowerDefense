@@ -1,3 +1,8 @@
+/*
+	=== Player Game Objects ===
+	Contains all player game objects. Player game objects are stationary objects like "Rampart" and "Tower",
+	which may offer options like (for example) upgrades. New player game objects can be derived from "PlayerGameObjectBase".
+*/
 import { GameSettings } from "../GameSettings.js";
 import { IGameObjectOption, IPricedObject, IShootingGameObject } from "../Interfaces.js";
 import { Bullet } from "./Bullet.js";
@@ -8,8 +13,8 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 	private m_price: number;
 	private m_initialSvg: string;
 
-	constructor(lane: number, classIdentifier: string, svg: string, price: number) {
-		super(lane, svg);
+	constructor(lane: number, posX: number, classIdentifier: string, svg: string, price: number) {
+		super(lane, posX, svg);
 		this.m_initialSvg = svg;
 		this.m_price = price;
 		this.m_classIdentifier = classIdentifier;
@@ -32,11 +37,13 @@ export abstract class PlayerGameObjectBase extends GameObject implements IPriced
 			}
 		};
 	}
+
+	protected isStationary = (): boolean => true;
 }
 
 export class Rampart extends PlayerGameObjectBase {
-	constructor(lane: number) {
-		super(lane, "Rampart", "Rampart/rampart.svg", GameSettings.rampartPrice);
+	constructor(lane: number, posX: number) {
+		super(lane, posX, "Rampart", "rampart/base.svg", GameSettings.rampartPrice);
 
 		this.m_health = GameSettings.rampartHealth;
 		this.m_maxHealth = GameSettings.rampartHealth;
@@ -44,8 +51,8 @@ export class Rampart extends PlayerGameObjectBase {
 
 	public getOptions = (): IGameObjectOption[] => [this.createRepairOption(GameSettings.rampartRepairPrice)];
 
-	protected getDamageSvg1 = (): string => "Rampart/rampart_damaged1.svg";
-	protected getDamageSvg2 = (): string => "Rampart/rampart_damaged2.svg";
+	protected getDamageSvg1 = (): string => "rampart/damaged1.svg";
+	protected getDamageSvg2 = (): string => "rampart/damaged2.svg";
 }
 
 export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
@@ -55,10 +62,10 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	private m_attackDamage: number;
 	private m_isBulletSpawnable: boolean;
 
-	constructor(lane: number) {
-		super(lane, "Tower", "Tower/level1.svg", GameSettings.towerPrice);
+	constructor(lane: number, posX: number) {
+		super(lane, posX, "Tower", "tower/upgrade0/base.svg", GameSettings.towerPrice);
 
-		this.m_bulletSvg = "Tower/bullets1.svg";
+		this.m_bulletSvg = this.getBulletSvg(0);
 		this.m_currentUpgradeLevel = 0;
 		this.m_isBulletSpawnable = true;
 		this.m_health = GameSettings.towerHealth;
@@ -67,14 +74,15 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 		this.m_attackDamage = GameSettings.towerAttackDamage;
 	}
 
-	private createUpgradeGameObjectOption(title: string, svgName: string, bulletSvgName: string, price: number, isAvailable: boolean): IGameObjectOption {
+	private createUpgradeGameObjectOption(title: string, price: number, isAvailable = true): IGameObjectOption {
 		return {
 			title: `${price}$ - ${title}`,
 			isAvailable: isAvailable,
 			execute: () => {
 				this.m_currentUpgradeLevel++;
-				this.m_svg = svgName;
-				this.m_bulletSvg = bulletSvgName;
+
+				this.m_svg = this.getTowerSvg(this.m_currentUpgradeLevel);
+				this.m_bulletSvg = this.getBulletSvg(this.m_currentUpgradeLevel);
 				this.m_attackDamage += GameSettings.towerUpgradeDamageIncrease;
 				this.m_hasSvgChanged = true;
 			},
@@ -85,9 +93,9 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	public getOptions = (): IGameObjectOption[] => {
 		const options: IGameObjectOption[] = [];
 		if (this.m_currentUpgradeLevel == 0)
-			options.push(this.createUpgradeGameObjectOption("Upgrade 1", "Tower/level2.svg", "Tower/bullets2.svg", GameSettings.towerUpgrade1Price, true));
+			options.push(this.createUpgradeGameObjectOption("Upgrade 1", GameSettings.towerUpgrade1Price));
 		else if (this.m_currentUpgradeLevel == 1)
-			options.push(this.createUpgradeGameObjectOption("Upgrade 2", "Tower/level3.svg", "Tower/bullets3.svg", GameSettings.towerUpgrade2Price, true));
+			options.push(this.createUpgradeGameObjectOption("Upgrade 2", GameSettings.towerUpgrade2Price));
 
 		options.push(this.createRepairOption(GameSettings.towerRepairPrice));
 		return options;
@@ -99,14 +107,17 @@ export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 
 		this.m_isBulletSpawnable = false;
 		setTimeout(() => { this.m_isBulletSpawnable = true; }, GameSettings.towerBulletSpawnTimeInMs);
-		return new Bullet(this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
+		return new Bullet(this.getLane(), this.getPositionX(), this.m_bulletSvg, this.m_attackDamage, this.m_attackSpeed);
 	}
 
 	public isBulletSpawnable = (): boolean => this.m_isBulletSpawnable;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 	public getAttackDamage = (): number => this.m_attackDamage;
 
-	protected getFullHealthSvg = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}.svg`;
-	protected getDamageSvg1 = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}_damaged1.svg`;
-	protected getDamageSvg2 = (): string => `Tower/level${this.m_currentUpgradeLevel + 1}_damaged2.svg`;
+	protected getFullHealthSvg = (): string => this.getTowerSvg(this.m_currentUpgradeLevel);
+	protected getDamageSvg1 = (): string => `tower/upgrade${this.m_currentUpgradeLevel}/damaged1.svg`;
+	protected getDamageSvg2 = (): string => `tower/upgrade${this.m_currentUpgradeLevel}/damaged2.svg`;
+
+	private getTowerSvg = (upgradeLevel: number): string => `tower/upgrade${upgradeLevel}/base.svg`;
+	private getBulletSvg = (upgradeLevel: number): string => `tower/upgrade${upgradeLevel}/bullets.svg`;
 }

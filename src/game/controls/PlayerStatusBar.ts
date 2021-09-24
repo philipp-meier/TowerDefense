@@ -1,6 +1,6 @@
 /*
 	=== Player Status Bar ===
-	Displays player relevant information (i.E. health, coins, elapsed time).
+	Displays player relevant information (i.E. health, coins, elapsed time, current enemy wave).
 */
 import { GameSettings } from "../GameSettings.js";
 import { IPlayerStatusInfo } from "../Interfaces.js";
@@ -23,7 +23,7 @@ export class PlayerStatusBar {
 		statusBarItem.title = description || "";
 
 		const imgDiv = ControlBuilder.createDiv(statusBarItem, "icon");
-		imgDiv.style.backgroundImage = `url('${GameSettings.svgPath}StatusBar/${svgName}')`;
+		imgDiv.style.backgroundImage = `url('${GameSettings.svgPath}statusBar/${svgName}')`;
 
 		ControlBuilder.createSpan(statusBarItem, value.toString(), null);
 		parent.append(statusBarItem);

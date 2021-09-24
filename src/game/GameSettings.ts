@@ -1,3 +1,7 @@
+/*
+	=== Game Settings ===
+	Contains all parameters which can be configured and are useful to balance the game.
+*/
 export const GameSettings = {
 	// Objective / Goal
 	goalInEnemyWaves: 5,
@@ -9,6 +13,8 @@ export const GameSettings = {
 	fieldHeight: 600,
 	rowCount: 6,
 	columnCount: 12,
+	singleFieldWidth: 100,
+	singleFieldHeight: 100,
 	svgPath: "img/",
 
 	// Spawn time
