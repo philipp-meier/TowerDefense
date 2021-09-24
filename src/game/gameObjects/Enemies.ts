@@ -36,14 +36,14 @@ export abstract class EnemyBase extends GameObject implements IAttackingGameObje
 
 export class Enemy extends EnemyBase {
 	constructor(lane: number, waveValues: IWaveDependentValues) {
-		super(lane, "Enemy/enemy.svg", waveValues);
+		super(lane, "enemy/base.svg", waveValues);
 	}
 
 	public getCoins = (): number => GameSettings.enemyCoins;
 	public getAttackSpeed = (): number => { throw new Error('Not supported'); }
 
-	protected getDamageSvg1 = (): string => "Enemy/enemy_damaged1.svg";
-	protected getDamageSvg2 = (): string => "Enemy/enemy_damaged2.svg";
+	protected getDamageSvg1 = (): string => "enemy/damaged1.svg";
+	protected getDamageSvg2 = (): string => "enemy/damaged2.svg";
 }
 
 export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
@@ -51,7 +51,7 @@ export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
 	private m_isBulletSpawnable: boolean;
 
 	constructor(lane: number, waveValues: IWaveDependentValues) {
-		super(lane, "Enemy/shootingEnemy.svg", waveValues);
+		super(lane, "shootingEnemy/base.svg", waveValues);
 
 		// Wave dependent values
 		this.m_isBulletSpawnable = true;
@@ -64,13 +64,13 @@ export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
 
 		this.m_isBulletSpawnable = false;
 		setTimeout(() => { this.m_isBulletSpawnable = true; }, GameSettings.shootingEnemyBulletSpawnTimeInMs);
-		return new Bullet(this.getLane(), this.getPositionX(), 'Enemy/bullets.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
+		return new Bullet(this.getLane(), this.getPositionX(), 'shootingEnemy/bullets.svg', this.getAttackDamage(), this.getAttackSpeed(), true);
 	}
 
 	public isBulletSpawnable = (): boolean => this.m_isBulletSpawnable;
 	public getCoins = (): number => GameSettings.shootingEnemyCoins;
 	public getAttackSpeed = (): number => this.m_attackSpeed;
 
-	protected getDamageSvg1 = (): string => "Enemy/shootingEnemy_damaged1.svg";
-	protected getDamageSvg2 = (): string => "Enemy/shootingEnemy_damaged2.svg";
+	protected getDamageSvg1 = (): string => "shootingEnemy/damaged1.svg";
+	protected getDamageSvg2 = (): string => "shootingEnemy/damaged2.svg";
 }
