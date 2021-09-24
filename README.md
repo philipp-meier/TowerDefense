@@ -1,2 +1,5 @@
 # TowerDefense
-A Simple Tower Defense Game written in Typescript.
+A simple Tower Defense Game written in Typescript.
+
+## License
+This project is under the [MIT license](LICENSE).
