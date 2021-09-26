@@ -13,10 +13,10 @@ export class PlayerStatusBar {
 		const statusBar = ControlBuilder.createDiv(parent, renderInfo.cssClass);
 		ControlBuilder.SetPosition(statusBar, renderInfo);
 
-		this.createPlayerStatusBarItem(statusBar, "health.svg", statusInfo.health.toFixed(), "health", "Health");
-		this.createPlayerStatusBarItem(statusBar, "coin.svg", statusInfo.coins.toFixed(), "coins", "Coins");
-		this.createPlayerStatusBarItem(statusBar, "enemyWave.svg", "1", "enemy-wave", "Current Wave");
-		this.createPlayerStatusBarItem(statusBar, "timer.svg", "00:00:00", "timer", "Elapsed time");
+		this.createPlayerStatusBarItem(statusBar, "health.png", statusInfo.health.toFixed(), "health", "Health");
+		this.createPlayerStatusBarItem(statusBar, "coin.png", statusInfo.coins.toFixed(), "coins", "Coins");
+		this.createPlayerStatusBarItem(statusBar, "enemyWave.png", "1", "enemy-wave", "Current Wave");
+		this.createPlayerStatusBarItem(statusBar, "timer.png", "00:00:00", "timer", "Elapsed time");
 	}
 	private createPlayerStatusBarItem(parent: HTMLElement, svgName: string, value: string, className: string, description: string | null = null): void {
 		const statusBarItem = ControlBuilder.createDiv(null, className);
