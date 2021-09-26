@@ -1,8 +1,6 @@
 # TowerDefense
 A simple Tower Defense Game written in Typescript.
 
-![Screenshot](https://repository-images.githubusercontent.com/398761673/b6d8937a-d44e-4014-af13-dd4afa51df2d)
-
 ## Getting started
 ```shell
 git clone https://github.com/philipp-meier/TowerDefense.git
