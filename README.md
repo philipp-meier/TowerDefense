@@ -1,5 +1,5 @@
 # TowerDefense
-A simple Tower Defense Game written in Typescript. [Try it!](http://23.88.105.38/)
+A simple Tower Defense Game written in Typescript. [Try it!](https://www.p-meier.dev/)
 
 ## Current state
 Work in progress. Currently, the game images are being reworked.
