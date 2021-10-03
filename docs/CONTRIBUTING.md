@@ -1,7 +1,7 @@
 # Contributing
 First of all, thank you for considering to contribute to this project!
 
-If you want to contribute to this project, please ensure, that you follow these rules:
+If you want to contribute, please ensure, that you follow these rules:
 1) Use only royalty-free assets.
 2) Develop with the current software architecture in mind, or change it for the better.
 3) Don't submit unused code.
