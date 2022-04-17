@@ -15,6 +15,13 @@ npm run run
 # open http://localhost:8080
 ```
 
+## Docker
+```
+npm run build
+docker build -t tower-defense-2d .
+docker run -it -d -p 80:80 tower-defense-2d
+```
+
 ## Contributing
 Feel free to fork and modify this project as you like.  
 If you want to contribute directly to this project, please consider the rules mentioned [here](docs/CONTRIBUTING.md).
