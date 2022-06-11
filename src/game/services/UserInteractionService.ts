@@ -53,7 +53,7 @@ export class UserInteractionService {
 
 			const gameObject = this.m_game.getPlayerGameObjectById(gameObjectID);
 			if (gameObject) {
-				contextMenu.show(gameObject, event.pageX, event.pageY, (gameObject: GameObject, option: IGameObjectOption) => {
+				contextMenu.show(gameObject, event.pageX, event.pageY, (_gameObject: GameObject, option: IGameObjectOption) => {
 					try {
 						this.m_game.buy(option);
 						option.execute();
