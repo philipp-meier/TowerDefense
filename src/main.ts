@@ -1,5 +1,6 @@
 import { UIService } from './game/services/UIService.js';
 import { Game } from './game/Game.js';
+import '../styles/main.less'
 
 (() => {
 	const main = document.getElementById("main");

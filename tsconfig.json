@@ -1,17 +1,25 @@
 {
-	"compilerOptions": {
-		"target": "ES6",
-		"module": "ES2015",
-		"strict": true,
-		"noImplicitAny": true,
-		"removeComments": true,
-		"preserveConstEnums": true,
-		"moduleResolution": "Node",
-		"esModuleInterop": true,
-		"rootDir": "src",
-		"outDir": "www/js"
-	},
-	"exclude": [
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "module": "ESNext",
+    "lib": ["ESNext", "DOM"],
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noEmit": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "removeComments": true,
+    "skipLibCheck": true
+  },
+  "include": ["src"],
+  "exclude": [
 		"test"
 	]
 }

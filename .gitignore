@@ -1,8 +1,7 @@
-docs
+idea
+src/**/*.js
 
-# Files will be compiled on build (tsc, lessc)
-www/js/
-www/css/
+docs
 
 # Logs
 logs

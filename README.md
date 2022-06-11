@@ -11,7 +11,7 @@ Work in progress. Currently, the game images are being reworked.
 git clone https://github.com/philipp-meier/TowerDefense.git
 cd TowerDefense
 npm install
-npm run run
+npm run dev
 # open http://localhost:8080
 ```
 
