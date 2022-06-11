@@ -1,0 +1,14 @@
+{
+    "image": "mcr.microsoft.com/vscode/devcontainers/typescript-node:0-12",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "vscode-icons-team.vscode-icons",
+                "EditorConfig.EditorConfig",
+                "dbaeumer.vscode-eslint",
+                "antfu.vite",
+                "jock.svg"
+            ]
+        }
+    }
+}

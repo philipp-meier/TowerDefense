@@ -7,16 +7,16 @@ A simple Tower Defense Game written in Typescript. [Try it!](https://www.p-meier
 Work in progress. Currently, the game images are being reworked.
 
 ## Getting started
-```shell
+```bash
 git clone https://github.com/philipp-meier/TowerDefense.git
 cd TowerDefense
+# run in dev-container with "npm run dev" or local with:
 npm install
 npm run dev
-# open http://localhost:8080
 ```
 
 ## Docker
-```
+```bash
 npm run build
 docker build -t tower-defense-2d .
 docker run -it -d -p 80:80 tower-defense-2d
