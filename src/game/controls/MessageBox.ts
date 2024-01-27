@@ -5,7 +5,7 @@
 import { ControlBuilder } from "./ControlBuilder.js";
 
 export class MessageBox {
-	private m_container: HTMLDivElement;
+	private readonly m_container: HTMLDivElement;
 
 	constructor(p: HTMLDivElement) {
 		this.m_container = p;

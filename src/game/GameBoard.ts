@@ -5,7 +5,7 @@
 import { IGameField } from "./Interfaces.js";
 
 export class GameBoard {
-	private m_GameFields: IGameField[][];
+	private readonly m_GameFields: IGameField[][];
 
 	constructor(rowCount: number, columnCount: number) {
 		this.m_GameFields = this.createGameFieldArray(rowCount, columnCount);

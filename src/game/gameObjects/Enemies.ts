@@ -15,9 +15,9 @@ export interface IWaveDependentValues {
 }
 
 export abstract class EnemyBase extends GameObject implements IAttackingGameObject {
-	private m_damage: number;
+	private readonly m_damage: number;
 
-	constructor(lane: number, svgPath: string, waveValues: IWaveDependentValues) {
+	protected constructor(lane: number, svgPath: string, waveValues: IWaveDependentValues) {
 		super(lane, (GameSettings.fieldWidth - GameSettings.singleFieldWidth), svgPath, GameSettings.enemyMoveSpeed);
 
 		// Wave dependent values
@@ -47,7 +47,7 @@ export class Enemy extends EnemyBase {
 }
 
 export class ShootingEnemy extends EnemyBase implements IShootingGameObject {
-	private m_attackSpeed: number;
+	private readonly m_attackSpeed: number;
 	private m_isBulletSpawnable: boolean;
 
 	constructor(lane: number, waveValues: IWaveDependentValues) {

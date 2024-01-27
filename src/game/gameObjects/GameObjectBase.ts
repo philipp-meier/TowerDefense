@@ -7,12 +7,12 @@ export abstract class GameObjectBase {
 	private static currentId = 1;
 	protected m_svg: string;
 
-	private m_id: number;
+	private readonly m_id: number;
+	private readonly m_gameBoardLane: number;
+	private readonly m_moveSpeed: number;
 	private m_posX: number;
-	private m_gameBoardLane: number;
-	private m_moveSpeed: number;
 
-	constructor(lane: number, posX: number, svg: string, moveSpeed = 0) {
+	protected constructor(lane: number, posX: number, svg: string, moveSpeed = 0) {
 		this.m_id = GameObjectBase.currentId++;
 		this.m_svg = svg;
 		this.m_gameBoardLane = lane;
@@ -41,7 +41,7 @@ export abstract class GameObject extends GameObjectBase {
 	protected m_maxHealth = 100;
 	protected m_hasSvgChanged = false;
 
-	constructor(lane: number, posX: number, svg: string, moveSpeed = 0) {
+	protected constructor(lane: number, posX: number, svg: string, moveSpeed = 0) {
 		super(lane, posX, svg, moveSpeed);
 	}
 

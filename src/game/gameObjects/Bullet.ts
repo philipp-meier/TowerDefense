@@ -6,9 +6,9 @@ import { IAttackingGameObject } from "../Interfaces.js";
 import { GameObjectBase } from "./GameObjectBase.js";
 
 export class Bullet extends GameObjectBase implements IAttackingGameObject {
-	private m_damage: number;
-	private m_speed: number;
-	private m_isEnemyBullet: boolean;
+	private readonly m_damage: number;
+	private readonly m_speed: number;
+	private readonly m_isEnemyBullet: boolean;
 
 	constructor(lane: number, posX: number, svgName: string, damage: number, speed: number, isEnemyBullet = false) {
 		super(lane, posX, svgName, speed);

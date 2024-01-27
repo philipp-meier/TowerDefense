@@ -10,4 +10,4 @@ If you want to make sure, that your pull request will be accepted, please contac
 we can discuss the feature beforehand.
 
 Feedback concerning the architecture and the project in general is very much appreciated, since Typescript is not my main programming
-language and I am not a game developer at all.
+language, and I am not a game developer at all.

@@ -15,10 +15,10 @@ import { CollisionService } from "./services/CollisionService.js";
 
 export class Game {
 	private m_player: Player;
-	private m_gameBoard: GameBoard;
 	private m_gameObjects: GameObjectBase[] = [];
 	private m_enemyWaveService: EnemyWaveService;
 	private m_startTime = Date.now();
+	private readonly m_gameBoard: GameBoard;
 
 	constructor() {
 		this.m_player = new Player();

@@ -1,7 +1,6 @@
 .app-title {
     text-align: center;
     background: #565656;
-    text-align: center;
     border: 1px solid black;
     
     span {
@@ -28,7 +27,7 @@
         width: 20px;
         height: 16px;
         background-repeat: no-repeat;
-        padding-left: 0px;
+        padding-left: 0;
     }
 }
 
@@ -224,22 +223,19 @@ a.menu-btn {
 
     &.disabled .icon {
         width: 20px;
-        background: url('../img/contextMenu/locked.png');
-        background-repeat: no-repeat;
+        background: url('../img/contextMenu/locked.png') no-repeat;
     }
     .icon {
         width: 20px;
-        background: url('../img/contextMenu/upgrade.png');
-        background-repeat: no-repeat;
+        background: url('../img/contextMenu/upgrade.png') no-repeat;
     }
 }
 
 
 .menu-item:hover > .menu-btn { 
     color: #fff; 
-    outline: none; 
-    background-color: #2E3940;
-    background: linear-gradient(to bottom, #5D6D79, #2E3940);
+    outline: none;
+    background: #2E3940 linear-gradient(to bottom, #5D6D79, #2E3940);
     border: 1px solid #2E3940;
 }
 

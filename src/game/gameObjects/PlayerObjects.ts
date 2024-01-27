@@ -9,11 +9,11 @@ import { Bullet } from "./Bullet.js";
 import { GameObject } from "./GameObjectBase.js";
 
 export abstract class PlayerGameObjectBase extends GameObject implements IPricedObject {
-	private m_classIdentifier: string;
-	private m_price: number;
-	private m_initialSvg: string;
+	private readonly m_classIdentifier: string;
+	private readonly m_price: number;
+	private readonly m_initialSvg: string;
 
-	constructor(lane: number, posX: number, classIdentifier: string, svg: string, price: number) {
+	protected constructor(lane: number, posX: number, classIdentifier: string, svg: string, price: number) {
 		super(lane, posX, svg);
 		this.m_initialSvg = svg;
 		this.m_price = price;
@@ -58,7 +58,7 @@ export class Rampart extends PlayerGameObjectBase {
 export class Tower extends PlayerGameObjectBase implements IShootingGameObject {
 	private m_currentUpgradeLevel: number;
 	private m_bulletSvg: string;
-	private m_attackSpeed: number;
+	private readonly m_attackSpeed: number;
 	private m_attackDamage: number;
 	private m_isBulletSpawnable: boolean;
 

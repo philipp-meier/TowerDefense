@@ -1,6 +1,6 @@
 /*
 	=== Game Context Menu ===
-	Displays (buyable) options for player game objects (i.E. upgrade, repair,...).
+	Displays (purchasable) options for player game objects (i.E. upgrade, repair,...).
 */
 import { PlayerGameObjectBase } from "../gameObjects/PlayerObjects.js";
 import { IGameObjectOption } from "../Interfaces.js";
@@ -9,7 +9,7 @@ import { ControlBuilder } from "./ControlBuilder.js";
 type ContextMenuExecOptionCallback = (gameObject: PlayerGameObjectBase, option: IGameObjectOption) => void;
 
 export class ContextMenu {
-	private m_ContextMenu: HTMLUListElement;
+	private readonly m_ContextMenu: HTMLUListElement;
 
 	constructor(p: HTMLDivElement) {
 		this.m_ContextMenu = this.buildContextMenu();
